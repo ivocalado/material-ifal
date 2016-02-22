@@ -1,0 +1,44 @@
+<html>
+<head>
+<style type="text/css">
+body {
+	background : yellow;
+}
+
+h1, h2 {
+font-size: 20px;
+font-family: "Comic Sans Ms";
+}
+
+h2 {
+color: green;
+}
+
+h2.teste {
+color: blue;
+}
+
+.corverde {
+color: green;
+}
+
+p#cor {
+color: red;
+}
+</style>
+</head>
+
+<body>
+<h1>Teste</h1>
+<h2>Teste 2</h2>
+<h2 class="teste">Teste 3</h2>
+<h2 class="teste">Teste 3</h2>
+<p class="teste">Teste 4</p>
+<h2 class="corverde">Teste 5</h2>
+<p class="corverde">Teste 6</p>
+<p id="cor">Teste 7</p>
+<h2 style="color:white;">Teste 8</h2>
+</body>
+</html>
+
+

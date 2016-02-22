@@ -1,0 +1,17 @@
+<html>
+<head>
+<style type="text/css">
+<!--
+p {padding-left: 50px;
+padding-left: 100px;
+  border-left-style:solid;
+  border-top-style:solid;
+	  
+}
+-->
+</style>
+</head>
+<body>
+<p>Um espaçamento esquerdo de 10%</p>
+</body>
+</html>

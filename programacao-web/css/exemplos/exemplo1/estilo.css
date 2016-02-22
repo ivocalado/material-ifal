@@ -1,0 +1,27 @@
+body
+{ /*sdfsadfsda*/
+color:white;
+background-color:blue;
+font-family: "Comic Sans MS"
+}
+
+p.verde
+{
+color:green;
+}
+
+p#ciano
+{
+color:cyan;
+}
+
+.amarelo
+{
+color:yellow;
+}
+
+p
+{
+color:#000;
+}
+

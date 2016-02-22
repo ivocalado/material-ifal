@@ -1,0 +1,844 @@
+%\documentclass[t,handout]{beamer}
+\documentclass{beamer}
+
+
+\usepackage[latin1]{inputenc}
+
+\usepackage[portuguese]{babel}
+\usepackage[tight]{subfigure}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{url}
+% \usepackage{inconsolata}
+\newcommand{\setcolor}[2]{\color{#1}{#2}\color{black}}
+
+%Pacote de listagem de cï¿½digo
+\usepackage{listings}
+%\lstset{numbers=left, stepnumber=1, firstnumber=1,
+%numberstyle=\tiny, extendedchars=true, breaklines=true, frame=tb,
+%basicstyle=\footnotesize, stringstyle=\ttfamily,
+%showstringspaces=false }
+
+\lstset{extendedchars=true, breaklines=true, frame=tb,
+basicstyle=\footnotesize, stringstyle=\ttfamily,
+showstringspaces=false,language=HTML }
+
+% \usecolortheme[RGB={130,35,150}]{structure}
+% \usecolortheme[RGB={33,33,94}]{structure}
+\usecolortheme[RGB={153,204,123}]{structure}
+\setbeamertemplate{footline}[frame number]
+\setbeamertemplate{navigation symbols}{}
+
+% \usetheme{Frankfurt} %LEGAL     !!!
+% \usetheme{Madrid}     %LEGAL/L%IMPO/COM CAIXA     (sem barra de desenvolvimento)
+
+% \usetheme{Antibes} %NAO
+% \usetheme{Berlin} %PODE SER...     (BARRA DE DESENVOLVIMANTO)
+% \usetheme{Berkeley}     %FEIO
+% \usetheme{Boadilla} %TUDO BRANCO...
+% \usetheme{Copenhagen}     %NAO
+% \usetheme{Darmstadt} %LEGAL!     !!!
+% \usetheme{Dresden}     %LEGAL/LIMPO/SEM CAIXA     (sem caixa fica ruim...)
+
+% \usetheme{Goettingen}     %FEIO DEMAIS!
+ \usetheme{Ilmenau} %LEGAL (forte candidato)
+% \usetheme{JuanLesPins} %BACANA
+% \usetheme{Luebeck}     %FEIO
+
+% \usetheme{Malmoe}     %FEIO
+% \usetheme{Warsaw} %NAO...
+% \usetheme{Seattle}
+% \usetheme{CambridgeUS}
+% \usetheme{Singapore}
+
+%Insere o numero de frames no slide
+\newcommand*\oldmacro{}
+\let\oldmacro\insertshortauthor% save previous definition
+\renewcommand*\insertshortauthor{%
+  \leftskip=.3cm% before the author could be a plus1fill ...
+  \insertframenumber\,/\,\inserttotalframenumber\hfill\oldmacro}
+
+
+\author[Ivo Calado]{Ivo Calado}
+\date{\today}
+\institute[IFAL]{Instituto Federal de Educação, Ciência e Tecnologia de Alagoas}
+\title{Programação Web}
+\logo{\includegraphics[width=0.2\linewidth]{imagens/ifal-logo.jpg}}
+\subtitle{\textit{Cascading Style Sheets}}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+% \section{Roteiro}
+% \AtBeginSection[]
+{\frame{
+\frametitle{Roteiro}
+\tableofcontents[hidesubsections]
+}
+}
+
+\section{Introdução}
+\subsection{Qual o problema com o HTML?}
+\begin{frame}{}
+Suponha que desejamos criar uma aplicação Web, quais seriam os passos?
+\begin{itemize}
+  \item Definimos o conteúdo que vamos querer exibir \pause
+  \item Definimos a estruturação do conteúdo na tela \pause
+  \item Fazemos uso de tags para definirmos a hierarquia do conteúdo (tags $<$h$>$, por exemplo)\pause
+  \item Definimos a formatação a ser adotada (cores, tamanhos de fonte, espaçamentos etc.)
+\end{itemize}
+\pause
+\begin{block}{Qual o problema com a abordagem anterior?}
+\pause Estamos acomplando o conteúdo a ser exibido de sua formatação!\\\pause
+... considere um site que todos os anos altera o seu layout!
+\end{block}
+
+\end{frame}
+
+\begin{frame}{CSS: a solução!}
+ \begin{itemize}
+  \item Separa a marcação do HTML da apresentação do site
+  \item Agora a responsabilidade do HTML é apenas estruturar o conteúdo enquanto que o visual é de responsabilidade do CSS
+  \item HTML marca e estrutura textos, cabeçalhos, parágrafos, links, botões, formulários, imagens e demais elementos da página
+  \item CSS define cores, posicionamento na tela, estilos de linhas, bordas e tudo o mais relacionado à apresentação
+ \end{itemize}
+
+\end{frame}
+
+\subsection{Definição}
+\begin{frame}{O que é?}
+\begin{itemize}
+  \item Acrônimo de \textbf{C}ascading \textbf{S}tyle \textbf{S}heets
+  \item Define como os elementos HTML serão exibidos
+  \item Foi adicionado ao HTML 4.0
+  \item Podem ser definidos tanto dentro do arquivo HTML quanto em um arquivo separado (*.css)
+\end{itemize}
+\pause
+\begin{block}{Quando utilizar dentro do próprio HTML e quando deve estar em um arquivo separado?}
+\pause Se a formatação representar poucos elementos, pode ser utilizado dentro do próprio arquivo. Porém, se a formatação do CSS abranger todo o conteúdo da página e/ou a aplicação Web for composta de diversas páginas, deve ser utilizado em um arquivo separado de modo a possibilitar reutilização!
+ 
+\end{block}
+
+\end{frame}
+
+\section{Sintaxe CSS}
+\subsection{Regras}
+\begin{frame}[fragile]{A regra CSS e sua sintaxe}
+\begin{itemize}
+  \item Uma regra CSS é uma declaração que segue uma sintaxe própria e que define como será aplicado estilo a um ou mais elementos HTML
+  \item Um conjunto de regras CSS formam uma Folha de Estilos. 
+\end{itemize}
+Uma regra CSS, na sua forma mais elementar, compõe-se de três partes: um seletor, uma propriedade e um valor e tem a seguinte sintaxe
+\begin{lstlisting}
+ seletor { propriedade: valor; }
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}{Definindo os elementos}
+\begin{itemize}
+ \item \textbf{Seletores: } é o elemento HTML para qual a regra será válida. Pode ser uma tag, uma classe, ou por uma ID etc. (por exemplo: $<$p$>$, $<$h1$>$, $<$form$>$, .minhaclasse, etc...)
+ \item \textbf{Propriedade: } é o atributo do elemento HTML ao qual será aplicada a regra (por exemplo: font, color, background, etc...)
+ \item \textbf{Valor: } é a característica específica a ser assumida pela propriedade
+\end{itemize}
+\pause
+\setcolor{red}{A atribuição dos valores às propriedades é feito atraves do operador ':' e não do operador '='!}\\\pause
+\setcolor{blue}{O operador ';' é opcional se houver apenas uma propriedade ou no caso da última!}
+\end{frame}
+
+\begin{frame}[fragile]{Exemplos}
+\begin{lstlisting}[caption=Elementos 'p' e 'body' customizados]
+p {
+font-size: 12px; 
+}
+
+body {
+color: #000000;
+background: #FFFFFF;
+font-weight: bold; 
+} 
+\end{lstlisting}
+
+\begin{lstlisting}[caption=Alteração da fonte para o conteúdo do elemento 'h3']
+h3 { 
+font-family: "Comic Sans MS" 
+}
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]{Comentários}
+É possível introduzir comentários ao longo das regras CSS. Para tal, colocase entre os elementos \textbf{/* */}
+\begin{lstlisting}
+ seletor 
+{ 
+      propriedade: valor; /*O que estiver aqui não será considerado!*/
+} 
+\end{lstlisting}
+
+\end{frame}
+\subsection{Agrupamento de seletores}
+\begin{frame}[fragile]{O que é e como fazer?}
+\begin{itemize}
+  \item Muitas vezes precisamos definir a mesma regra para vários seletores 
+  \item Deste modo, é necessário agrupar todos os elementos em uma única regra
+ \end{itemize}
+
+\begin{lstlisting}[caption=Exemplo de agrupamento de seletores]
+h1, h2, h3, h4, h5, h6 {
+color: #00FF00;
+}
+\end{lstlisting}
+\end{frame}
+
+\subsection{Seletores class e id}
+\begin{frame}{O seletor \textbf{class}}
+\begin{itemize}
+  \item Até agora vimos a aplicação de estilos às \textit{tags}
+  \item Mas quais são as limitações disso? \pause
+  \item Não é possível definir diferentes estilos ao mesmo \textit{tag} ao mesmo tempo!
+  \item Nestes casos fazem-se uso dos seletores \textbf{class} e \textbf{id}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]{O seletor \textit{class}}
+O seletor \textbf{class} permite que você defina seus próprios identificadores que são utilizados nas regras de estilo. 
+
+\begin{lstlisting}
+elemento.minhaclasse { 
+	propriedade: valor;
+}
+\end{lstlisting}
+
+\begin{lstlisting}
+ p.cor-um { 
+	color:#000;
+	} 
+    
+p.cor-dois { 
+	color:#0ff;
+	}
+\end{lstlisting}
+ 
+
+\end{frame}
+\begin{frame}[fragile]{Usando o seletor \textit{class}}
+\begin{lstlisting}
+<p class ="cor-um"> este parágrafo será na cor preta.</p>
+    
+<p class ="cor-dois">este parágrafo será na cor azul.</p>
+
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]{Extendendo o seletor \textit{class} para várias \textit{tags}}
+Ao criar uma classe você talvez queira que ela seja aplicável a qualquer elemento HTML. Neste caso basta que se omita o nome do elemento antes da classe.
+
+\begin{lstlisting}
+.cor-tres {
+    color: #00f;
+}
+\end{lstlisting}
+
+ 
+\end{frame}
+
+\subsection{O seletor id}
+\begin{frame}[fragile]{Usando o seletor \textbf{id}}
+\begin{itemize}
+ \item O seletor ID difere do seletor classe, por ser ÚNICO
+ \item Um seletor ID de determinado nome só pode ser aplicado a UM e somente UM elemento HTML dentro do documento
+\end{itemize}
+\begin{lstlisting}
+#meuID {
+	propriedade: valor;
+}
+
+p#cor {
+    color: #00f;
+} 
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Usando o seletor \textbf{id}}
+\begin{lstlisting}
+<p id ="cor"> este parágrafo será na cor preta.</p>
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}{Quando utilizar o seletor \textbf{id} e quando utilizar \textbf{class}}
+\pause
+O seletor \textbf{id} deve ser usado quando apenas 1 elemento deverá ser alterado. O elemento \textbf{class} será utilizado quando muitos elementos serão customizados
+\end{frame}
+
+\section{Tipos de CSS}
+\begin{frame}{Inserção de folhas de estilo}
+Existem 3 formas de inserção de código CSS
+\begin{itemize}
+  \item Definição em arquivo externo
+  \item Definição no elemento \textbf{header}
+  \item Definição inline
+\end{itemize}
+
+\end{frame}
+
+\subsection{Folhas de estilo externos}
+\begin{frame}[fragile]{Folhas de estilo externos}
+\begin{itemize}
+  \item Definido em um arquivo com extensão .css
+  \item Após isso, ele é referenciado de duas formas
+\end{itemize}
+
+\begin{lstlisting}
+<head>
+...
+	<link rel="stylesheet" type="text/css" href="estilo.css">
+...
+</head> 
+\end{lstlisting}
+
+\begin{lstlisting}
+<head>
+...
+<style type="text/css">
+	@import url("estilo.css");
+</style>	
+...	
+</head>
+\end{lstlisting}
+\end{frame}
+
+\subsection{Folha de estilo definido no header}
+\begin{frame}[fragile]{Folha de estilo definido no header}
+\begin{itemize}
+  \item As folhas de estilos são definidos dentro da table \textbf{style}
+\end{itemize}
+\begin{lstlisting}
+<head> <style type="text/css">
+<!--
+body {
+	background: #000; 
+	url(imagens/minhaimagem.gif);
+	}
+h3 {color: #f00;}
+p {
+	margin-left: 15px; 
+	padding:1.5em;
+	}
+-->
+</style>
+</head> 
+\end{lstlisting}
+
+\end{frame}
+
+\subsection{Folha de estilo inline}
+\begin{frame}[fragile]{Folha de estilo inline}
+\begin{itemize}
+ \item O estilo é definido dentro do parâmetro \textbf{style}
+\end{itemize}
+\pause
+\begin{lstlisting}
+<p style="color:#000; margin: 5px;">
+	Aqui um parágrafo de cor preta e com 5px nas 4  margens.
+</p> 
+\end{lstlisting}
+
+\end{frame}
+
+\subsection{Conflito entre estilos e efeito cascata}
+\begin{frame}{Conflito entre estilos}
+\begin{block}{O que acontece quando dois estilos são aplicados ao mesmo elemento em escopos diferentes?}
+\pause 
+Há uma situação de conflito. \\
+\pause Neste caso é utilizado o efeito Cascata (\textit{Cascade})
+\end{block}
+Então o que acontece? \pause
+É utilizado o valor mais interno!
+
+\end{frame}
+
+\section{Propriedades CSS}
+\subsection{Font e text}
+\begin{frame}{Customizando a fonte}
+As propriedades para as fontes, definem as características (os valores na regra CSS) das letras que constituem os textos dentro dos elementos HTML
+\begin{itemize}
+  \item \textbf{color:} cor da fonte
+  \item \textbf{font-family:} tipo da fonte
+  \item \textbf{font-size:} tamanho da fonte
+  \item \textbf{font-style:} estilo da fonte
+  \item \textbf{font-variant:} fontes maiúsculas de menor altura
+  \item \textbf{font-weight:} nível de negrigo
+\end{itemize}
+
+\end{frame}
+\begin{frame}{Color}
+Existem três formas de representar cores: \pause
+\begin{itemize}
+ \item código hexadecimal: \#FFFFFF
+ \item código rgb: rgb(255,235,0)
+ \item nome da cor: red, blue, green...etc
+\end{itemize}
+Ver exemplo
+\end{frame}
+
+\begin{frame}[fragile]{Font-family}
+Define o nome das fontes a serem utilizadas
+
+\begin{lstlisting}
+<style type="text/css">
+<!--
+h2 {font-family: arial, helvetica, serif;}
+p {font-family: sans-serif;}
+-->
+</style>
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Font-size}
+Especifica o tamanho da fonte:
+
+\begin{itemize}
+  \item xx-small
+  \item x-small
+  \item small
+  \item medium
+  \item ...
+  \item length: uma medida reconhecida pelas CSS (px, pt, em, cm, ...) 
+  \item \%
+\end{itemize}
+Ver exemplo
+\end{frame}
+
+\begin{frame}[fragile]{Font-style}
+Define estilos de fontes como itálico, oblicuo
+\begin{lstlisting}
+<style type="text/css">
+<!--
+h1 {font-style: italic;}
+h2 {font-style: normal;}
+p {font-style: oblique;}
+-->
+</style>
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]{font-variant}
+Define variações para fontes. Existem duas variantes principais:
+\begin{itemize}
+ \item \textbf{normal:} fonte normal
+ \item \textbf{small-caps:} transforma em maiúsculas de menor altura
+\end{itemize}
+\begin{lstlisting}
+<style type="text/css">
+<!--
+h3 {font-variant: normal;}
+p{font-variant: small-caps;}
+-->
+p</style>
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}{font-weight}
+Define a intensidade da cor (nível de negrito)
+
+\begin{itemize}
+ \item normal
+  \item bold
+  \item bolder
+  \item lighter
+  \item 100
+  \item 200
+  \item ...
+\end{itemize}
+Ver exemplo
+\end{frame}
+
+\begin{frame}{Formatação de texto}
+Além das fontes, é possível realizar diversas customizações no texto propriamente dito
+\begin{itemize}
+  \item \textbf{letter-spacing:} espaçamento entre letras
+  \item \textbf{word-spacing:} espaçamento entre palavras
+  \item \textbf{text-align:} alinhamento
+  \item \textbf{text-decoration:} decoração de texto (underline, overline, blink etc)
+  \item \textbf{text-inden:} identação do texto
+  \item \textbf{text-transform:} transformação de texto (maiúsculo para minúsculo e vice-versa)
+  \item \textbf{white-space:} especifica como os espaços em branco serão tratados
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]{letter-spacing}
+ \begin{itemize}
+  \item \textbf{normal:} é o espaçamento default
+  \item \textbf{lenght:} uma medida reconhecida pelas CSS (px, pt, cm, ...) São válidos valores negativos
+ \end{itemize}
+\begin{lstlisting}
+<style type="text/css">
+<!--
+h2 {letter-spacing: 1.2cm;}
+p {letter-spacing: 0.4cm;}
+-->
+</style>
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{word-spacing}
+Segue a mesma estrutura de espaçamento de palavras
+\begin{lstlisting}
+<style type="text/css">
+<!--
+h2 {word-spacing: 1.8em;}
+p {word-spacing: 80px;}
+-->
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]{text-align}
+Define o estilo de alinhamento
+\begin{itemize}
+  \item left
+  \item right 
+  \item center
+  \item justify
+\end{itemize}
+
+Ver demais exemplos na página...
+\end{frame}
+
+\begin{frame}[fragile]{text-indent}
+Especifica o recuo de um texto em termo de graduação
+\begin{lstlisting}
+<style type="text/css">
+<!--
+h3 {text-indent: 80px;}
+p {text-indent: 3em;}
+-->
+</style>
+\end{lstlisting}
+
+\end{frame}
+
+
+\subsection{Margens, bordas e padding}
+\begin{frame}[fragile]{Margens}
+A propriedade para margens, define um valor para espessura das margens dos elementos HTML
+\begin{itemize}
+  \item \textbf{margin-top}
+  \item \textbf{margin-left}
+  \item \textbf{margin-right}
+  \item \textbf{margin-bottom}
+\end{itemize}
+
+\begin{lstlisting}
+<style type="text/css">
+<!--
+p {margin-top: 2cm;}
+-->
+</style>
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]{Bordas}
+\begin{itemize}
+ \item As propriedades para as bordas, definem as características (os valores na regra CSS) das quatro bordas de um elemento HTML
+ \item Existem em torno de 20 diferentes propriedades que podem ser customizadas!!
+ \item Todavia, todas as propriedades estão relacionadas à largura, estilo e cor das bordas
+\end{itemize}
+
+\begin{lstlisting}
+<style type="text/css">
+<!--
+p {
+    border-width: thin;
+    border-top-style: hidden;
+    border-right-color: rgb(255,235,0);
+  }
+-->
+</style> 
+\end{lstlisting}
+ 
+
+\end{frame}
+
+\begin{frame}[fragile]{Padding}
+Uma outra propriedade que pode ser configurada é a distância entre a borda e o elemento HTML
+
+São definidas as propriedades: \textbf{padding-top}, \textbf{padding-right}, \textbf{padding-bottom}, \textbf{padding-left}
+
+\begin{lstlisting}
+<style type="text/css">
+<!--
+p {
+    padding-top: 2cm;
+  }
+-->
+</style> 
+ 
+\end{lstlisting}
+
+\end{frame}
+
+
+\begin{frame}{Outras propriedades CSS}
+ Além das propriedades já apresentadas, diversas outras opções de configuração são possíveis, como:
+\begin{itemize}
+ \item Background
+  \item Listas
+  \item Entrelinhas
+  \item etc
+\end{itemize}
+
+\end{frame}
+
+\subsection{Visibilidade e Posicionamento}
+\begin{frame}[fragile]{Visibilidade}
+\begin{itemize}
+  \item É possível tornar um elemento ``invisível'' a partir do CSS
+  \item Existem duas opções com resultados levementes diferentes
+\end{itemize}
+
+\begin{lstlisting}
+ h1.hidden {visibility:hidden;}
+ h1.hidden {display:none;}
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]{Posicionamento}
+\begin{itemize}
+  \item Css possibilita customizar a posição do elemento pretendido
+  \item É possível posicionar um elemento a esquerda, direita, cima, embaixo e inclusive com sobreposição entre elementos
+  \item O posicionamento de elementos podem ser fixos ou relativo
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]{Elementos Fixos}
+\begin{itemize}
+ \item Elementos não se movem com a barra de rolagem
+\end{itemize}
+
+\begin{lstlisting}
+p.pos_fixed
+{
+position:fixed;
+top:30px;
+right:5px;
+}
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]{Posicionamento relativo}
+\begin{itemize}
+ \item Aqui o posicionamento é relativo ao que deveria ser sua posição ``original''
+\end{itemize}
+\begin{lstlisting}
+h2.pos_left
+{
+position:relative;
+left:-20px;
+}
+h2.pos_right
+{
+position:relative;
+left:20px;
+} 
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]{Posicionamento absoluto}
+\begin{itemize}
+ \item Com posicionamento absoluto é possível definir onde cada elemento vai se encontrar exatamente
+  \item Neste tipo de posição pode haver sobreposição de elementos
+\end{itemize}
+
+\begin{lstlisting}
+h2
+{
+position:absolute;
+left:100px;
+top:150px;
+}
+\end{lstlisting}
+
+
+\end{frame}
+
+\begin{frame}[fragile]{Sobreposição de elementos}
+\begin{itemize}
+ \item Conforme apresentado com o posicionamento absoluto, é possível ocorrer sobreposição de elementos
+  \item Para tal, pode-se definir a ordem de qual elemento será exibido através do parâmetro \textbf{z-index}
+\end{itemize}
+\begin{lstlisting}
+img
+{
+position:absolute;
+left:0px;
+top:0px;
+z-index:-1
+}
+\end{lstlisting}
+\end{frame}
+
+\subsection{Pseudoclasses e Pseudoelemtos}
+\begin{frame}[fragile]{Pseudoclasses}
+ Em CSS pseudoclasses são usada para adicionar efeitos especiais a alguns seletores\\
+\textbf{Sintaxe:}
+\begin{lstlisting}
+ selector:pseudo-class {property:value;}
+ selector.class:pseudo-class {property:value;}
+\end{lstlisting}
+
+Diversos tipos de pseudoclasses podem ser utilizadas
+\begin{itemize}
+  \item \textbf{Anchor} (âncoras)
+  \item \textbf{first-child}
+    \item Outros: focus, first-line, before, after etc.
+\end{itemize}
+
+
+\end{frame}
+
+
+\begin{frame}[fragile]{Ancoras}
+Links podem ser exibidos de diferentes formas em navegadores que suportam CSS
+
+\begin{lstlisting}
+a:link {color:#FF0000;}      /* unvisited link */
+a:visited {color:#00FF00;}  /* visited link */
+a:hover {color:#FF00FF;}  /* mouse over link */
+a:active {color:#0000FF;}  /* selected link */
+\end{lstlisting}
+
+\textbf{Notas}
+\begin{itemize}
+ \item \textbf{a:hover} DEVE ser apresentado após \textbf{a:link} e \textbf{a:visited} na definição de CSS para que haja efeito
+  \item \textbf{a:active} DEVE ser apresentado após \textbf{a:hover} na definição CSS para que haja efeito
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]{A pseudoclasse :first-child}
+\textbf{Objetivo:} customizar o primeiro elemento dentro de um outro elemento\\
+
+\begin{lstlisting}[caption=Encontra o primeiro elemento p]
+<style type="text/css">
+p:first-child
+{
+color:blue;
+}
+</style>
+\end{lstlisting}
+ 
+\end{frame}
+
+\section{Casos de uso}
+\subsection{Barras de navegação}
+\begin{frame}{Barra de Navegação Horizontal}
+\begin{itemize}
+ \item A criação de barras de navegação é importante em qualquer Website
+  \item Com CSS é possível transformar menus HTML em barras de navegação estilizadas
+\end{itemize}
+\pause
+\textbf{Barras de navegação == Lista de links!!}\\
+Uma barra de navegação é basicamente uma lista de links
+\end{frame}
+
+\begin{frame}[fragile]{Passo 1: criação da lista de links}
+\begin{lstlisting}
+<ul>
+<li><a href="home.html">Home</a></li>
+<li><a href="noticias.html">News</a></li>
+<li><a href="contatos.html">Contact</a></li>
+<li><a href="sobre.html">About</a></li>
+</ul>
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]{Passo 2: remover marcadores da lista e espaços}
+\begin{lstlisting}
+ul
+{
+list-style-type:none; /*Remove os marcadores*/
+margin:0; /*Remove espaço entre a margem*/
+padding:0; /*Remove espaço interno da célula*/
+}
+li
+{
+float:left;
+}
+
+\end{lstlisting}
+ 
+\end{frame}
+
+\begin{frame}[fragile]{Passou 3: definido comportamento dos links}
+\begin{lstlisting}
+a:link,a:visited
+{
+  display:block;
+  width:120px;
+  font-weight:bold;
+  color:#FFFFFF;
+  background-color:#98bf21;
+  text-align:center;
+  padding:4px;
+  text-decoration:none;
+  text-transform:uppercase;
+}
+a:hover,a:active
+{
+  background-color:#7A991A;
+}
+
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]{Barra de navegação vertical}
+Para transformar nosso exemplo em uma barra vertical temos apenas de retirar a flutuação dos elementos
+
+\begin{lstlisting}
+li
+{
+  float:left;
+}
+\end{lstlisting}
+
+\end{frame}
+
+\section*{}
+
+\begin{frame}{}
+\begin{center}
+ \Huge Dúvidas? 
+\end{center}
+
+ 
+\end{frame}
+
+\begin{frame}{Exercício I}
+\begin{itemize}
+ \item Com base no HTML apresentado aqui http://paste.pocoo.org/raw/382563/, crie uma página como esta: http://tinyurl.com/5t8fg4d
+
+  \item Altere o código apresentado em http://paste.pocoo.org/raw/382566/ retirando todo o conteúdo de formatação e movendo-o para um conteúdo CSS
+
+  \item Altere o html (http://maujor.com/temas/html-padrao\_zengarden-maujor.zip) adicionando as devidas formatações CSS. Usem inserção de imagens, posicionamento, transparência, alteração de fontes etc. Sejam criativos!! :)
+\end{itemize}
+
+\end{frame}
+
+\end{document}

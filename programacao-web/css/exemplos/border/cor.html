@@ -1,0 +1,51 @@
+<html>
+<head>
+<script type="text/javascript">
+function enableColor(el) {
+	el.style.borderWidth="1px";
+	el.style.borderStyle="solid";
+	el.style.borderColor="red";
+}
+
+function disableColor(el) {
+	el.style.borderStyle="none";
+}
+function checkStatus(nm) {
+	el = document.getElementById(nm);
+	ret = true
+	if(el.value == "") {
+		enableColor(el);
+		ret = false
+	} else disableColor(el);
+	return ret
+}
+function checkFields()
+{
+var result = true;
+
+v1 = checkStatus("nome");
+v1 = checkStatus("endereco") && v1;
+v1 = checkStatus("idade") && v1;
+if(v1) {
+	document.getElementById("resultado").style.color = "blue"
+	document.getElementById("resultado").innerHTML = "Formulário enviado"
+	document.getElementById("botao").value="Enviado!!"
+} else {
+	document.getElementById("resultado").style.color = "red"
+	document.getElementById("resultado").innerHTML = "Não foi possível realizar o envio do formulário"
+	document.getElementById("botao").value="Reenviar!"
+}
+
+}
+</script>
+
+</head>
+<body>
+<h2>Submissão de formulário</h2>
+<div id="resultado"></div>
+Nome: <input id="nome" type="text"><br/>
+Endereço: <input id="endereco" type="text"><br/>
+Idade: <input id="idade" type="text"><br/>
+<input id="botao" type="button" value="Enviar" onclick="checkFields();"/>
+ 
+</html>

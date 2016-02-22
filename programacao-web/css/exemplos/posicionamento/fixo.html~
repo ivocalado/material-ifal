@@ -1,0 +1,22 @@
+<html>
+<head>
+<style type="text/css">
+.pos_fixed
+{
+position:fixed;
+top:30px;
+right:5px;
+}
+</style>
+</head>
+<body>
+
+<img class="pos_fixed" src="img_css.jpg" alt="Angry face" />
+<p class="pos_fixed">Some more text</p>
+<p>Some text</p><p>Some text</p><p>Some text</p><p>Some text</p><p>Some text</p><p>Some text</p><p>Some text</p><p>Some text</p><p>Some text</p><p>Some text</p><p>Some text</p><p>Some text</p><p>Some text</p><p>Some text</p><p>Some text</p><p>Some text</p>
+<p>Some text</p><p>Some text</p><p>Some text</p><p>Some text</p><p>Some text</p><p>Some text</p><p>Some text</p><p>Some text</p><p>Some text</p><p>Some text</p><p>Some text</p><p>Some text</p><p>Some text</p><p>Some text</p><p>Some text</p><p>Some text</p><p>Some text</p><p>Some text</p><p>Some text</p><p>Some text</p><p>Some text</p><p>Some text</p><p>Some text</p><p>Some text</p><p>Some text</p><p>Some text</p><p>Some text</p><p>Some text</p>
+</body>
+</html>
+
+
+

@@ -1,0 +1,20 @@
+<html>
+<head>
+<style type="text/css">
+.negrito > i:first-child
+{
+font-size:50px;
+}
+</style>
+</head>
+<body>
+    <div class="negrito">
+	    <i>strong</i>, <i>strong</i> man
+    </div>
+    <div>
+	    <i>strong</i>, <i>strong</i> man
+    </div>
+    <p class="negrito"><i>strong</i>, <i>strong</i> man.</p>
+    <p> <i>strong</i>, <i>strong</i> man.</p>
+  </body>
+</html> 

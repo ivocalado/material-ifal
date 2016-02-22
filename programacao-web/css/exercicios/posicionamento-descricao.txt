@@ -1,0 +1,3 @@
+1) construir uma página que reproduza o conteúdo da imagem exercicio 1.png
+
+2) corrigir o arquivo posicionamento.html para que os componentes estejam corretamente posicionados.

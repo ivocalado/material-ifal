@@ -1,0 +1,19 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="http://127.0.0.1/estilo.css"/>
+
+</head>
+
+<body>
+
+<h1 class="verde">My CSS web page!</h1>
+<p class="verde">Hello world! This is a CSS example.</p>
+<p class="amarelo">Hello world! This is a CSS example.</p>
+<p>Hello world! This is a CSS example.</p>
+<p id="ciano">Hello world! This is a CSS example.</p>
+<p id="ciano">Hello world! This is a CSS example.</p>
+
+</body>
+</html>
+
+
