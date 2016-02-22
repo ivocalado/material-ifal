@@ -1,0 +1,430 @@
+%\documentclass[t,handout]{beamer}
+\documentclass{beamer}
+
+
+\usepackage[latin1]{inputenc}
+
+\usepackage[portuguese]{babel}
+\usepackage[tight]{subfigure}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{url}
+\usepackage{inconsolata}
+\newcommand{\setcolor}[2]{\color{#1}{#2}\color{black}}
+
+%Pacote de listagem de cï¿½digo
+\usepackage{listings}
+%\lstset{numbers=left, stepnumber=1, firstnumber=1,
+%numberstyle=\tiny, extendedchars=true, breaklines=true, frame=tb,
+%basicstyle=\footnotesize, stringstyle=\ttfamily,
+%showstringspaces=false }
+
+\lstset{extendedchars=true, breaklines=true, frame=tb,
+basicstyle=\footnotesize, stringstyle=\ttfamily,
+showstringspaces=false,language=HTML }
+
+% \usecolortheme[RGB={130,35,150}]{structure}
+% \usecolortheme[RGB={33,33,94}]{structure}
+\usecolortheme[RGB={153,204,123}]{structure}
+\setbeamertemplate{footline}[frame number]
+\setbeamertemplate{navigation symbols}{}
+
+% \usetheme{Frankfurt} %LEGAL     !!!
+% \usetheme{Madrid}     %LEGAL/L%IMPO/COM CAIXA     (sem barra de desenvolvimento)
+
+% \usetheme{Antibes} %NAO
+% \usetheme{Berlin} %PODE SER...     (BARRA DE DESENVOLVIMANTO)
+% \usetheme{Berkeley}     %FEIO
+% \usetheme{Boadilla} %TUDO BRANCO...
+% \usetheme{Copenhagen}     %NAO
+% \usetheme{Darmstadt} %LEGAL!     !!!
+% \usetheme{Dresden}     %LEGAL/LIMPO/SEM CAIXA     (sem caixa fica ruim...)
+
+% \usetheme{Goettingen}     %FEIO DEMAIS!
+ \usetheme{Ilmenau} %LEGAL (forte candidato)
+% \usetheme{JuanLesPins} %BACANA
+% \usetheme{Luebeck}     %FEIO
+
+% \usetheme{Malmoe}     %FEIO
+% \usetheme{Warsaw} %NAO...
+% \usetheme{Seattle}
+% \usetheme{CambridgeUS}
+% \usetheme{Singapore}
+
+%Insere o numero de frames no slide
+\newcommand*\oldmacro{}
+\let\oldmacro\insertshortauthor% save previous definition
+\renewcommand*\insertshortauthor{%
+  \leftskip=.3cm% before the author could be a plus1fill ...
+  \insertframenumber\,/\,\inserttotalframenumber\hfill\oldmacro}
+
+
+\author[Ivo Calado]{Ivo Calado}
+\date{\today}
+\institute[IFAL]{Instituto Federal de Educação, Ciência e Tecnologia de Alagoas}
+\title{Programação para Web}
+\logo{\includegraphics[width=0.2\linewidth]{imagens/ifal-logo.jpg}}
+\subtitle{\textit{XML\\}}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+% \section{Roteiro}
+% \AtBeginSection[]
+{\frame{
+\frametitle{Roteiro}
+\tableofcontents[hidesubsections]
+}
+}
+
+\section{Introdução}
+\subsection{O que XML?}
+\begin{frame}{Definição}
+ \begin{itemize}
+  \item E\setcolor{red}{X}tensible \setcolor{red}{M}arkup \setcolor{red}{L}anguage
+  \item É uma linguagem de marcação bastante semelhante à HTML \pause
+  \item Porém não descende e nem originou o HTML
+  \item É originária do SGML \pause
+  \item É bem mais flexível que o HTML
+  \item É uma recomendação da W3C
+ \end{itemize}
+\end{frame}
+
+\subsection{Diferença entre XML e HTML}
+\begin{frame}{Diferença entre XML e HTML}
+\begin{block}{Qual seria a diferença básica entre XML e HTML?}
+\pause
+ XML foi projetado para armazenar dados e não para exibi-los!
+\end{block}
+\begin{itemize}
+  \item XML não é um substituto do HTML
+  \item Diferentes objetivos:\\
+   XML foi projetado para \setcolor{blue}{descrever } dados e com foco no \setcolor{blue}{que o dado é}\\
+   HTML foi projetado para \setcolor{blue}{exibir } dados e com foco em como a informação será \setcolor{blue}{apresentada}
+  
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]{Exemplo de XML}
+\begin{lstlisting}
+<?xml version="1.0" encoding="ISO-8859-1"?> 
+<note> 
+  <to>Tove</to> 
+  <from>Jani</from>
+  <heading>Reminder</heading>
+  <body>Don't forget me this weekend!</body> 
+</note>
+\end{lstlisting}
+\end{frame}
+
+\subsection{Porque XML é importante?}
+\begin{frame}{Porque XML é importante?}
+\textbf{Texto Plano}
+\begin{itemize}
+  \item Fácil de editar
+  \item Útil para armazenar pequenas quantidades de dados
+  \item Possibilita o armazenamento eficiente de uma grande quantidade de dados através de um \textit{XML front end} e de um banco de dados
+\end{itemize}
+\textbf{Indentificação dos Dados}
+\begin{itemize}
+  \item Descreve o tipo de informação armazenado (Metadado)
+  \item Pode ser usado de diferentes formas por diferentes aplicações
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Porque XML é importante?}
+\textbf{Estilo de exibição}
+\begin{itemize}
+  \item Desassocia o armazenamento da informação do seu processamento \pause
+  \item Para isso, usa-se a linguagem XSL
+  \item XSL possibilita a apresentação do conteúdo armazenado no XML sob diferentes estilos
+\end{itemize}
+\textbf{Reusabilidade \textit{inline}}
+\begin{itemize}
+  \item Pode ser composto de diferentes entidades
+  \item É possível modularizar o documento e fazer referencia entre eles
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Porque XML é importante?}
+\textbf{Facilmente processável}
+\begin{itemize}
+  \item Possui uma notação regular e consistente
+  \item Notação independente de fabricante
+\end{itemize}
+\textbf{Formato baseado em hierarquia}
+\begin{itemize}
+  \item Rápido de acessar
+  \item Fácil de rearranjar
+\end{itemize}
+\end{frame}
+
+\section{Especificações XML}
+\begin{frame}{Especificações XML}
+Diversas especificações fazem parte do padrão XML
+\begin{itemize}
+  \item \textbf{XML 1.0:} define a estrutura da sintaxe de documento XML
+  \item \textbf{XPointer e XLink:} define uma abordagem padrão para representação referência entre recursos
+  \item \textbf{XSL:} Define uma abordagem padrão para representação de estilos a serem aplicações em documentos XML
+\end{itemize}
+\end{frame}
+
+\section{XML a fundo}
+\subsection{XML Building blocks}
+\begin{frame}[fragile]{Elementos}
+\begin{itemize}
+  \item Delimitados por colchetes angulates ($<$ e $>$)
+  \item Identifica a natureza do conteúdo que circunda 
+\end{itemize}
+Formato geral:
+\begin{lstlisting}
+ <element> ... </element>
+\end{lstlisting}
+Elementos vazios:
+\begin{lstlisting}
+  <emptyelement/>
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]{Atributos}
+  \begin{itemize}
+   \item Pares chave-valor
+   \item Em geral usa-se como metadado sobre os elementos
+   \item Os valores devem estar entre aspas
+  \end{itemize}
+\begin{lstlisting}
+ <element attribute="value"> 
+\end{lstlisting}
+
+\end{frame}
+
+\subsection{Sintaxe XML}
+\begin{frame}[fragile]{Sintaxe XML}
+\begin{itemize}
+  \item Todos elementos devem ter uma tag de fechamento
+  \item Tags XML são \textit{case sensitive}
+  \item Todo os elementos XML devem estar corretamente aninhados
+\end{itemize}
+\pause
+\begin{lstlisting}
+<note> 
+  <to>Tove</to> 
+  <from>Jani</from>
+  <heading>Reminder
+    <body>Don't forget me this weekend!
+  </heading> 
+    </body> 
+</note>
+\end{lstlisting}
+\end{frame}
+
+
+\begin{frame}[fragile]{Sintaxe XML}
+\begin{itemize}
+  \item Espaços em branco são preservados
+  \item Comentários seguem a mesma estrutura do HTML
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Conclusões a partir da sintaxe}
+\begin{itemize}
+  \item Os elementos são extensíveis
+  \item Há um relacionamento entre os elementos
+  \item Os elementos tem conteúdo (que podem ser inclusive outros elementos)
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Dúvida}
+ \begin{block}{Quando usar elementos e quando usar atributos?}
+ \pause
+Metainformação sobre os elementos devem ser armazenados como atributos e o dado por si só deve ser armazenado como elemento.
+ \end{block}
+
+\end{frame}
+
+\section{Desenvolvendo aplicações com XML}
+\begin{frame}{Desenvolvendo aplicações com XML}
+\begin{itemize}
+  \item Diversas APIs estão disponíveis para o desenvolvimento de aplicações que fazem uso de XML
+  \item Nessas APIs é possível a criação de uma árvore XML, sendo possível inclusive a validação com base em DTD ou XMLSchema
+  \item Vamos tabalhar com a API JDOM
+\end{itemize}
+
+\end{frame}
+
+\section{Validação de XMLs}
+\begin{frame}{Por que é necessário validar um documento XML?}
+\pause
+\begin{itemize}
+  \item Apesar do arquivo estar sintaticamente correto poderemos querer que ele siga alguma estrutura \pause
+  \item Suponha que desejamos criar a estrutura de uma entidade Pessoa, poderemos querer forçar que a pessoa tenha um elemento informando o CPF e ter apenas um elemento endereço \pause
+  \item Para isso usamos estruturas de validação DTD ou XMLSchema
+\end{itemize}
+
+\end{frame}
+
+\subsection{DTD}
+\begin{frame}[fragile]{DTD}
+\begin{itemize}
+  \item Acrônimo de \textit{Document Type Definition}
+  \item Especifica a estrutura a ser utilizada pelo documento XML
+  \item Pode ser definido tanto dentro do XML quanto em um documento externo
+\end{itemize}
+\begin{lstlisting}
+<!DOCTYPE note [
+<!ELEMENT note (to,from,heading,body)>
+<!ELEMENT to (#PCDATA)>
+<!ELEMENT from (#PCDATA)>
+<!ELEMENT heading (#PCDATA)>
+<!ELEMENT body (#PCDATA)>
+]>
+\end{lstlisting}
+
+\end{frame}
+\begin{frame}[fragile]{DTD}
+\begin{lstlisting}
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE note SYSTEM "Note.dtd">
+<note>
+<to>Tove</to>
+<from>Jani</from>
+<heading>Reminder</heading>
+<body>Don't forget me this weekend!</body>
+</note> 
+\end{lstlisting}
+
+\begin{lstlisting}
+<!DOCTYPE root-element SYSTEM "filename">
+\end{lstlisting}
+
+ 
+\end{frame}
+
+
+\subsection{XMLSchema}
+\begin{frame}{O que é?}
+\begin{itemize}
+  \item Trata-se de uma altertativa ao DTD
+  \item Oferece uma abordagem baseada em XML
+  \item Também referenciado como XSD
+\end{itemize}
+ 
+\end{frame}
+
+\begin{frame}{O que possibilita?}
+\begin{itemize}
+  \item Define os elementos e atributos que podem aparecer no documento
+  \item Define a ordem, o número e quais são os elementos filhos de um certo elemento
+  \item Define se um elemento pode ser vazio ou se contém texto
+  \item Define o tipo de dado de cada elemento e atributo
+  \item Possibilita definir valores padrões para elementos e atributos
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Porque XMlSchema são sucessores dos DTDs?}
+\begin{itemize}
+  \item São mais ricos e mais poderosos que os DTDs
+  \item São escritos em XML
+  \item Suportam tipos de dados
+\end{itemize}
+\end{frame}
+
+
+
+
+\begin{frame}[fragile]{Exemplo XSD}
+\begin{lstlisting}
+ <?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+targetNamespace="http://mynamespace/2011/empresa"
+xmlns="http://www.w3schools.com"
+elementFormDefault="qualified">
+<xs:element name="note">
+  <xs:complexType>
+    <xs:sequence>
+      <xs:element name="to" type="xs:string"/>
+      <xs:element name="from" type="xs:string"/>
+      <xs:element name="heading" type="xs:string"/>
+      <xs:element name="body" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+</xs:schema>
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Exemplo XML}
+\begin{lstlisting}
+<?xml version="1.0"?>
+<note xmlns="http://www.w3schools.com"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="http://www.w3schools.com note.xsd">
+<to>Tove</to>
+<from>Jani</from>
+<heading>Reminder</heading>
+<body>Don't forget me this weekend!</body>
+</note>
+
+\end{lstlisting}
+
+\end{frame}
+
+
+\begin{frame}{O que são namespaces}
+\begin{itemize}
+  \item Provém um método de evitar conflitos em nomes de elementos
+  \item É útil quando é necessário unir documentos de dois documentos XML
+  
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]{Exemplo Namespace}
+Forma de usar: \textbf{xmlns:prefix="URI"}
+\begin{lstlisting}
+<root>
+<h:table xmlns:h="http://www.w3.org/TR/html4/">
+  <h:tr>
+    <h:td>Apples</h:td>
+    <h:td>Bananas</h:td>
+  </h:tr>
+</h:table>
+<f:table xmlns:f="http://www.w3schools.com/furniture">
+  <f:name>African Coffee Table</f:name>
+  <f:width>80</f:width>
+  <f:length>120</f:length>
+</f:table>
+</root> 
+\end{lstlisting}
+
+\end{frame}
+
+
+
+
+
+
+\subsection{Trabalho}
+\begin{frame}[allowframebreaks]{Trabalho}
+Implementar mecanismo de serialização e desserialização de objetos. Fornecer suporte aos seguintes mecanismos
+\begin{itemize}
+  \item Tipos primitivos
+  \item Tipos complexos definidos pelo usuário
+  \item Arrays de tipos complexos
+  \item Objetos do tipo ArrayList
+\end{itemize}
+Implementar mecanismo de XMLSchema que valide o arquivo XML
+
+\end{frame}
+
+
+
+
+\end{document}
