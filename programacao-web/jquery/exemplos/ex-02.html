@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script>
+$(document).ready(function(){
+
+  
+    //$("button").click(function(){
+	    $("div").toggle(function(){
+	    	$(this).animate({width: "+=100px", height: "+=100px", opacity: "0.5"})
+	    }, function(){
+	    	$(this).animate({width: "-=100px", height: "-=100px", opacity: "1.0"})
+	    });
+//    });
+});
+</script>
+</head>
+<body>
+
+
+<button>Click me</button>
+
+
+<div style="background-color:blue; height: 100px; width: 100px;"
+
+</body>
+</html>

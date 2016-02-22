@@ -1,0 +1,1008 @@
+%\documentclass[t,handout]{beamer}
+\documentclass{beamer}
+
+
+\usepackage[latin1]{inputenc}
+
+\usepackage[portuguese]{babel}
+\usepackage[tight]{subfigure}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{url}
+% \usepackage{inconsolata}
+\newcommand{\setcolor}[2]{\color{#1}{#2}\color{black}}
+\usepackage{url}
+%Pacote de listagem de cï¿½digo
+\usepackage{listings}
+%\lstset{numbers=left, stepnumber=1, firstnumber=1,
+%numberstyle=\tiny, extendedchars=true, breaklines=true, frame=tb,
+%basicstyle=\footnotesize, stringstyle=\ttfamily,
+%showstringspaces=false }
+
+\lstset{extendedchars=true, breaklines=true, frame=tb,
+basicstyle=\footnotesize, stringstyle=\ttfamily,
+showstringspaces=false,language=HTML }
+
+% \usecolortheme[RGB={130,35,150}]{structure}
+% \usecolortheme[RGB={33,33,94}]{structure}
+\usecolortheme[RGB={153,204,123}]{structure}
+\setbeamertemplate{footline}[frame number]
+\setbeamertemplate{navigation symbols}{}
+
+% \usetheme{Frankfurt} %LEGAL     !!!
+% \usetheme{Madrid}     %LEGAL/L%IMPO/COM CAIXA     (sem barra de desenvolvimento)
+
+% \usetheme{Antibes} %NAO
+% \usetheme{Berlin} %PODE SER...     (BARRA DE DESENVOLVIMANTO)
+% \usetheme{Berkeley}     %FEIO
+% \usetheme{Boadilla} %TUDO BRANCO...
+% \usetheme{Copenhagen}     %NAO
+% \usetheme{Darmstadt} %LEGAL!     !!!
+% \usetheme{Dresden}     %LEGAL/LIMPO/SEM CAIXA     (sem caixa fica ruim...)
+
+% \usetheme{Goettingen}     %FEIO DEMAIS!
+ \usetheme{Ilmenau} %LEGAL (forte candidato)
+% \usetheme{JuanLesPins} %BACANA
+% \usetheme{Luebeck}     %FEIO
+
+% \usetheme{Malmoe}     %FEIO
+% \usetheme{Warsaw} %NAO...
+% \usetheme{Seattle}
+% \usetheme{CambridgeUS}
+% \usetheme{Singapore}
+
+%Insere o numero de frames no slide
+\newcommand*\oldmacro{}
+\let\oldmacro\insertshortauthor% save previous definition
+\renewcommand*\insertshortauthor{%
+  \leftskip=.3cm% before the author could be a plus1fill ...
+  \insertframenumber\,/\,\inserttotalframenumber\hfill\oldmacro}
+
+
+\author[Ivo Calado]{Ivo Calado}
+\date{\today}
+\institute[IFAL]{Instituto Federal de Educação, Ciência e Tecnologia de Alagoas}
+\title{Programação para Web}
+\logo{\includegraphics[width=0.2\linewidth]{imagens/ifal-logo.jpg}}
+\subtitle{\textit{jQuery\\}}
+
+\begin{document}
+
+
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+% \section{Roteiro}
+% \AtBeginSection[]
+{\frame{
+\frametitle{Roteiro}
+\tableofcontents[hidesubsections]
+}
+}
+
+\section{Definições}
+\subsection{Características básicas}
+\begin{frame}{O que é \textit{jQuery}?}
+ \begin{itemize}
+  \item É uma biblioteca JavaScript para construção de páginas Web
+  \item Tem como objetivo tornar facilitar a utilização de JavaScript nas páginas
+  \item Reduz o esforço para realização de ações comuns do JavaScript
+ \end{itemize}
+ \begin{block}{O que é necessário conhecer para utilizar \textit{jQuery}?}
+  \begin{itemize}
+   \item HTML
+   \item CSS
+   \item JavaScript
+  \end{itemize}
+
+ \end{block}
+
+
+\end{frame}
+
+\begin{frame}{O que \textit{jQuery} possibilita?}
+ O \textit{jQuery} possue suporte a manipulação dos seguintes recursos:
+ 
+ \begin{itemize}
+  \item Manipulação HTML/DOM 
+  \item Manipulação de CSS
+  \item Tratamento de eventos HTML
+  \item Efeitos e animações
+  \item AJAX
+ \end{itemize}
+ 
+ Além disso, é possível encontrar \textit{plugins} para diversas outras tarefas
+
+\end{frame}
+
+\begin{frame}{Por que utilizar \textit{jQuery}?}
+ \begin{itemize}
+  \item É considerado o framework JavaScript mais popular
+  \begin{itemize}
+   \item Google
+   \item Microsoft
+   \item IBM
+   \item Netflix
+  \end{itemize}
+  \item É compatível com praticamente todos os navegadores modernos
+  \begin{itemize}
+   \item Com exceção do IE 6!
+  \end{itemize}
+
+
+ \end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]{Como adicionar jQuery?}
+ \begin{itemize}
+  \item Via Download de \url{jquery.com}
+  
+ \begin{lstlisting}
+<head>
+  <script src="jquery-1.11.3.min.js"></script>
+</head> 
+ \end{lstlisting}  
+  \item Utilização de CDNs
+  \begin{lstlisting}
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  \end{lstlisting}
+  ou
+  \begin{lstlisting}
+   <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.11.3.min.js"></script>
+  \end{lstlisting}
+ \end{itemize}
+
+\end{frame}
+
+\begin{frame}{Observação}
+\begin{block}{Qual a importância de se utilizar CDNs?}
+ \pause
+ \begin{itemize}
+  \item Reaproveitamento do cache
+  \item CDNs servem o arquivo através de servidores mais próximos fisicamente do cliente
+ \end{itemize}
+
+\end{block}
+
+\end{frame}
+
+\subsection{Sintaxe}
+\begin{frame}[fragile]{Princípios básicos da Sintaxe jQuery (ex-01)}
+A sintaxe básica do jQuery é \textbf{\$(seletor).acao()} ou jquery(seletor).acao()
+ \begin{itemize}
+  \item \textbf{\$} ou \textbf{jquery}, especificam o acesso ao jQuery
+  \item \textbf{seletor} especifica o elemento(s) que serão afetados
+  \item \textbf{action()} especifica a ação a ser tomada
+ \end{itemize}
+ \begin{lstlisting}
+$(this).hide() - oculta o elemento atual
+
+$("p").hide() - oculta todos os elementos p
+
+$(".test").hide() - oculta todos os elementos com a classe 'test'
+
+$("#test").hide() - oculta o elemento com o id 'test'
+ \end{lstlisting} 
+
+\end{frame}
+
+\begin{frame}[fragile]{Hello World (ex-01)}
+\begin{lstlisting}
+<body>
+<h2>This is a heading</h2>
+<p>This is a paragraph.</p>
+<button>Click me</button>
+<p>This is another paragraph.</p>
+<script>
+    $("button").click(function(){
+        $("p").hide();
+    });
+</script>
+</body>
+\end{lstlisting}
+ 
+\end{frame}
+
+\begin{frame}{Seletores}
+jQuery fornece uma ampla gama de possibilidades de busca de seletores. Exemplo: 
+\begin{itemize}
+ \item \$(``p''): seleciona todos elementos ``p''
+ \item \$(``.c1''): seleciona todos os elementos com a classe ``c1''
+ \item \$(``\#id1''): seleciona o elemento com o id ``id1''
+ \item \$(``p,h1''): seleciona todos elementos ``p'' e ``h1''
+\end{itemize}
+Uma lista completa pode ser visualizada em: \url{http://www.w3schools.com/jquery/trysel.asp}
+\end{frame}
+
+
+\begin{frame}[fragile]{O evento \textit{``Ready Event''} (ex-02)}
+\begin{block}{O que acontece se o código que faz seleção a elementos aparece antes dos elementos propriamente ditos?}
+\pause
+Os eventos não serão disparados pois os elementos não são encontrados
+\end{block}
+Causas: 
+\begin{itemize}
+ \item Problemas no carregamento da páginas
+ \item Definição do código antes do elemento
+\end{itemize}
+Solução: utilizar o evento \textit{ready event}!
+\begin{lstlisting}
+$(document).ready(function(){
+    $("button").click(function(){
+        $("p").hide();
+    });
+});
+\end{lstlisting}
+
+
+ 
+\end{frame}
+
+\begin{frame}{Exercícios}
+Baixar arquivo de \url{https://goo.gl/gq5CBS}. Para cada questão, utilizar exemplo correspondente.
+
+\begin{enumerate}
+ \item Ocultar todos os elementos ``p''
+ \item Ocultar o seletor com o id ``test''
+ \item Ocultar todos os elementos com a classe ``test''
+ \item Ocultar todos os elementos do documento
+ \item Ocultar todos os elementos com o atributo \textbf{href}
+ \item Ocultar as linhas ímpares da tabela
+\end{enumerate}
+
+\end{frame}
+
+\begin{frame}{Atividade para casa}
+Estudar as demais formas de se selecionar elementos a partir de \url{http://www.w3schools.com/jquery/jquery_ref_selectors.asp}
+\end{frame}
+
+\subsection{Eventos jQuery}
+\begin{frame}[allowframebreaks]{O que são eventos?}
+São ações disparadas pela página Web em resposta as ações do usuário não página. Exemplos:
+
+Eventos do mouse:
+\begin{itemize}
+ \item click
+ \item dblclick
+ \item mouseenter
+ \item mouseleave
+\end{itemize}
+
+Eventos do teclado:
+\begin{itemize}
+ \item keypress
+ \item keydown
+ \item keyup
+\end{itemize}
+
+Eventos de formulário:
+
+\begin{itemize}
+ \item submit
+ \item change
+ \item focus
+ \item blur
+\end{itemize}
+
+Eventos do documento:
+\begin{itemize}
+ \item load
+ \item resize
+ \item scroll
+ \item unload
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]{Evento click}
+\begin{itemize}
+ \item Atribui tratador de evento a ação de clique de usuário
+ \item Pode ser atribuído a qualquer elemento (botão ou não)
+\end{itemize}
+
+\begin{lstlisting}
+$("p").click(function(){
+    $(this).hide();
+}); 
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]{Evento dblclick}
+\begin{itemize}
+ \item Efeito semelhante ao evento click porém requer o clique duplo do usuário
+\end{itemize}
+\begin{lstlisting}
+$(document).ready(function(){
+    $("p").dblclick(function(){
+        $(this).hide();
+    });
+});
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]{Eventos mouseenter e mouseleave}
+\begin{itemize}
+ \item O evento \textit{mouseenter} é disparado quando o usuário passa o mouse sobre o elemento
+\end{itemize}
+\begin{lstlisting}
+$("#p1").mouseenter(function(){
+    alert("You entered p1!");
+});
+\end{lstlisting}
+
+\begin{itemize}
+ \item O evento \textit{mouseleave} é disparado quando o usuário move o mouse para fora do elemento
+\end{itemize}
+\begin{lstlisting}
+$("#p1").mouseleave(function(){
+    alert("Bye! You now leave p1!");
+});
+\end{lstlisting}
+
+\begin{itemize}
+ \item Testar eventos \textit{mousedown} e \textit{mouseup}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Evento \textit{hover}}
+\begin{itemize}
+ \item Combina os eventos \textit{mouseenter} e \textit{mouseleave}
+ \item Utiliza duas funções, onde a primeira é disparada quando o mouse é colocada sobre o elemento (mouseenter) e a segunda função é chamada quando o mouse é retirado do elemento
+\end{itemize}
+
+\begin{lstlisting}
+$("#p1").hover(function(){
+    alert("Entrou em p1!");
+},
+function(){
+    alert("Saiu de p1!");
+}); 
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]{Como é possível atribuir uma classe css a um dado elemento?}
+\begin{lstlisting}
+<style>.c1 { color: red; font-size: 30px; }</style>
+<script>
+$(document).ready(function(){
+    $("#p1").hover(function(){
+        $("p").addClass("c1")
+    },
+    function(){
+        $("p").removeClass("c1")
+    }); 
+});
+</script></head><body>
+<span id="p1">This is a paragraph.</span><br>
+<p>teste!</p>
+</body>
+
+\end{lstlisting}
+
+\end{frame}
+
+
+\begin{frame}[fragile]{Evento \textit{focus} e \textit{blur}}
+\begin{itemize}
+ \item Evento \textit{focus}
+\end{itemize}
+
+\begin{lstlisting}
+$("input").focus(function(){
+    $(this).css("background-color", "#cccccc");
+}); 
+\end{lstlisting}
+\begin{itemize}
+ \item Evento \textit{blur}
+\end{itemize}
+\begin{lstlisting}
+$("input").blur(function(){
+    $(this).css({"background-color", "#ffffff", "color": "blue"});
+});
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]{O método \textit{on}}
+\begin{itemize}
+ \item Com o método \textit{on} é possível atrelar mais de um tratador de eventos a um elemento por vez
+\end{itemize}
+\begin{lstlisting}
+$("p").on({
+    mouseenter: function(){
+        $(this).css("background-color", "lightgray");
+    },
+    mouseleave: function(){
+        $(this).css("background-color", "lightblue");
+    },
+    click: function(){
+        $(this).css("background-color", "yellow");
+    }
+});
+\end{lstlisting}
+
+
+\end{frame}
+
+\begin{frame}{Exercícios}
+Baixar arquivo de \url{https://goo.gl/KewJiz}. Para cada questão, utilizar exemplo correspondente.
+
+\begin{enumerate}
+ \item Alterar o código para que os elementos ``p'' sejam ocultados ao clique
+ \item Alterar o código para que os elementos ``p'' sejam ocultados ao clique duplo
+ \item Alterar o código para que quando o mouse passar sobre o elemento ``span'' ele seja ocultado
+ \item Alterar o código para que o ``input'' seja ocultado quando o usuário digitar algum caracter
+ \item Utilizar o método ``on'' para atribuir um tratador ao evento do clique do mouse a todos os elementos ``p''
+\end{enumerate}
+
+\end{frame}
+
+\begin{frame}{Atividade para casa}
+Estudar os demais eventos do jQuery a partir de \url{http://www.w3schools.com/jquery/jquery_ref_events.asp}
+\end{frame}
+
+
+
+
+\section{Efeitos jQuery}
+\subsection{Hide, Show, Toggle, Fade e Slide}
+\begin{frame}[fragile]{Eventos \textit{hide} e \textit{show}}
+\begin{itemize}
+ \item O efeito \textit{hide} tem como objetivo ocultar o elemento
+\end{itemize}
+\begin{lstlisting}
+$("#hide").click(function(){
+    $("p").hide();
+});
+\end{lstlisting}
+\begin{itemize}
+ \item O efeito \textit{show} tem como objetivo tornar visível um elemento previamente ocultado
+\end{itemize}
+\begin{lstlisting}
+$("#show").click(function(){
+    $("p").show();
+});
+\end{lstlisting}
+
+\end{frame}
+\begin{frame}[fragile]{Velocidade para eventos \textit{hide} e \textit{show}}
+\begin{itemize}
+ \item É possível definir a velocidade para o desaparecimento ou exibição dos elemento
+\end{itemize}
+\begin{lstlisting}
+$("button").click(function(){
+    $("p#1").hide(1000);
+    $("p#2").hide("slow");
+    $("p#3").hide("fast");
+});
+\end{lstlisting}
+Possíveis valores:
+\begin{itemize}
+ \item ``slow''
+ \item ``fast''
+ \item tempo em milissegundos
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]{Efeito \textit{toggle}}
+\begin{itemize}
+ \item Com o evento \textit{toggle} é possível implementar a troca contínua entre os efeitos \textit{hide} e \textit{show}
+\end{itemize}
+
+\begin{lstlisting}
+$(document).ready(function(){
+    $("button").click(function(){
+        $("p#id1").toggle(1000);
+        $("p#id2").toggle("fast");
+        $("p#id3").toggle("slow");
+        $("p#id4").toggle();
+    });
+});
+\end{lstlisting}
+
+
+\end{frame}
+
+\begin{frame}{Efeitos fade}
+\begin{itemize}
+ \item jQuery fornece a possibilidade de adição de efeitos de fade (desvanecimento) aos elementos
+ \item Efeito de fade é o efeito em que o elemento é removido ou adicionado ao mesmo tempo em que sua transparência é modificada
+ \item São definidos 4 métodos diferentes de fade
+ \begin{itemize}
+  \item fadeIn
+  \item fadeOut
+  \item fadeToggle
+  \item fadeTo
+ \end{itemize}
+
+\end{itemize}
+
+
+ 
+\end{frame}
+
+\begin{frame}[fragile]{fadeIn}
+\begin{itemize}
+ \item Utilizado para adicionar elementos da página
+
+\end{itemize}
+Sintaxe: 
+\begin{lstlisting}
+$(selector).fadeIn(speed,callback);
+\end{lstlisting}
+
+Exemplo: 
+\begin{lstlisting}
+$("button").click(function(){
+    $("#div1").fadeIn();
+    $("#div2").fadeIn("slow"); // slow ou fast
+    $("#div3").fadeIn(3000);
+});
+\end{lstlisting}
+
+
+
+
+\end{frame}
+
+\begin{frame}[fragile]{fadeOut}
+\begin{itemize}
+ \item Utilizado para tornar visível elementos da página
+\end{itemize}
+Sintaxe:
+\begin{lstlisting}
+$(selector).fadeOut(speed,callback);
+\end{lstlisting}
+
+Exemplo: 
+\begin{lstlisting}
+$("button").click(function(){
+    $("#div1").fadeOut();
+    $("#div2").fadeOut("slow");
+    $("#div3").fadeOut(3000);
+});
+\end{lstlisting}
+
+
+\end{frame}
+
+
+\begin{frame}[fragile]{fadeToggle}
+\begin{itemize}
+ \item Equivalente ao toggle: chaveamento entre os efeitos de fadeIn e fadeOut
+\end{itemize}
+Sintaxe: 
+\begin{lstlisting}
+$(selector).fadeToggle(speed,callback);
+\end{lstlisting}
+Exemplo: 
+\begin{lstlisting}
+$("button").click(function(){
+    $("#div1").fadeToggle();
+    $("#div2").fadeToggle("slow");
+    $("#div3").fadeToggle(3000);
+});
+\end{lstlisting}
+
+
+
+\end{frame}
+
+
+\begin{frame}[fragile]{fadeTo}
+\begin{itemize}
+ \item Semelhante aos demais métodos de \textit{fadding}, porém ao invés de tornar os elementos visíveis/invisíveis modifica o nível de opacidade/transparência dos elementos
+\end{itemize}
+Sintaxe: 
+\begin{lstlisting}
+$(selector).fadeTo(speed,opacity,callback);
+\end{lstlisting}
+
+Exemplo: 
+\begin{lstlisting}
+$("button").click(function(){
+    $("#div1").fadeTo("slow", 0.15);
+    $("#div2").fadeTo("slow", 0.4);
+    $("#div3").fadeTo("slow", 0.7);
+});
+\end{lstlisting}
+
+
+
+\end{frame}
+
+
+\begin{frame}{Exercícios}
+Baixar arquivo de \url{https://goo.gl/nSpQh8}. Para cada questão, utilizar exemplo correspondente.
+
+\begin{enumerate}
+ \item A partir do jQuery, remova o elemento div utilizando desvanecimento
+ \item Repita o processo do exercício anterior porém utilizando a velocidade ``slow''
+ \item Adicione o elemento div utilizando desvanecimento (a velocidade da ação deve ser de 2000 milissegundos)
+ \item Modifique a opacidade do elemento div para 0.2 (utilize a velocidade ``slow'' para realização da ação)
+ \item Adicione o efeito de chaveamento para adição e remoção do elemento div com desvanecimento (a velocidade da ação deve ser de 1000 milissegundos)
+\end{enumerate}
+
+\end{frame}
+
+\begin{frame}[fragile]{Métodos de \textit{sliding}}
+\begin{itemize}
+ \item jQuery fornece três métodos para realização de slide de elementos (adição e remoção de elementos via deslizamento)
+ \begin{itemize}
+  \item \textit{slideDown: exibe o elemento}
+  \item \textit{slideUp: esconde o elemento}
+  \item \textit{slideToggle: chaveamento entre exibição e ocultação}
+ \end{itemize}
+
+\end{itemize}
+Sintaxe:
+\begin{lstlisting}
+$(selector).slideDown(speed,callback);
+\end{lstlisting}
+Exemplo: 
+\begin{lstlisting}
+$("#flip").click(function(){
+    $("#panel").slideUp();
+});
+\end{lstlisting}
+
+
+\end{frame}
+
+\subsection{Animações}
+\begin{frame}[fragile]{O método \textit{animate}}
+\begin{itemize}
+ \item A partir da utilização do método \textit{animate} é possível criar animações personalizadas
+\end{itemize}
+\pause
+\begin{lstlisting}
+...
+<script> 
+$(document).ready(function(){
+    $("button").click(function(){
+        $("div").animate({left: '250px'});
+    });
+});
+</script>
+...
+<button>Iniciar animação</button>
+<div style="background:blue;height:100px;width:100px;position:absolute;"></div>
+\end{lstlisting}
+
+
+\end{frame}
+
+\begin{frame}[fragile]{Animações: sintaxe}
+Sintaxe: 
+\begin{lstlisting}
+$(selector).animate({params},speed,callback);
+\end{lstlisting}
+
+\begin{itemize}
+ \item Os parâmetros definem propriedades CSS a serem animadas
+ \item O segundo parâmetro (opcional) define a velocidade com o efeito será ajustado. Valores possíveis: ``slow'', ``fast'' e o tempo em milissegundos
+ \item O terceiro parâmetro (opcional) define uma callback a ser chamada ao final do processo de animação
+\end{itemize}
+\pause
+\begin{block}{Importante!}
+Por padrão, todos os elementos HTML tem a posição \textit{static} e não podem ser movidos. Para manipular a posição, deve-se primeiro definir a propriedade position para \textit{relative}, \textit{fixed} ou \textit{absolute}
+\end{block}
+
+
+\end{frame}
+
+\begin{frame}[fragile]{Manipulando múltiplas propriedades}
+\begin{itemize}
+ \item É possível manipular múltiplas propriedades CSS em uma única chamada
+\end{itemize}
+
+\begin{lstlisting}
+$("button").click(function(){
+    $("div").animate({
+        left: '250px',
+        opacity: '0.5',
+        height: '150px',
+        width: '150px'
+    });
+}); 
+\end{lstlisting}
+
+
+\end{frame}
+
+
+\begin{frame}[fragile]{Dúvida?!}
+\begin{block}{É possível manipular todas as propriedades CSS via o método \textit{animate}?}
+\begin{itemize}
+ \item Sim, porém as propriedades devem ser escritas no formato camel-cased. Ou seja, a propriedades \textit{padding-left} deve ser escrita como \textit{\textbf{paddingLeft}}
+ \item Para que as propriedades ligadas a cores tenham efeito deve-se importar o plugin jQuery UI
+\end{itemize}
+
+\end{block}
+
+\begin{lstlisting}
+  <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+  <script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+\end{lstlisting}
+Ver mais opções do plugin em \textbf{\url{https://jqueryui.com/}}
+\end{frame}
+
+
+\begin{frame}[fragile]{Utilizando valores relativos}
+\begin{itemize}
+ \item Ao realizar animações é possível definir valores relativos aos atuais
+ \item Para tal, basta ao definir as propriedades utilizar os operadores += ou -=
+\end{itemize}
+\begin{lstlisting}
+$("button").click(function(){
+    $("div").animate({
+        left: '250px',
+        height: '+=150px',
+        width: '+=150px'
+    });
+});
+\end{lstlisting}
+
+
+\end{frame}
+
+\begin{frame}[fragile]{Utilizando valores predefinidos}
+\begin{itemize}
+ \item jQuery especifica três valores predefinidos para as propriedades: \textbf{show}, \textbf{hide} e \textbf{toggle}
+\end{itemize}
+\begin{lstlisting}
+$("button").click(function(){
+    $("div").animate({
+        height: 'toggle'
+    });
+});
+\end{lstlisting}
+
+
+\end{frame}
+
+
+\begin{frame}[fragile]{Chamadas consecutivas ao método \textit{animate}}
+\begin{itemize}
+ \item Se múltiplas chamadas ao método \textit{\textbf{animate}} são realizadas elas são enfileiradas
+ \item Isto significa que uma chamada será executada após o término da anterior
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]{Exemplo}
+\begin{lstlisting}
+("button").click(function(){
+    var div = $("div");
+    div.animate({height: '300px', opacity: '0.4'}, "slow");
+    div.animate({width: '300px', opacity: '0.8'}, "slow");
+    div.animate({height: '100px', opacity: '0.4'}, "slow");
+    div.animate({width: '100px', opacity: '0.8'}, "slow");
+});  
+
+...
+<div style="background:#98bf21;height:100px;width:100px;position:absolute;"></div>
+\end{lstlisting}
+
+\end{frame}
+
+
+
+
+\section{jQuery e HTML}
+\subsection{Introdução}
+\begin{frame}{Definição}
+\begin{itemize}
+ \item jQuery possibilita a manipulação de maneira simples dos elementos de DOM
+\end{itemize}
+
+\begin{block}{O que é mesmo DOM?}
+\pause
+\textit{
+"The W3C Document Object Model (DOM) is a platform and language-neutral interface that allows programs and scripts to dynamically access and update the content, structure, and style of a document."}
+\end{block}
+
+
+
+\end{frame}
+
+\subsection{Recuperando conteúdo de elementos}
+\begin{frame}[fragile]{Métodos text(), html() e val()}
+São fornecidos três métodos para recuperação e modificação de conteúdo via jQuery
+\begin{itemize}
+ \item text() - Ajusta ou recupera o texto do elemento selecionado
+ \item html() - Ajusta ou recupera o conteúdo do elemento selecionado (incluindo marcações HTML)
+ \item val() - Ajusta ou recupera o conteúdo de campos de formulários
+\end{itemize}
+
+\begin{lstlisting}
+    $("#btn1").click(function(){
+        alert("Text: " + $("#test").text());
+    });
+    $("#btn2").click(function(){
+        alert("HTML: " + $("#test").html());
+    });
+\end{lstlisting}
+
+
+\end{frame}
+
+\begin{frame}[fragile]{Uso do val()}
+\begin{lstlisting}
+<script>
+$(document).ready(function(){
+    $("button").click(function(){
+        alert("Value: " + $("#test").val());
+    });
+});
+</script>
+</head>
+<body>
+
+<p>Name: <input type="text" id="test" value="Mickey Mouse"></p>
+
+<button>Show Value</button>
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]{Recuperando valores de atributos}
+\begin{itemize}
+ \item Para recuperarmos valores de atributos basta utilizar o método attr()
+\end{itemize}
+\begin{lstlisting}
+<script>
+$(document).ready(function(){
+    $("button").click(function(){
+        alert($("#w3s").attr("href"));
+    });
+});
+</script>
+</head>
+<body>
+
+<p><a href="http://www.w3schools.com" id="w3s">W3Schools.com</a></p>
+\end{lstlisting}
+
+
+\end{frame}
+
+\begin{frame}[fragile]{Modificando conteúdo de elementos}
+\begin{lstlisting}
+$("#btn1").click(function(){
+    $("#test1").text("Hello world!");
+});
+$("#btn2").click(function(){
+    $("#test2").html("<b>Hello world!</b>");
+});
+$("#btn3").click(function(){
+    $("#test3").val("Dolly Duck");
+}); 
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]{Modificando atributos}
+\begin{lstlisting}
+<script>
+$(document).ready(function(){
+    $("button").click(function(){
+        $("#w3s").attr("href", "http://www.w3schools.com/jquery");
+    });
+});
+</script>
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]{Funções de callbacks para os métodos text(), html() e val()}
+\begin{lstlisting}
+<script>
+$(document).ready(function(){
+        $("#btn2").click(function(){
+        $("#test2").html(function(i, origText){
+            return "Old html: " + origText + " New html: Hello <b>world!</b> (index: " + i + ")"; 
+        });
+    });
+});
+</script>
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]{Função de callback para método attr}
+\begin{lstlisting}
+<script>
+$(document).ready(function(){
+    $("button").click(function(){
+        $("#w3s").attr("href", function(i, origValue){
+            return origValue + "/jquery"; 
+        });
+    }); 
+});
+</script>
+\end{lstlisting}
+
+\end{frame}
+
+
+\subsection{Adicionando novos elementos ao HTML}
+\begin{frame}{Adicionando novos elementos ao HTML}
+São fornecidos 4 métodos para inserção de novos elementos na página
+\begin{itemize}
+ \item \textbf{append():} o novo elemento é inserido como último elemento filho do elemento selecionado
+ \item \textbf{prepend():} o novo elemento é inserido como primeiro elemento filho do elemento selecionado
+ \item \textbf{after():} insere o elemento APÓS o elemento selecionado
+ \item \textbf{before():} insere o elemento ANTES do elemento selecionado
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]{Exemplos}
+\begin{lstlisting}
+$("p").append("Some appended text."); 
+$("p").prepend("Some prepended text."); 
+
+var txt1 = "<p>Text.</p>";
+var txt2 = $("<p></p>").text("Text.");   
+var txt3 = document.createElement("p");  
+txt3.innerHTML = "Text.";
+$("p").append(txt1, txt2, txt3);    
+
+$("img").after("Some text after");
+$("img").before("Some text before"); 
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]{Um pouco mais de exemplos...}
+\begin{lstlisting}
+$(document).ready(function(){
+    $("#b1").click(function(){
+         var $a = $("<a>", {id: "foo", href:"http://www.google.com", target: "blank", text: "Clique"});
+
+         $("div").append($a);
+    }); 
+    $("#b2").click(function(){
+         a = document.createElement("a")
+         a.id="foo"
+         a.href="http://www.google.com"
+         a.target="blank"
+         a.innerHTML = "Clique"
+         $("div").append(a);
+    }); 
+
+});
+\end{lstlisting}
+
+\end{frame}
+
+\subsection{Removendo elementos do HTML}
+\begin{frame}[fragile]{Definição}
+São fornecidos dos métodos para remoção de elementos do HTML
+\begin{itemize}
+ \item \textbf{remove():} Remove os elementos selecionados (e seus elementos filhos)
+ \item \textbf{empty():} Remove os elementos filhos do elementos selecionado
+\end{itemize}
+\begin{lstlisting}
+$("#div1").remove(); 
+$("#div1").empty();
+$("p").remove(".test");
+$("p").remove(".test, .demo");
+\end{lstlisting}
+
+
+\end{frame}
+
+
+\section{jQuery e AJAX}
+
+
+\end{document}
