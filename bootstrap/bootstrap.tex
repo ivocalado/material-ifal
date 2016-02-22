@@ -1,0 +1,1290 @@
+%\documentclass[t,handout]{beamer}
+\documentclass{beamer}
+
+
+\usepackage[latin1]{inputenc}
+
+\usepackage[portuguese]{babel}
+\usepackage[tight]{subfigure}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{url}
+% \usepackage{inconsolata}
+\newcommand{\setcolor}[2]{\color{#1}{#2}\color{black}}
+
+%Pacote de listagem de cï¿½digo
+\usepackage{listings}
+%\lstset{numbers=left, stepnumber=1, firstnumber=1,
+%numberstyle=\tiny, extendedchars=true, breaklines=true, frame=tb,
+%basicstyle=\footnotesize, stringstyle=\ttfamily,
+%showstringspaces=false }
+
+\lstset{extendedchars=true, breaklines=true, frame=tb,
+basicstyle=\footnotesize, stringstyle=\ttfamily,
+showstringspaces=false,language=HTML }
+
+% \usecolortheme[RGB={130,35,150}]{structure}
+% \usecolortheme[RGB={33,33,94}]{structure}
+\usecolortheme[RGB={153,204,123}]{structure}
+\setbeamertemplate{footline}[frame number]
+\setbeamertemplate{navigation symbols}{}
+
+% \usetheme{Frankfurt} %LEGAL     !!!
+% \usetheme{Madrid}     %LEGAL/L%IMPO/COM CAIXA     (sem barra de desenvolvimento)
+
+% \usetheme{Antibes} %NAO
+% \usetheme{Berlin} %PODE SER...     (BARRA DE DESENVOLVIMANTO)
+% \usetheme{Berkeley}     %FEIO
+% \usetheme{Boadilla} %TUDO BRANCO...
+% \usetheme{Copenhagen}     %NAO
+% \usetheme{Darmstadt} %LEGAL!     !!!
+% \usetheme{Dresden}     %LEGAL/LIMPO/SEM CAIXA     (sem caixa fica ruim...)
+
+% \usetheme{Goettingen}     %FEIO DEMAIS!
+ \usetheme{Ilmenau} %LEGAL (forte candidato)
+% \usetheme{JuanLesPins} %BACANA
+% \usetheme{Luebeck}     %FEIO
+
+% \usetheme{Malmoe}     %FEIO
+% \usetheme{Warsaw} %NAO...
+% \usetheme{Seattle}
+% \usetheme{CambridgeUS}
+% \usetheme{Singapore}
+
+%Insere o numero de frames no slide
+\newcommand*\oldmacro{}
+\let\oldmacro\insertshortauthor% save previous definition
+\renewcommand*\insertshortauthor{%
+  \leftskip=.3cm% before the author could be a plus1fill ...
+  \insertframenumber\,/\,\inserttotalframenumber\hfill\oldmacro}
+
+
+\author[Ivo Calado]{Ivo Calado}
+\date{\today}
+\institute[IFAL]{Instituto Federal de Educação, Ciência e Tecnologia de Alagoas}
+\title{Programação para Web}
+\logo{\includegraphics[width=0.2\linewidth]{imagens/ifal-logo.jpg}}
+\subtitle{\textit{Bootstrap\\}}
+
+\begin{document}
+
+
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+% \section{Roteiro}
+% \AtBeginSection[]
+{\frame{
+\frametitle{Roteiro}
+\tableofcontents[hidesubsections]
+}
+}
+
+\section{Definições}
+\subsection{O que é Bootstrap?}
+\begin{frame}{O que é Bootstrap?}
+\begin{itemize}
+ \item Bootstrap é um framework livre para construção de \textit{front-end} para desenvolvimento ágil e fácil de aplicações Web
+ \item Inclue templates baseados em HTML e CSS para tipografia, formulários, botões, navegação entre outros
+ \item Possibilita a criação de designs responsivos de maneira fácil
+\end{itemize}
+\pause
+\begin{block}{O que é Design Web Responsivo?}
+ Design Web Responsivo está relacionado a criação de web sites que automaticamente se ajustam para a apresentação adequada em todos os tipos de dispositivos, desde pequenos telefones até grandes desktops
+\end{block}
+
+\end{frame}
+
+\begin{frame}{História do Bootstrap}
+ \begin{itemize}
+  \item O Bootstrap foi desenvolvido por \textbf{Mark Otto} e \textbf{Jacob Thornton} no Twitter e liberado como \textit{open source} em Agosto de 2011 no \textbf{GitHub}
+ \end{itemize}
+ \pause
+ \begin{block}{Afinal, o que é mesmo o GitHub?}
+ \pause
+ Repositório de compartilhamento de projetos \textit{open source}! Permite que sejam criados projetos para armazenamento de código para desenvolvimento, download para público, wiki entre outras funcionalidades
+ \end{block}
+
+
+\end{frame}
+
+\subsection{Vantagens}
+\begin{frame}{Porque utilizar o Bootstrap?}
+ Vantagens do Bootstrap:
+ 
+ \begin{itemize}
+  \item \textbf{Fácil de usar:} exige apenas o conhecimento básico de HTML e CSS para começar a usar o Bootstrap
+  \item \textbf{Desenvolvimento responsivo:} todas as páginas que fazem uso do Bootstrap já se ajustam automaticamente a dispositivos com diferentes interfaces
+  \item \textbf{\textit{Mobile first!}} todo o framework já é pensado em oferecer suporte à aplicações móveis
+  \item \textbf{Compatibilidade com navegadores:} Bootstrap é compatível com todos os navegadores modernos (Chrome, Firefox, Internet Explorer, Safari, and Opera)
+ \end{itemize}
+
+\end{frame}
+
+\begin{frame}{Como obter o Bootstrap?}
+ Há duas formas de adicionar o Bootstrap à sua aplicação. Você pode: 
+ 
+ \begin{enumerate}
+  \item Fazer o download do Bootstrap de \url{http://getbootstrap.com}
+  \item Usar o Bootstrap de um CDN (\textit{Content Delivery Network})
+ \end{enumerate}
+
+ \begin{block}{Porque escolher o CDN?}
+  \begin{itemize}
+   \item Não é necessário fazer o download
+   \item O cliente pode reaproveitar o cache de outras páginas
+   \item O CDN pode otimizar disponibilizando o servidor mais próximo do cliente
+  \end{itemize}
+
+ \end{block}
+
+\end{frame}
+
+\begin{frame}[fragile]{Como adicionar o Bootstrap à uma página}
+ \begin{lstlisting}
+   <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+ \end{lstlisting}
+
+\end{frame}
+
+
+\subsection{Hello World}
+\begin{frame}[fragile]{Etapa 1}
+\begin{itemize}
+ \item Adicionar o doctype HTML5
+\end{itemize}
+ 
+ \begin{lstlisting}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+  </head>
+</html>
+ \end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]{Etapa 2}
+O Bootstrap é é projetado para ser responsivo para dispositivos móveis. Para garantir a renderização apropriada e o zoom correto, adicione a seguinte tag meta dentro de head
+
+\begin{lstlisting}
+<meta name="viewport" content="width=device-width, initial-scale=1">
+\end{lstlisting}
+
+\begin{itemize}
+ \item \textbf{width=device-width} ajusta a largura da página para seguir a largura da tela do dispositivo (que pode variar de dispositivo para dispositivo)
+ 
+ \item \textbf{initial-scale=1} ajusta o zoom inicial quando a página é inicialmente carregada pelo navegador
+\end{itemize}
+
+
+\end{frame}
+
+\begin{frame}[fragile]{Containers}
+ Bootstrap requer a indicação do elemento mais externo a todos os conteúdos da página. Estão definidos duas classes \textit{containers} que podem ser escolhidas
+ 
+ \begin{itemize}
+  \item \textbf{.container} utiliza uma largura de \textit{container} fixa
+  \item \textbf{.container-fluid} utiliza a largura total do device como largura do container
+ \end{itemize}
+ 
+ \begin{lstlisting}
+<body>
+    <div class="container">
+      <h1>My First Bootstrap Page</h1>
+      <p>This is some text.</p>
+    </div>
+<body>
+ \end{lstlisting}
+
+\end{frame}
+
+\section{Elementos Bootstrap I}
+\subsection{Tipografia}
+\begin{frame}{Bootstrap vs. Browser Defaults}
+ \begin{itemize}
+  \item Com o Bootstrap, os elemento HTML apresentam algumas modificações
+ \end{itemize}
+
+\end{frame}
+
+
+\begin{frame}[fragile]{$<$h1$>$ - $<$h6$>$}
+\begin{itemize}
+ \item Os cabeçalhos h1 à h6 seguem a seguinte estrutura em termos de tamalho
+\end{itemize}
+
+\begin{lstlisting}
+
+<div class="container">
+  <h1>h1 Bootstrap heading (36px)</h1>
+  <h2>h2 Bootstrap heading (30px)</h2>
+  <h3>h3 Bootstrap heading (24px)</h3>
+  <h4>h4 Bootstrap heading (18px)</h4>
+  <h5>h5 Bootstrap heading (14px)</h5>
+  <h6>h6 Bootstrap heading (12px)</h6>
+</div>
+
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]{$<$small$>$}
+ \begin{itemize}
+  \item No Bootstrap o elemento \textbf{small} é utilizado para criar um texto secundário, em tamanho reduzido, para qualquer cabeçalho
+ \end{itemize}
+ 
+ \begin{lstlisting}
+  <div class="container">
+  <h1>Lighter, Secondary Text</h1>
+  <p>The small element is used to create a lighter, secondary text in any heading:</p>       
+  <h1>h1 heading <small>secondary text</small></h1>
+  <h2>h2 heading <small>secondary text</small></h2>
+  <h3>h3 heading <small>secondary text</small></h3>
+  <h4>h4 heading <small>secondary text</small></h4>
+  <h5>h5 heading <small>secondary text</small></h5>
+  <h6>h6 heading <small>secondary text</small></h6>
+</div>
+ \end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]{$<$mark$>$ e $<$abbr$>$}
+ \begin{lstlisting}
+<div class="container">
+  <h1>Highlight Text</h1>    
+  <p>Use the mark element to <mark>highlight</mark> text.</p>
+  <p>Use the mark element to <abbr title="O que isto significa?">highlight</abbr> text.</p>
+</div>
+ \end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]{$<$blockquote$>$ e citação reversa}
+ \begin{lstlisting}
+<blockquote>
+    <p>For 50 years, WWF has been protecting the future of nature. The world's leading conservation organization, WWF works in 100 countries and is supported by 1.2 million members in the United States and close to 5 million globally.</p>
+    <footer>From WWF's website</footer>
+</blockquote>
+
+<blockquote class="blockquote-reverse">
+    <p>For 50 years, WWF has been protecting the future of nature. The world's leading conservation organization...</p>
+    <footer>From WWF's website</footer>
+</blockquote>
+ \end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]{$<$code$>$ e $<$kbd$>$ (ex-07)}
+\begin{itemize}
+ \item As tags $<$code$>$ e $<$kdb$>$ destacam o conteúdo de diferentes formas
+\end{itemize}
+
+\begin{lstlisting}
+<div class="container">
+  <h1>Code Snippets</h1>
+  <p>Inline snippets of code should be embedded in the code element:</p>
+  <p>The following HTML elements: <code>span</code>, <code>section</code>, and <code>div</code> defines a section in a document.</p>
+  <p>Use <kbd>ctrl + p</kbd> to open the Print dialog box.</p>
+</div>
+\end{lstlisting}
+ 
+\end{frame}
+
+\begin{frame}[fragile]{Cores de texto contextuais (ex-08)}
+ \begin{itemize}
+  \item Bootstrap define algumas classes para cores contextuais
+ \end{itemize}
+\begin{center}
+ \includegraphics[scale=0.45]{./imagens/contextual-colours.png}
+ % contextual-colours.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{center}
+\begin{lstlisting}
+ <div class="container">
+  <p class="text-muted">Texto</p>
+  <p class="text-primary">Texto</p>
+  <p class="text-success">Texto</p>
+  <p class="text-info">Texto</p>
+  <p class="text-warning">Texto</p>
+  <p class="text-danger">Texto</p>
+</div>
+\end{lstlisting}
+
+ 
+\end{frame}
+
+\begin{frame}[fragile]{Cores de fundo contextuais (ex-09)}
+\begin{itemize}
+  \item Bootstrap define algumas classes para cores de fundo contextuais
+ \end{itemize}
+ \begin{center}
+ \includegraphics[scale=0.45]{./imagens/background-colours.png}
+ % background-colours.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{center}
+\begin{lstlisting}
+<div class="container">
+  <p class="bg-primary">Texto</p>
+  <p class="bg-success">Texto</p>
+  <p class="bg-info">Texto</p>
+  <p class="bg-warning">Texto</p>
+  <p class="bg-danger">Texto</p>
+</div>
+ 
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]{$<$pre$>$ (ex-10)}
+\begin{itemize}
+ \item O elemento \textbf{pre} é utilizado para adição de conteúdo sem formatação
+\end{itemize}
+\begin{lstlisting}
+<pre>Text in a pre element
+  is displayed in a fixed-width
+  font, and it preserves
+  both      spaces and
+  both      spaces and
+</pre>
+\end{lstlisting}
+\begin{itemize}
+ \item É possível utilizar a classe \textbf{pre-scrollable} para adição da barra de rolagem com tamanho padrão de \textbf{350px}
+\end{itemize}
+
+\begin{lstlisting}
+<pre class="pre-scrollable" style="max-height: 200px;">
+  both      spaces and
+</pre>
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Alinhamento textual (ex-11)}
+\begin{itemize}
+ \item São fornecidas classes para possibilitar o alinhamento do texto
+\end{itemize}
+
+\begin{lstlisting}
+<div class="container">
+  <h2>Typography</h2>
+  <p class="text-left">Left-aligned text.</p>
+  <p class="text-right">Right-aligned text.</p>      
+  <p class="text-center">Center-aligned text.</p>
+  <p class="text-justify">Justified text. </p>      
+  <p class="text-nowrap">No wrap text. </p>
+</div>
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]{Case (ex-12)}
+ \begin{itemize}
+  \item É possível ajustar como o texto será apresetado em termos de capitalização
+ \end{itemize}
+ \begin{lstlisting}
+<div class="container">
+  <h2>Typography</h2>
+  <p class="text-lowercase">Lowercased text.</p>
+  <p class="text-uppercase">Uppercased text.</p>      
+  <p class="text-capitalize">Capitalized text.</p>
+</div>
+ \end{lstlisting}
+
+
+\end{frame}
+
+\begin{frame}[fragile]{\textit{initialism} (ex-13)}
+\begin{itemize}
+ \item É possível exibir o texto de uma tag $<$abbr$>$ em uma fonte menor
+\end{itemize}
+\begin{lstlisting}
+ <div class="container">
+  <h2>Typography</h2>
+  <p>The <abbr title="World Health Organization">WHO</abbr> was founded in 1948. (normal abbr)</p>      
+  
+  <p>The <abbr title="World Health Organization" class="initialism">WHO</abbr> was founded in 1948. (slightly smaller abbr)</p>
+</div>
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]{\textit{list-inline} (ex-14)}
+ \begin{itemize}
+  \item É possível colocar todos os itens de uma lista em uma única linha (lista de links?)
+ \end{itemize}
+ \begin{lstlisting}
+ <div class="container">
+  <h2>Typography</h2>
+  <p>The class .list-inline places all list items on a single line:</p>
+  <ul class="list-inline">
+    <li>Coffee</li>
+    <li>Tea</li>
+    <li>Milk</li>
+  </ul>
+</div>
+ \end{lstlisting}
+\end{frame} 
+ 
+ \begin{frame}[fragile]{\textit{pre-scrollable} (ex-15)}
+ \begin{itemize}
+  \item É possível adicionar uma barra de rolagem automática ao elemento $<$pre$>$
+ \end{itemize}
+ \begin{lstlisting}
+    <pre class="pre-scrollable">Text in a pre element
+  is displayed in a fixed-width
+  font, and it preserves
+  both      spaces and
+  line breaks.</pre>
+ \end{lstlisting}
+\end{frame}
+
+\subsection{Tabelas}
+\begin{frame}{Configuração de tabelas (ex-16)}
+ \begin{itemize}
+  \item O Bootstrap fornece um conjunto de classes CSS para serem utilizadas especificamente para tabelas
+  \item O Todas as classes possuem como infixo a palavra ``table''
+  \item É recomendável sempre utilizar estruturas $<$thread$>$ e $<$tbody$>$
+  \item No exemplo mais simples (utilizando a class \textit{table}), são adicionadas linhas horizontais
+ \end{itemize}
+ \begin{figure}
+ \centering
+ \includegraphics[scale=0.6]{./imagens/table01.png}
+ % table01.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{figure}
+
+
+\end{frame}
+
+\begin{frame}{Table striped (ex-17)}
+\begin{itemize}
+ \item A classe \textbf{table-striped} adiciona estilo zebra à tabela (estilos diferentes em linhas vizinhas)
+ 
+\end{itemize}
+\begin{figure}
+ \centering
+ \includegraphics[scale=0.6]{./imagens/table02.png}
+ % table02.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{figure}
+
+\end{frame}
+
+\begin{frame}{Table bordered (ex-18)}
+\begin{itemize}
+ \item A classe \textbf{table-bordered} adiciona estilo adiciona bordas as linhas e colunas
+ 
+\end{itemize}
+\begin{figure}
+ \centering
+ \includegraphics[scale=0.6]{./imagens/table03.png}
+ % table02.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{figure}
+
+\end{frame}
+
+\begin{frame}{Table hover (ex-19)}
+\begin{itemize}
+ \item A classe \textbf{table-hover} adiciona efeito de destaque quando na linha em que o mouse se encontra
+ 
+\end{itemize}
+\begin{figure}
+ \centering
+ \includegraphics[scale=0.6]{./imagens/table04.png}
+ % table02.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{figure}
+
+\end{frame}
+
+\begin{frame}{Condensed table (ex-20)}
+\begin{itemize}
+ \item A classe \textbf{table-Condensed} torna a tabela mais compacta diminuindo o padding das céclulas pela metade
+ 
+\end{itemize}
+\begin{figure}
+ \centering
+ \includegraphics[scale=0.6]{./imagens/table05.png}
+ % table02.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{figure}
+
+\end{frame}
+
+\begin{frame}{Tabelas contextuais (ex-21)}
+\begin{itemize}
+ \item Classes contextuais podem ser adicionadas modificar as cores das linha ($<$tr$>$) ou células ($<$td$>$)
+ 
+\end{itemize}
+\begin{figure}
+ \centering
+ \includegraphics[scale=0.6]{./imagens/table06.png}
+ % table02.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{figure}
+
+Encontram-se definidas as seguintes classes: \textbf{active}, \textbf{success},\textbf{info},\textbf{warning},\textbf{danger}
+\end{frame}
+
+\begin{frame}{Tabelas responsivas (ex-22)}
+\begin{itemize}
+ \item É possível configurar a tabela para ela ser \textbf{responsiva}
+
+\end{itemize}
+\begin{block}{O que significa mesmo responsividade?}
+\pause É a capacidade de se adequar a resolução da tela do usuário. No caso da tabela, isso significa ganhar barras de rolagem! :)
+\end{block}
+
+\begin{figure}
+ \centering
+ \includegraphics[scale=0.4]{./imagens/table07.png}
+ % table02.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{figure}
+
+Para habilitar a responsividade em tabelas basta adicionar a tabela dentro de uma div com a classe \textbf{table-responsive}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Exercícios}
+ Baixar arquivo \url{https://goo.gl/ceqEv6}. Para cada questão, utilizar exemplo correspondente
+ 
+ \begin{enumerate}
+  \item Usar classes Bootstrap para adicionar estilos à tabela (com divisores vertical e horizontal)
+  \item Adicionar marcação de zebra às linhas da tabela
+  \item Adicionar bordas em todos os lados da tabela e das células
+  \item Adicionar o efeito hover às linhas da tabela
+  \item Tornar o espaço entre as células mais compacto
+  \item Usar classes contextuais para adicionar a seguinte configuração:
+  \begin{enumerate}
+   \item Cor verde para a linha da tabela contendo John
+   \item Cor vermelha para a linha da tabela contendo Mary
+   \item Cor laranja para a última linha
+  \end{enumerate}
+
+ \end{enumerate}
+\end{frame}
+\subsection{Images, Wells e Alerts}
+\begin{frame}[fragile]{Images (ex-23)}
+ \begin{itemize}
+  \item É possível configurar como uma imagem será exibida através das classes \textbf{img-rounded}, \textbf{img-circle} e \textbf{img-thumbnail}
+  \item Além disso, é possível configurar a imagem para ser responsiva
+  
+ \end{itemize}
+ \begin{lstlisting}
+   <img src="cinqueterre.jpg" class="img-rounded" alt="Cinque Terre" width="304" height="236">
+      
+   <img src="cinqueterre.jpg" class="img-circle" alt="Cinque Terre" width="304" height="236">
+   
+   <img src="cinqueterre.jpg" class="img-thumbnail" alt="Cinque Terre" width="304" height="236">
+   
+   <img class="img-responsive" src="img_chania.jpg" alt="Chania"> 
+   
+ \end{lstlisting}
+
+
+\end{frame}
+
+\begin{frame}[fragile]{Wells (ex-24)}
+ \begin{itemize}
+  \item A classe \textbf{well} adiciona uma borda arredondada e fundo cinza ao elemento
+  \item É possível também adicionar classes adicionais para configurar o tamanho
+ \end{itemize}
+ \begin{lstlisting}
+    <div class="well well-sm">Small Well</div>
+    <div class="well">Normal Well</div>
+    <div class="well well-lg">Large Well</div>
+ \end{lstlisting}
+\begin{figure}
+ \centering
+ \includegraphics[scale=0.35]{./imagens/well01.png}
+ % table02.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{figure}
+\end{frame}
+
+\begin{frame}[fragile]{Alerts (ex-25)}
+ \begin{itemize}
+  \item Bootstrap possibilita a criação de mensagens de alerta
+ \end{itemize}
+ \begin{figure}
+ \centering
+ \includegraphics[scale=0.35]{./imagens/alerts01.png}
+ % table02.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{figure}
+\begin{itemize}
+ \item Alertas são criados com a classe \textbf{alert}, seguindo por uma das 4 classes contextuais \textbf{alert-success}, \textbf{alert-info}, \textbf{alert-warning} ou \textbf{alert-danger}
+\end{itemize}
+
+\begin{lstlisting}
+ <div class="alert alert-success">Mensagem!</div>
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]{Closing Alerts (ex-26)}
+\begin{itemize}
+ \item É possível criar um alert com marcação de fechamento
+\end{itemize}
+\begin{figure}
+ \centering
+ \includegraphics[scale=0.35]{./imagens/alerts02.png}
+ % alerts02.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{figure}
+
+\begin{lstlisting}
+ <div class="alert alert-success">
+  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+  <strong>Success!</strong> Indicates a successful or positive action.
+</div>
+\end{lstlisting}
+\begin{itemize}
+ \item O fechamento é realizado a partir da adição dos atributos \textbf{class=``close''} e \textbf{data-dismiss=``alert''}
+ \item \textbf{aria-label=``close''} é utilizado para \textit{screen readers}
+ 
+\end{itemize}
+
+
+ 
+\end{frame}
+
+\begin{frame}[fragile]{\textit{Fade alerts (ex-27)}}
+ \begin{itemize}
+  \item É possível adicionar um atraso no fechamento do close alerts
+  \item Basta utilizar as classes \textbf{fade in}
+ \end{itemize}
+ 
+ \begin{lstlisting}
+    <div class="alert alert-danger fade in">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <strong>Danger!</strong> This alert box could indicate a dangerous or potentially negative action.
+  </div>
+ \end{lstlisting}
+
+ 
+
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Exercícios}
+ Baixar arquivo \url{https://goo.gl/c1Q8GY}. Para cada questão, utilizar exemplo correspondente
+ 
+ \begin{enumerate}
+  \item Criar uma mensagem de alerta que indique uma ação de sucesso
+  \item Adicione a mensagem de alerta apropriada dependendo do texto
+  \item Torne a mensagem de alerta fechável
+  \item Utilize o exemplo anterior e adicione o atraso do fechamento da mensagem
+
+ \end{enumerate}
+
+\end{frame}
+
+\subsection{Buttons, Buttons Groups e Glyphicons}
+\begin{frame}[allowframebreaks,fragile]{Buttons}
+\begin{itemize}
+ \item Bootstrap possibilita a criação de 7 estilos diferentes de links
+ \begin{itemize}
+  \item btn-default
+    \item btn-primary
+    \item btn-success
+    \item btn-info
+    \item btn-warning
+    \item btn-danger
+    \item btn-link
+
+ \end{itemize}
+
+\end{itemize}
+\begin{figure}
+ \centering
+ \includegraphics[scale=0.45]{./imagens/buttons.png}
+ % buttons.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{figure}
+
+\begin{itemize}
+ \item Para a criação dos elementos, deve-se adicionar a classe padrão de botões \textbf{btn}
+ \item Estilos de botões podem ser adicionados a elementos \textbf{a}, \textbf{input} e \textbf{button}
+\end{itemize}
+
+\begin{lstlisting}
+<a href="#" class="btn btn-info" role="button">Link Button</a>
+<button type="button" class="btn btn-info">Button</button>
+<input type="button" class="btn btn-info" value="Input Button">
+<input type="submit" class="btn btn-info" value="Submit Button">
+\end{lstlisting}
+
+\begin{itemize}
+ \item É possível configurar o tamanho dos botões a partir das seguintes classes:
+ \begin{itemize}
+  \item btn-lg
+    \item btn-md
+    \item btn-sm
+    \item btn-xs
+
+ \end{itemize}
+\end{itemize}
+\begin{figure}
+ \centering
+ \includegraphics[scale=0.45]{./imagens/buttons-size.png}
+ % buttons-size.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{figure}
+
+
+\begin{lstlisting}
+<button type="button" class="btn btn-primary btn-lg">Large</button>
+
+\end{lstlisting}
+
+
+\end{frame}
+
+\begin{frame}[fragile]{Block Level Buttons}
+\begin{itemize}
+ \item É possível forçar que o botão ocupe toda a largura do container
+\end{itemize}
+
+\begin{lstlisting}
+  <button type="button" class="btn btn-primary btn-block">Button 1</button>
+\end{lstlisting}
+
+\begin{figure}
+ \centering
+ \includegraphics[scale=0.35]{./imagens/button-block-level.png}
+ % button-block-level.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{figure}
+
+
+\end{frame}
+
+\begin{frame}[fragile]{Ativação e desativação de botões}
+ \begin{itemize}
+  \item É possível habilitar ou desabilitar o acesso a botões
+  \item Botão ativado não é um botão comum (efeito de estar clicado)
+ \end{itemize}
+ 
+ \begin{figure}
+ \centering
+ \includegraphics[scale=0.45]{./imagens/button-active.png}
+ % button-active.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{figure}
+
+ 
+ \begin{lstlisting}
+<button type="button" class="btn btn-primary active">Active Primary</button>
+<button type="button" class="btn btn-primary disabled">Disabled Primary</button>
+ \end{lstlisting}
+
+
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Exercícios}
+ Baixar arquivo \url{https://goo.gl/WIA7Vl}. Para cada questão, utilizar exemplo correspondente
+ 
+ \begin{enumerate}
+  \item Utilize as classes do bootstream para adicionar o estilo de botão com a cor vermelha
+  \item Modifique o tamanho dos botões na seguinte ordem: grande, médio, pequeno e muito pequeno
+  \item Faça com que o botão ocupe o tamanho de todo o elemento pai
+  \item Utilize as classes bootstrap para desabilitar o botão
+
+ \end{enumerate}
+
+\end{frame}
+
+\begin{frame}[fragile]{Agrupamento horizontal de botões}
+ \begin{itemize}
+  \item É possível agrupar um conjunto de botões em uma mesma linha. Para tal, deve-se reunir os botões em uma div com classe 
+  \textbf{btn-group}
+ \end{itemize}
+ 
+ \begin{figure}
+ \centering
+ \includegraphics[scale=0.45]{./imagens/button-group.png}
+ % button-group.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{figure}
+
+ 
+  \begin{lstlisting}
+<div class="btn-group">
+  <button type="button" class="btn btn-primary">Apple</button>
+  <button type="button" class="btn btn-primary">Samsung</button>
+  <button type="button" class="btn btn-primary">Sony</button>
+</div>
+ \end{lstlisting}
+
+
+\end{frame}
+
+\begin{frame}[fragile]{Agrupamento vertical}
+ \begin{itemize}
+  \item O agrupamento vertical segue a mesma estrutura, porém a partir da classe \textbf{btn-group-vertical}
+ \end{itemize}
+ \begin{figure}
+ \centering
+ \includegraphics[scale=0.5]{./imagens/button-group-vertical.png}
+ % button-group-vertical.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{figure}
+
+ \begin{lstlisting}
+<div class="btn-group-vertical">
+  <button type="button" class="btn btn-primary">Apple</button>
+  <button type="button" class="btn btn-primary">Samsung</button>
+  <button type="button" class="btn btn-primary">Sony</button>
+</div>
+ \end{lstlisting}
+
+
+\end{frame}
+
+\begin{frame}[fragile,allowframebreaks]{Botões aninhados/Dropbown Menu}
+\begin{itemize}
+ \item Com Bootstrap é possível aninhar botões no formato de menu
+ \item Deve-se utilizar as classes \textbf{dropdown-toggle} e \textbf{dropdown-menu}
+\end{itemize}
+
+\begin{figure}
+ \centering
+ \includegraphics[scale=0.45]{./imagens/button-dropdown.png}
+ % button-dropdown.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{figure}
+
+
+\begin{lstlisting}
+<div class="btn-group">
+    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+    Sony <span class="caret"></span></button>
+    <ul class="dropdown-menu" role="menu">
+      <li><a href="#">Tablet</a></li>
+      <li><a href="#">Smartphone</a></li>
+    </ul>
+</div>
+\end{lstlisting}
+
+
+
+\end{frame}
+
+
+\begin{frame}[allowframebreaks]{Exercícios}
+ Baixar arquivo \url{https://goo.gl/5rHzKm}. Para cada questão, utilizar exemplo correspondente
+ 
+ \begin{enumerate}
+  \item Agrupe os botões
+  \item Faça com que todos os botões estejam agrupados com tamanho grande com a utilização de uma única classe
+  \item Crie um agrupamento vertical
+  \item Agrupe o grupo de botões de modo justificado (ocupando toda a largura do container)
+  \item Adicione o menu ao botão Sony
+
+ \end{enumerate}
+
+\end{frame}
+
+\begin{frame}{Bootstrap Glyphicons}
+ \begin{itemize}
+  \item Bootstrap provê em torno de 200 Glyphicons
+ \end{itemize}
+ \begin{block}{O que são Glyphicons?}
+  É uma biblioteca de ícones e simbolos monocromáticos com ênfase na simplicidade e facilidade de orientação
+ \end{block}
+\begin{figure}
+ \centering
+ \includegraphics[scale=0.4]{./imagens/glyphicons.png}
+ % glyphicons.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{figure}
+
+
+\end{frame}
+
+\begin{frame}[fragile]{Sintaxe Glyphicons}
+ \begin{itemize}
+  \item Para adicionar um Glyphicon, deve-se utilizar a seguinte sintaxe:
+ \end{itemize}
+ \begin{lstlisting}
+<span class="glyphicon glyphicon-name"></span>
+ \end{lstlisting}
+
+ A lista de Glyphicons disponíveis no Bootstrap pode ser visualizado aqui: \url{http://goo.gl/RniGTK}
+ 
+ \begin{lstlisting}
+<span class="glyphicon glyphicon-envelope"></span>
+<span class="glyphicon glyphicon-search"></span>
+<span class="glyphicon glyphicon-print"></span>
+ \end{lstlisting}
+
+
+\end{frame}
+
+
+\begin{frame}[allowframebreaks]{Exercícios}
+ Baixar arquivo \url{https://goo.gl/nGQ1NO}. Para cada questão, utilizar exemplo correspondente
+ 
+ \begin{enumerate}
+  \item Utilize um elemento \textit{span} para criar um ícone de busca (``search'')
+  \item Crie um botão que indique uma ação de sucesso e adicione um ícone de busca nele
+  \item Corrige o código para que seja exibido corretamente o elemento glyphicon
+
+ \end{enumerate}
+
+\end{frame}
+
+\begin{frame}{Atividade para casa}
+ Estudar os seguintes elementos Bootstrap:
+ 
+ \begin{itemize}
+  \item Badges and Labels
+  \item Progress Bar
+  \item Pager
+  \item List Groups
+  \item Panels
+  \item Dropdown Divider
+  \item Dropdown Header
+  \item Como desabilitar itens de dropdown
+ \end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]{Collapse (ex-28)}
+ \begin{itemize}
+  \item Com o Bootstrap é possível esconder elementos inteiros HTML
+ \end{itemize}
+ 
+ \begin{lstlisting}
+  <button data-toggle="collapse" data-target="#demo">Collapsible</button>
+
+  <div id="demo" class="collapse">
+    Lorem ipsum dolor text....
+  </div>
+ \end{lstlisting}
+\begin{itemize}
+ \item A classe \textbf{collapse} indica o elemento que será ocultado
+ \item O elemento \textbf{data-target="\#id"} conecta o elemento que será ocultado do elemento ocultador
+ \item Para tornar elemento ocultado ativo, basta adicionar a class \textbf{in}
+\end{itemize}
+
+
+\end{frame}
+
+\section{Elementos Bootstrap II}
+\subsection{Criação de Menus}
+\begin{frame}
+ É possível criar menus a partir de
+ \begin{itemize}
+  \item listas \textit{inline}
+  \begin{figure}
+ \centering
+ \includegraphics[scale=0.6]{./imagens/menu.png}
+ % menu.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{figure}
+
+  \item elementos \textit{tabs}
+  \begin{figure}
+ \centering
+ \includegraphics[scale=0.45]{./imagens/tabs.png}
+ % tabs.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{figure}
+
+  \item elementos pills
+  \begin{figure}
+ \centering
+ \includegraphics[scale=0.45]{./imagens/pills.png}
+ % pills.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{figure}
+
+ \end{itemize}
+
+ 
+\end{frame}
+
+\begin{frame}[fragile]{Listas inline (ex-29)}
+\begin{itemize}
+ \item Para ativar as listas \textit{inline} basta utilizar a classe \textbf{list-inline} no elemento \textbf{ul} de uma lista
+\end{itemize}
+
+
+ \begin{lstlisting}
+<ul class="list-inline">
+  <li><a href="#">Home</a></li>
+  <li><a href="#">Menu 1</a></li>
+  <li><a href="#">Menu 2</a></li>
+  <li><a href="#">Menu 3</a></li>
+</ul>
+ \end{lstlisting}
+
+\end{frame}
+
+ 
+\begin{frame}[fragile]{Tabs (ex-30)}
+\begin{itemize}
+ \item Para ativar as tabs, deve-se fazer uso das classes \textbf{nav} e \textbf{nav-tabs} e \textbf{active}
+\end{itemize}
+
+\begin{lstlisting}
+<ul class="nav nav-tabs">
+  <li class="active"><a href="#">Home</a></li>
+  <li><a href="#">Menu 1</a></li>
+  <li><a href="#">Menu 2</a></li>
+  <li><a href="#">Menu 3</a></li>
+</ul>
+\end{lstlisting}
+
+
+\end{frame}
+
+\begin{frame}{Criação de menus com dropdown}
+\begin{itemize}
+ \item É possível definir menus com menus em cascata
+\end{itemize}
+
+\begin{figure}
+ \centering
+ \includegraphics[scale=0.65]{./imagens/dropdown-menu.png}
+ % dropdown-menu.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{figure}
+
+
+\end{frame}
+
+\begin{frame}[fragile]{Menu com Dropbown (ex-31)}
+\begin{lstlisting}
+<ul class="nav nav-tabs">
+  <li class="active"><a href="#">Home</a></li>
+  <li class="dropdown">
+    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Menu 1
+    <span class="caret"></span></a>
+    <ul class="dropdown-menu">
+      <li><a href="#">Submenu 1-1</a></li>
+      <li><a href="#">Submenu 1-2</a></li>
+      <li><a href="#">Submenu 1-3</a></li>
+    </ul>
+  </li>
+  <li><a href="#">Menu 2</a></li>
+  <li><a href="#">Menu 3</a></li>
+</ul>
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]{Pills}
+ \begin{itemize}
+  \item Pills são criados a partir das classes \textbf{nav}, \textbf{nav-pills} e \textbf{active}
+ \end{itemize}
+ \begin{lstlisting}
+<ul class="nav nav-pills">
+  <li class="active"><a href="#">Home</a></li>
+  <li><a href="#">Menu 1</a></li>
+  <li><a href="#">Menu 2</a></li>
+  <li><a href="#">Menu 3</a></li>
+</ul>
+ \end{lstlisting}
+
+
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Estudar elementos}
+ \begin{itemize}
+  \item Vertical pills
+  \begin{figure}
+ \centering
+ \includegraphics[scale=0.45]{./imagens/vertical-pills.png}
+ % vertical-pills.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{figure}
+
+  \item Vertical pills em linha
+  \begin{figure}
+ \centering
+ \includegraphics[scale=0.45]{./imagens/vertical-pills-linha.png}
+ % vertical-pills-linha.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{figure}
+
+  \item Pills com menus
+  \begin{figure}
+ \centering
+ \includegraphics[scale=0.45]{./imagens/pills-menu.png}
+ % pills-menu.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{figure}
+
+ \end{itemize}
+
+\end{frame}
+
+
+\begin{frame}{Criação de Abas dinâmicas}
+ \begin{itemize}
+  \item Com o Bootstrap é possível a definição de abas dinâmicas
+ \end{itemize}
+ 
+ \begin{figure}
+ \centering
+ \includegraphics[scale=0.5]{./imagens/tabs-dinamicas.png}
+ % tabs-dinamicas.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{figure}
+
+
+\end{frame}
+
+\begin{frame}[fragile]{Criação de abas dinâmicas}
+ \begin{itemize}
+  \item para criaçaõ das abas dinâmicas é necessário utilizar em conjunto a lista de menus e divs representando o conteúdo
+ \end{itemize}
+ 
+ \begin{lstlisting}
+<ul class="nav nav-tabs">
+  <li class="active"><a data-toggle="tab" href="#id1">Menu 1</a></li>
+  <li><a data-toggle="tab" href="#id2">Menu 1</a></li>
+</ul>
+<div class="tab-content">
+  <div id="id1" class="tab-pane fade in active">
+    Conteúdo 1
+  </div>
+  <div id="id2" class="tab-pane fade">
+    <h3>Conteúdo 2</h3>
+    <p>Some content in menu 1.</p>
+  </div>
+  <div id="menu2" class="tab-pane fade">
+    Conteúdo 2
+  </div>
+</div>
+ \end{lstlisting}
+
+
+\end{frame}
+
+\begin{frame}{Utilização de pills dinâmicos}
+\begin{itemize}
+ \item Para utilizar pills dinâmicos deve-se realizar as seguintes modificações:
+ 
+ \begin{itemize}
+  \item Modificar \textbf{nav-tabs} por \textbf{nav-pills}
+  \item Modificar \textbf{data-toggle=``tab''} por \textbf{data-toggle=``pill''}
+ \end{itemize}
+
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Exercícios}
+ Baixar arquivo \url{https://goo.gl/E4RM45}. Para cada questão, utilizar o exemplo correspondente
+ 
+ \begin{enumerate}
+  \item Crie uma barra de menu a partir da lista passada
+  \item Altere o status do primeiro elemento da lista para \textbf{ativo}
+  \item Crie um menu do tipo \textbf{pill} a partir da lista passada
+  \item Modifique a visualização do menu pill para ser exibido verticalmente
+  \item Modifique o menu pill apresentado de modo que ele tenha uma visualização justificada
+  \item Crie um menu de abas dinâmicas
+  \item Modifique o exemplo anterior para que seja criado um \textbf{Pill} dinâmico
+
+ \end{enumerate}
+\end{frame}
+
+\subsection{Barras de Navegação}
+\begin{frame}[fragile]{Barras de navegação}
+\begin{itemize}
+ \item Barras de navagação são cabeçalhos de navegação posicionados no topo da página
+ \item Com o Bootstrap a barra de navegação pode ser expandida ou comprimida, dependendo do tamanho da tela
+ \item Para criação de tabelas, devemos fazer uso da tag \textbf{nav} com as classes \textbf{navbar} e \textbf{navbar-default}
+ 
+\end{itemize}
+\begin{lstlisting}
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div>
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="#">Home</a></li>
+        <li><a href="#">Page 1</a></li>
+      </ul></div>
+  </div> </nav>
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]{Barra de navegação}
+
+\begin{lstlisting}
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">WebSiteName</a>
+    </div>
+    <div>
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="#">Home</a></li>
+        <li><a href="#">Page 1</a></li>
+        <li><a href="#">Page 2</a></li>
+        <li><a href="#">Page 3</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<div class="container">....</div>
+\end{lstlisting}
+
+ 
+\end{frame}
+
+\begin{frame}{Inversão de cores da barra de navegação}
+\begin{itemize}
+ \item É possível modificar o estilo de cores padrão da barra de navegação
+ \item Basta modificar a opção \textbf{navbar-default} para \textbf{navbar-inverse}
+\end{itemize}
+\begin{figure}
+ \centering
+ \includegraphics[scale=0.5]{./imagens/barra-navegacao-black.png}
+ % barra-navegacao-black.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{figure}
+
+ 
+\end{frame}
+
+\begin{frame}[fragile]{Barra de naveração fixa}
+\begin{itemize}
+ \item É possível configurar a barra de navegação para que ela fique fixa no topo ou na baseados
+ \item Basta utilizar a classe \textbf{navbar-fixed-top} ou \textbf{navbar-fixed-bottom}
+ 
+\end{itemize}
+\begin{lstlisting}
+ <nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container-fluid">
+      ....
+\end{lstlisting}	
+\pause
+\begin{block}{Como resolver o conteúdo sobrescrito pela barra de navegação?}
+Basta adicionar a propriedade \textbf{padding-*: 70px} ao \textit{body}
+ \begin{lstlisting}
+<body style="padding-top: 70px;"> ou 
+<body style="padding-bottom: 70px;">
+ \end{lstlisting}
+
+\end{block}
+
+\end{frame}
+
+\begin{frame}{Exercício}
+ Modificar o exemplo de barra de navegação para adicionar um menu em cascata
+\end{frame}
+
+\begin{frame}[fragile]{Menus alinhados à direita}
+\begin{itemize}
+ \item Para adicionar opções de menu alinhados à direita, basta adicionar uma segunda lista de menus com a classe \textbf{navbar-right}
+\end{itemize}
+\begin{lstlisting}
+<ul class="nav navbar-nav">... </ul>
+<ul class="nav navbar-nav navbar-right">
+  <li><a href="#"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+  <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+</ul>
+\end{lstlisting}
+
+
+\end{frame}
+
+\begin{frame}{Tornando o meu responsivo}
+ 
+\end{frame}
+
+
+
+
+
+
+
+
+\end{document}
