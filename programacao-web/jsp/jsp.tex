@@ -1,0 +1,601 @@
+%\documentclass[t,handout]{beamer}
+\documentclass{beamer}
+
+
+\usepackage[latin1]{inputenc}
+
+\usepackage[portuguese]{babel}
+\usepackage[tight]{subfigure}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{url}
+% \usepackage{inconsolata}
+\newcommand{\setcolor}[2]{\color{#1}{#2}\color{black}}
+
+%Pacote de listagem de cï¿½digo
+\usepackage{listings}
+%\lstset{numbers=left, stepnumber=1, firstnumber=1,
+%numberstyle=\tiny, extendedchars=true, breaklines=true, frame=tb,
+%basicstyle=\footnotesize, stringstyle=\ttfamily,
+%showstringspaces=false }
+
+\lstset{extendedchars=true, breaklines=true, frame=tb,
+basicstyle=\footnotesize, stringstyle=\ttfamily,
+showstringspaces=false,language=HTML }
+
+% \usecolortheme[RGB={130,35,150}]{structure}
+% \usecolortheme[RGB={33,33,94}]{structure}
+\usecolortheme[RGB={153,204,123}]{structure}
+\setbeamertemplate{footline}[frame number]
+\setbeamertemplate{navigation symbols}{}
+
+% \usetheme{Frankfurt} %LEGAL     !!!
+% \usetheme{Madrid}     %LEGAL/L%IMPO/COM CAIXA     (sem barra de desenvolvimento)
+
+% \usetheme{Antibes} %NAO
+% \usetheme{Berlin} %PODE SER...     (BARRA DE DESENVOLVIMANTO)
+% \usetheme{Berkeley}     %FEIO
+% \usetheme{Boadilla} %TUDO BRANCO...
+% \usetheme{Copenhagen}     %NAO
+% \usetheme{Darmstadt} %LEGAL!     !!!
+% \usetheme{Dresden}     %LEGAL/LIMPO/SEM CAIXA     (sem caixa fica ruim...)
+
+% \usetheme{Goettingen}     %FEIO DEMAIS!
+ \usetheme{Ilmenau} %LEGAL (forte candidato)
+% \usetheme{JuanLesPins} %BACANA
+% \usetheme{Luebeck}     %FEIO
+
+% \usetheme{Malmoe}     %FEIO
+% \usetheme{Warsaw} %NAO...
+% \usetheme{Seattle}
+% \usetheme{CambridgeUS}
+% \usetheme{Singapore}
+
+%Insere o numero de frames no slide
+\newcommand*\oldmacro{}
+\let\oldmacro\insertshortauthor% save previous definition
+\renewcommand*\insertshortauthor{%
+  \leftskip=.3cm% before the author could be a plus1fill ...
+  \insertframenumber\,/\,\inserttotalframenumber\hfill\oldmacro}
+
+
+\author[Ivo Calado]{Ivo Calado}
+\date{\today}
+\institute[IFAL]{Instituto Federal de Educação, Ciência e Tecnologia de Alagoas}
+\title{Programação para Web}
+\logo{\includegraphics[width=0.2\linewidth]{imagens/ifal-logo.jpg}}
+\subtitle{\textit{Java Server Pages (JSP)}}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+% \section{Roteiro}
+% \AtBeginSection[]
+{\frame{
+\frametitle{Roteiro}
+\tableofcontents[hidesubsections]
+}
+}
+
+\section{Introdução}
+\begin{frame}{Observação sobre o conteúdo}
+Parte deste material é baseada na apostila FJ-21 - Java para Desenvolvimento Web desenvolvido pela Caelum (\url{www.caelum.com.br})
+\end{frame}
+
+\subsection{Definições}
+\begin{frame}{Colocando o HTML no seu devido lugar}
+\begin{itemize}
+ \item Até agora, vimos que podemos escrever conteúdo dinâmico através de Servlets
+  \item Porém, se toda hora criarmos Servlets para fazermos esse trabalho, teremos muitos problemas na manutenção das nossas páginas
+e também na legibilidade do nosso código
+\end{itemize}
+
+\begin{block}{Porque?}
+porque sempre aparece código Java misturado com código HTML. Imagine todo um sistema criado com Servlets fazendo a geração do HTML 
+\end{block}
+\end{frame}
+
+\begin{frame}{Colocando o HTML no seu devido lugar}
+\begin{itemize}
+ \item Em situações onde a presença do código HTML é superior a do código Java precisamos de uma solução que possibilite inverter os papéis!
+  \item Ao invés de inserir código HTML dentro do código Java, inserimos código Java dentro do HTML!
+  \item Algo similar ao ASP e PHP
+\item Essa tecnologia é o JavaServer Pages (JSP).
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}[fragile]{Nosso primeiro exemplo}
+Vejamos o nosso primeiro exemplo em JSP
+
+\textbf{bem-vindo.jsp}
+\begin{lstlisting}
+<html>
+  <body>
+    Bem vindo
+  </body>
+</html>
+\end{lstlisting}
+Novidade?
+
+\begin{itemize}
+ \item Fica claro que uma página JSP nada mais é que um arquivo baseado em HTML, com a extensão .jsp
+\item Podemos escrever também código Java, para que possamos adicionar comportamento
+dinâmico em nossas páginas, como declaração de variáveis, condicionais (if), loops (for, while) entre
+outros
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]{Nosso primeiro exemplo II}
+\begin{lstlisting}
+<body>
+	<%-- Exemplo de comentário--%>
+	<% String mensagem = "Meu primeiro exemplo dinâmico com JSP"; %>
+	
+	<% out.println(mensagem); %><br />
+	
+	<% String desenvolvido = "Desenvolvido por todos!"; %>
+	
+	<strong><%=desenvolvido%></strong><br />
+	<%  System.out.println("Tudo foi executado!"); %>
+</body>
+\end{lstlisting}
+
+Porque a mensagem ``Tudo foi executado!'' não foi exibida na resposta?
+
+\end{frame}
+
+\begin{frame}{Sobre o código JSP}
+\begin{itemize}
+ \item O código Java é adicionado entre os elementos $<$\% e \%$>$
+  \item Existe um objeto out.println que já envia a saída direta para o usuário. Lembra algum outro objeto?
+  \item Chamada a System.out.println irá enviar a saída para a saída padrão do servidor!
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]{Objetos Implícitos}
+\begin{itemize}
+ \item Em JSP alguns objetos são implícitos
+\end{itemize}
+\begin{lstlisting}
+request         HttpServletRequest
+response        HttpServletResponse
+out             JSPWriter
+session         HttpSession
+application     ServletContext
+config          ServletConfig
+pageContext     PageContext
+page            HttpJspPage
+\end{lstlisting}
+
+
+ 
+\end{frame}
+
+
+\begin{frame}[fragile]{Código HTML entre o código JSP}
+\begin{itemize}
+ \item A lógica do código JSP pode ser intercalada com código HTML
+  \item No exemplo abaixo, tudo que estiver entre a definição do loop e o símbolo de fechamento (\}) será repetido!
+\end{itemize}
+
+\begin{lstlisting}
+<body>
+<% for(int i = 0; i < 10; i++) { %>
+
+  <!-- Fora do Código Java -->
+  Passou aqui = 
+
+<%= i %>
+  <br/>
+<%} %>
+</body>
+\end{lstlisting}
+
+\end{frame}
+
+
+\section{Sintaxe JSP}
+\subsection{Diretivas}
+\begin{frame}[fragile]{Diretivas}
+\begin{itemize}
+ \item São mensagens ao container JSP, contendo informações de como o container JSP deve traduzir as páginas
+  \item A sintaxe básica é utiliza uma estrutura chave valor
+\end{itemize}
+
+\begin{lstlisting}
+<%@ diretiva (atributo="valor") *%>
+\end{lstlisting}
+\begin{itemize}
+ \item Existem três tipos de diretivas:
+\begin{itemize}
+ \item Diretiva de página: \textbf{page}
+  \item Diretiva de inclusão: \textbf{include}
+  \item Diretiva de taglib: \textbf{taglib}
+\end{itemize}
+
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{A diretiva \textit{page}}
+\begin{itemize}
+ \item A diretiva page possibilita a configuração de diversas propriedades da página como \textit{contentType}, buffer, import etc
+\end{itemize}
+\begin{lstlisting}
+ <%@ page atributo="valor"%>
+\end{lstlisting}
+\begin{itemize}
+ \item São definidos 11 tipos de atributos 
+  \begin{itemize}
+   \item language: Nome da linguagem do script (padrão ``Java'')
+    \item info: String a ser recuperada via \textbf{getServletInfo}
+    \item contentType: Tipo MIME identificando o tipo do conteúdo e a codificação
+    \item import: análogo ao \textbf{import} numa classe Java
+    \item session: indica se a página participará do controle de sessão
+    \item errorPage: pagina de erro a ser utilizada caso alguma exceção seja lançada
+  \end{itemize}
+
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{A diretiva \textit{include}}
+\begin{itemize}
+ \item Permite a inclusão de conteúdos de outros arquivos na página JSP
+  \item É útil para inclusão de cabeçalhos e rodapés de página, por exemplo
+\end{itemize}
+\begin{lstlisting}
+<%@ include file="arquivo.jsp"%> 
+\end{lstlisting}
+\begin{itemize}
+ \item A localização do arquivo é em relação a JSP. Caso seja colocado um / no começo leva-se em consideração o contexto do servidor. Mais a frente veremos uma maneira mais robusta de trabalhar com localizações de recursos!
+\end{itemize}
+
+
+\end{frame}
+
+\begin{frame}{A diretiva \textit{taglib}}
+\begin{itemize}
+ \item Possibilita extender a funcionalidade do JSP
+  \item Iremos abordar ele com mais detalhes a frente... :)
+\end{itemize}
+
+\end{frame}
+
+
+\subsection{Sintaxe}
+\begin{frame}{Definição de código}
+Existem três formas de definir código em uma página JSP
+\begin{itemize}
+ \item Declarações: Permitem a definição de variáveis e métodos 
+  \item Expressões: Converte o resultado do código em uma string a ser anexada no código JSP
+  \item Scriptlets: Permitem a escrita de código fora de qualquer método a ser executado (análogo a um código JavaScript)
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]{Exemplo}
+Scriptlets
+\begin{lstlisting}
+<%
+while(i-- != 0) {
+  out.println("Texto");
+}%>
+\end{lstlisting}
+Expressões
+\begin{lstlisting}
+Hoje são <%= getSystemTime() %><br/>
+\end{lstlisting}
+Declarações
+\begin{lstlisting}
+<%!
+	int i = 10;
+	String getSystemTime() {
+		return Calendar.getInstance().getTime().toString();	
+	}
+%>
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}{Exercicio I: Criando uma lista de contatos}
+\begin{itemize}
+ \item Crie uma classe chamada Contato, dentro de algum pacote específicos
+  \item Adicione 3 atributos: Nome, Endereço e Idade
+  \item Crie uma classe ContatosDao com um métodolo que retorne uma lista de Contatos (pelo menos 5 elementos)
+  \item Com base no exemplo anterior, crie uma página JSP que contenha uma tabela e cada coluna da tabela represente um contato	
+  \item Faça uso do \textbf{Ctrl + espaço} no Eclipse para importar o que for necessário e veja como é feito o \textbf{import}
+\end{itemize}
+
+\end{frame}
+
+
+\section{EL e Taglibs}
+\subsection{EL: Expression Language}
+\begin{frame}{Até agora conseguimos desacoplar o Java do HTML?}
+\begin{itemize}
+ \item O objetivo inicial do JSP era redudir o acoplamento entre o código Java e o HTML
+  \item Pelo que vimos até agora isso foi obtido? Porque?
+  \item Não! O código Java continua sendo misturado com HTML e um \textit{designer Web} precisa entender lógica de programação
+  \item E existe hoje em dia no mercado muitas aplicações feitas inteiramente utilizando scriptlets e escrevendo
+código Java, PHP e outras no meio dos HTMLs
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{EL: Expression Language}
+\begin{itemize}
+ \item Para remover um pouco do código Java que fica na página JSP, a Sun desenvolveu uma linguagem chamada
+Expression Language que é interpretada pelo servlet container
+  \item O acesso a expressões é realizada a partir da estrutura \$\{expr\}
+  \item Vejamos como criar uma página que receba um parâmetro e exiba-o na tela
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]{Exemplo EL}
+\begin{lstlisting}
+<body>
+	Testando seus parametros:
+	<br /> A idade é ${param.idade}.
+</body>
+\end{lstlisting}
+\begin{itemize}
+ \item \textbf{param} é um objeto nativo, assim como \textbf{out} que contem um mapa com parâmetros recebidos na requisição
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}[fragile]{Exemplo: avaliação de expressões}
+\begin{lstlisting}
+<body>
+<h2>Operadores de Comparação</h2>
+4 > '3'  => ${4 > '3'}<br/>
+'4' > 3  => ${'4' > 3}<br/>
+'4' > '3'=> ${'4' > '3'} <br/>
+4 >= 3  =>  ${4 >= 3}<br/>
+4 <= 3  =>   ${4 < 3}<br/>
+4 == '4' =>  ${4 == 4}<br/>
+</body>
+\end{lstlisting}
+
+\end{frame}
+
+\subsection{Taglibs}
+\begin{frame}{Motivação}
+\begin{itemize}
+ \item Começamos a melhorar nossos problemas com relação à mistura de código Java com HTML através da Expression Language
+  \item No entanto, ela sozinha não pode nos ajudar muito, pois ela não nos permite, por exemplo, instanciar objetos, fazer verificações condicionais (if else), iterações como em um for e assim por diante
+  \item Sendo assim, precisamos de um mecanismo baseado em tags para representar nosso lógica de negócio!
+  \item Para isso, fazemos uso das Taglibs
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{JavaBeans: acesso aos atributos}
+\begin{itemize}
+ \item Antes de entrarmos diretamente em Taglibs precisamos aprender sobre Javabeans. Um Bean é um tipo de objeto Java, com construtor \textit{default} e os respectivos \textit{getters} e \textit{setters}
+  \item Instânciá-los na nossa página JSP não é complicado. Basta utilizarmos a tag correspondente para essa
+função, que no nosso caso é a $<jsp:useBean>$
+\end{itemize}
+\begin{block}{}
+$<$jsp:useBean id="contato" class="br.edu.ifal.pweb.classes.Contato"/$>$
+\end{block}
+Agora podemos fazer uso das expressões EL para acessar o valor de \textbf{contato}. Exemplo: \$\{contato.nome\}
+
+\end{frame}
+
+\begin{frame}{JavaBeans}
+\begin{itemize}
+ \item No nosso exemplo, os atributos de \textbf{Contato} foram definidos como privados mas estamos conseguindo acessá-los. Por que isso?
+\item Na verdade não estamos acessando o atributo privado. Quando fazemos \textbf{contato.nome} o container implicitamente chama o método \textbf{getNome}
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}[fragile]{JavaBeans: Modificando propriedades}
+Para modificar uma propriedade em um bean, fazemos uso da propriedade jsp:setProperty
+
+\begin{lstlisting}
+<body>
+
+<%contato.setNome("teste"); %>
+
+<jsp:setProperty property="endereco" value="Rua das casas" name="contato" />
+
+Nome = ${contato.nome} <br/>
+Endereço = ${contato.endereco}
+</body>
+\end{lstlisting}
+
+\end{frame}
+
+\subsection{JSTL}
+\begin{frame}{JavaServer Pages Standard Tag Library}
+\begin{itemize}
+ \item JSTL é a API que encapsulou em tags simples toda a funcionalidade que diversas páginas Web precisam
+  \item Exemplos de funcionalidades incluem: controle de laços (fors), controle de fluxo do tipo if else, manipulação de dados XML e a internacionalização
+de sua aplicação
+  \item Existem ainda outras partes da JSTL, por exemplo aquela que acessa banco de dados e permite escrever códigos SQL na nossa página. Mas se o designer não compreende Java o que diremos de SQL? O uso de tal
+parte da JSTL é desencorajado.
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]{Instalação do JSTL}
+\begin{itemize}
+ \item Para instalar a implementação mais famosa da JSTL basta baixar a mesma no site \url{https://jstl.dev.java.net/}
+  \item Adicionar as libs no diretórios libs do projeto
+  \item Para removermosas as notificações de erros no Eclipse, teremos de adicionar as libs no \textit{build path}
+  \item Adicione a referência ao conjunto de taglibs do JSTL (equivalente a um \textbf{import}) através da seguinte linha
+\begin{lstlisting}
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+\end{lstlisting}
+
+\end{itemize}
+
+\end{frame}
+
+\subsection{Estruturas de controle}
+\begin{frame}[fragile]{forEach}
+\begin{itemize}
+ \item A JSTL core disponibiliza uma tag chamada c:forEach capaz de iterar por uma coleção
+  \item No c:forEach, precisamos indicar a coleção na qual vamos iterar, através do atributo items e também como chamará o objeto que será atribuído para cada iteração no atributo var.
+\end{itemize}
+\begin{lstlisting}
+		<c:forEach var="ct" items="${contato.lista}" varStatus="id">
+			<tr bgcolor="#${id.count % 2 == 0 ? 'aaee88' : 'ffffff' }">
+				<td>${id.count}</td>
+				<td>${ct.nome}</td>
+				<td>${ct.idade}</td>
+			</tr>
+		</c:forEach>
+
+\end{lstlisting}
+
+
+\end{frame}
+
+\begin{frame}{Atributos}
+\begin{itemize}
+ \item \textbf{var:} variável a ser utilizada na iteração
+  \item \textbf{items:} fonte dos dados
+  \item \textbf{varStatus:} posição corrente
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Exercício}
+Altere o exemplo para que seja a coluna e não a linha da tabela apresentada
+\end{frame}
+
+\begin{frame}[fragile]{Criando Ifs}
+\begin{itemize}
+ \item E se quisermos alterar a tabela para que seja exibida uma obsercação caso o contato tenha menos que 18 anos
+  \item Fazermos uso da Tag If
+\end{itemize}
+
+\begin{lstlisting}
+		<c:forEach var="ct" items="${contato.lista}" varStatus="id">
+			<tr bgcolor="#${id.count % 2 == 0 ? 'aaee88' : 'ffffff' }">
+				<td>${id.count}</td>
+				<td>${ct.nome}</td>
+				<td>${ct.idade}</td>
+				<td><c:if test="${ct.idade < 18 }">
+				Menor de Idade</c:if>
+				</td>
+			</tr>
+		</c:forEach>
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]{Semântica dos parâmetros}
+\begin{itemize}
+ \item \textbf{test:} Recebe como parâmetro uma expressão a ser avaliada como \textbf{true} ou \textbf{false}
+\end{itemize}
+Além de testes diretos, operadores de EL podem ser utilizados
+\begin{lstlisting}
+<c:if test="${not empty variavel}">
+</c:if>
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]{Simulando o else}
+\begin{itemize}
+ \item O JSTL não possui uma tag \textbf{else} para complementar o \textbf{if}
+  \item Porém podemos utilizar a estrutura choose para este propósito
+\end{itemize}
+\begin{lstlisting}
+<c:choose>
+	<c:when test="${ct.idade < 18}">
+	Menor de idade
+	</c:when>
+	<c:otherwise>Maior de Idade</c:otherwise>
+</c:choose>
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}{Exercicio para casa}
+Pesquisar sobre os demais operadores do EL 
+\end{frame}
+
+
+\begin{frame}{Exercicio}
+\begin{itemize}
+ \item Adicione um atributo \textbf{homepage} à classe Contato. 
+  \item No métododo \textbf{getLista} de ContatoDao adicione para alguns usuários uma página de usuário
+  \item Altere o exemplo de listagem usando JSTL, adicionando uma nova coluna
+  \item Caso o usuário possua a \textit{homepage} definida exiba na coluna correspondente como um link, caso contrário exiba a mensagem ``Não disponível''
+\end{itemize}
+
+
+\end{frame}
+
+\begin{frame}[fragile]{Importando páginas}
+\begin{itemize}
+ \item Um requisito comum que temos nas aplicaçõesWeb hoje em dia é colocar cabeçalhos e rodapé nas páginas do nosso sistema
+  \item Esses cabeçalhos e rodapés podem ter informações da empresa, do sistema e assim por
+diante
+  \item O problema é que, na grande maioria das vezes, todas as páginas da nossa aplicação precisam ter
+esse mesmo cabeçalho e rodapés
+  \item Para isso, podemos fazer uso de inclusões de arquivos para possibilitar a inclusão de outras páginas já existentes
+\end{itemize}
+
+\begin{lstlisting}
+<c:import url="cabecalho.jsp" />
+\end{lstlisting}
+
+
+\end{frame}
+
+\begin{frame}{Outras tags JSTL existentes}
+\begin{itemize}
+ \item formatDate: possibilita formatar objetos do tipo Data sob os mais diversos aspectos
+ \item curl: permite a localização simplificada de recursos dentro do projeto
+  \item catch: bloco do tipo try/catch
+  \item c:forTokens: for em tokens (ex: ``a,b,c'' separados por vírgula)
+  \item c:out: saída
+  \item etc
+\end{itemize}
+
+\end{frame}
+
+\section{Model View Controller}
+\subsection{Introdução}
+\begin{frame}{Servlet ou JSP?}
+Ao se trabalhar com Servlets e JSPs temos um \textit{tradeoff}
+\begin{itemize}
+ \item Se utilizarmos apenas Servlets, o que acontece quando precisamos mudar o design da página? O designer não vai saber Java para editar a Servlet, recompilar e colocá-la no servidor
+  \item Imagine usar apenas JSP. Ficaríamos com muito \textit{scriptlet}, que é muito difícil de dar manutenção. O JSP foi feito apenas para apresentar o resultado, e ele não deveria fazer acessos a banco de dados e nem fazer a instanciação de objetos. Isso deveria estar em código Java, na Servlet
+\end{itemize}
+
+\pause
+
+Uma ideia mais interessante é usar o que é bom de cada um dos dois!!
+ 
+\end{frame}
+
+\begin{frame}{Objetivo}
+\begin{itemize}
+ \item O ideal então é que a Servlet faça o trabalho árduo, a tal da \textbf{lógica de negócio}
+  \item E o JSP apenas apresente visualmente os resultados gerados pela Servlet. 
+
+
+\end{itemize}
+
+\end{frame}
+
+
+
+\end{document}
+
