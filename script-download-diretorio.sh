@@ -2,11 +2,19 @@
 
 diretorio="$1"
 
-mkdir material-ifal
-cd material-ifal
+atual=`pwd`
+destino=`mktemp -d`
+url="https://github.com/txithihausen/material-ifal.git"
+
+cd $destino
 git init
-git remote add -f origin https://github.com/txithihausen/material-ifal.git
+git remote add -f origin $url
 
 git config core.sparseCheckout true
 
 echo $diretorio >> .git/info/sparse-checkout
+
+git pull origin master
+
+mv $diretorio $atual
+rm -rf $destino
