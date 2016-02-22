@@ -1,0 +1,13 @@
+<html>
+<head><title>Exemplo de cabeçalho</title>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+
+</head>
+<body>
+<DL>
+<DT>Imperadores do Brasil:
+<DD>D. Pedro I
+<DD>D. Pedro II
+</DL> 
+</body>
+</html>

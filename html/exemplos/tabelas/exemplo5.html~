@@ -1,0 +1,16 @@
+<html>
+<head>
+<title>
+</title>
+</head>
+<body>
+<TABLE BORDER=1>
+<TR><TH COLSPAN="3" ALIGN="left">Colunas 1 e 2</TH></TR>
+<TR><TD COLSPAN=2>linha1, coluna 1</TD><td>Coluna 3</td></TR>
+<TR><TD>linha 2, coluna 1</TD><TD>linha 2, coluna 2</TD><td rowspan="2" valign="top">Coluna 3</td></TR>
+<TR><Td ROWSPAN=3>3 linhas</Td><TD>uma linha</TD></TR>
+<TR><TD>duas linhas</TD><td>Coluna 3</td></TR>
+<TR><Th COLSPAN=2>tres linhas</Th></TR>
+</TABLE>
+</body>
+</html>

@@ -1,0 +1,16 @@
+<html>
+<head><title>Exemplo</title></head>
+<body>
+Este é o meu documento original e aqui embaixo temos o iframe <br/>
+
+
+<iframe frameborder=0 width="50%" height="50%" src="http://www.uol.com.br" ></iframe>
+
+
+<p> Aqui voltamos a ter nosso documento normal</p>
+
+
+</body>
+</html>
+
+

@@ -1,0 +1,9 @@
+<html>
+<head><title>Exemplo de cabeçalho</title>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+
+</head>
+<body>
+Parágrafo 1;<p> linha 2<br>linha3
+</body>
+</html>

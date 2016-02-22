@@ -1,0 +1,29 @@
+<html>
+<head>
+<title>
+Estilos físicos
+</title>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+</head>
+<body>
+&lt;b&gt; Texto em <b>negrito</b>&lt;/b&gt; </br>
+&lt;i&gt; Texto em <i>itálico</i> </br>
+&lt;tt&gt; Texto <tt>monoespaçado</tt> </br>
+&lt;u&gt; Texto <u>sublinhado</u> </br>
+&lt;strike&gt; Texto <strike>riscado</strike> </br>
+&lt;big&gt; Texto um pouco <big>maior</big> </br>
+&lt;small&gt;Texto um pouco <small>menor</small> </br>
+&lt;sub&gt;Frase em estilo <sub>indice</sub>, como em H<sub>2</sub>O </br>
+&lt;sup&gt;Frase em estilo <sup>expoente</sup>, como em Km<sup>2</sup> </br>
+<blink>teste</blink>
+
+
+<ul>
+	<li> <b>v1</b>
+	<li> <u>v2</u>
+	<li> v3
+</ul>
+
+
+</body>
+</html>

@@ -1,0 +1,13 @@
+<html>
+<head><title>Exemplo de cabeçalho</title>
+
+</head>
+<body>
+<H1>Este é um cabeçalho de nível 1</H1>
+<H2>Este é um cabeçalho de nível 2</H2>
+<H3>Este é um cabeçalho de nível 3</H3>
+<H4>Este é um cabeçalho de nível 4</H4>
+<H5>Este é um cabeçalho de nível 5</H5>
+<H6>Este é um cabeçalho de nível 6</H6>
+</body>
+</html>

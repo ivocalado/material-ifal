@@ -1,0 +1,12 @@
+<html>
+<head><title>Exemplo de cabeçalho</title>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+
+</head>
+<body>
+<H2>Este é </h2><H1>um cabeçalho de nível 1</H1><h2> dentro de um cabeçalho de nível 2</H2>
+
+
+Texto normal
+</body>
+</html>

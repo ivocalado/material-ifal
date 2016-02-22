@@ -1,0 +1,1111 @@
+%\documentclass[t,handout]{beamer}
+\documentclass{beamer}
+
+
+\usepackage[latin1]{inputenc}
+
+\usepackage[portuguese]{babel}
+\usepackage[tight]{subfigure}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{url}
+% \usepackage{inconsolata}
+\newcommand{\setcolor}[2]{\color{#1}{#2}\color{black}}
+
+%Pacote de listagem de cï¿½digo
+\usepackage{listings}
+%\lstset{numbers=left, stepnumber=1, firstnumber=1,
+%numberstyle=\tiny, extendedchars=true, breaklines=true, frame=tb,
+%basicstyle=\footnotesize, stringstyle=\ttfamily,
+%showstringspaces=false }
+
+\lstset{extendedchars=true, breaklines=true, frame=tb,
+basicstyle=\footnotesize, stringstyle=\ttfamily,
+showstringspaces=false,language=HTML }
+
+% \usecolortheme[RGB={130,35,150}]{structure}
+% \usecolortheme[RGB={33,33,94}]{structure}
+\usecolortheme[RGB={153,204,123}]{structure}
+\setbeamertemplate{footline}[frame number]
+\setbeamertemplate{navigation symbols}{}
+
+% \usetheme{Frankfurt} %LEGAL     !!!
+% \usetheme{Madrid}     %LEGAL/L%IMPO/COM CAIXA     (sem barra de desenvolvimento)
+
+% \usetheme{Antibes} %NAO
+% \usetheme{Berlin} %PODE SER...     (BARRA DE DESENVOLVIMANTO)
+% \usetheme{Berkeley}     %FEIO
+% \usetheme{Boadilla} %TUDO BRANCO...
+% \usetheme{Copenhagen}     %NAO
+% \usetheme{Darmstadt} %LEGAL!     !!!
+% \usetheme{Dresden}     %LEGAL/LIMPO/SEM CAIXA     (sem caixa fica ruim...)
+
+% \usetheme{Goettingen}     %FEIO DEMAIS!
+ \usetheme{Ilmenau} %LEGAL (forte candidato)
+% \usetheme{JuanLesPins} %BACANA
+% \usetheme{Luebeck}     %FEIO
+
+% \usetheme{Malmoe}     %FEIO
+% \usetheme{Warsaw} %NAO...
+% \usetheme{Seattle}
+% \usetheme{CambridgeUS}
+% \usetheme{Singapore}
+
+%Insere o numero de frames no slide
+\newcommand*\oldmacro{}
+\let\oldmacro\insertshortauthor% save previous definition
+\renewcommand*\insertshortauthor{%
+  \leftskip=.3cm% before the author could be a plus1fill ...
+  \insertframenumber\,/\,\inserttotalframenumber\hfill\oldmacro}
+
+
+\author[Ivo Calado]{Ivo Calado}
+\date{\today}
+\institute[IFAL]{Instituto Federal de Educação, Ciência e Tecnologia de Alagoas}
+\title{Programação para Web}
+\logo{\includegraphics[width=0.2\linewidth]{imagens/ifal-logo.jpg}}
+\subtitle{\textit{HTML 5\\}}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+% \section{Roteiro}
+% \AtBeginSection[]
+{\frame{
+\frametitle{Roteiro}
+\tableofcontents[hidesubsections]
+}
+}
+
+
+\section{Introdução}
+\subsection{O que é Internet?}
+\begin{frame}{O que é Internet?}
+\pause
+\begin{block}{Estamos acostumados a ouvir que...}
+ \textit{Internet é a ``grande rede mundial de computadores''}
+\end{block}
+
+\pause
+\begin{block}{Entretanto, essa definição não é exata...}
+     \pause Internet é ``o conjunto de diversas redes de computadores que se comunicam através dos protocolos TCP/IP''
+\end{block}
+\end{frame}
+ 
+\subsection{O que é World Wide Web?}
+\begin{frame}{O que é a World Wide Web?}
+ \pause
+\begin{block}{Definição}
+ É um sistema de documentos \underline{hipertexto} inteligados através de \textit{\underline{hiperlinks}}
+\end{block}
+\pause
+\begin{block}{Qual a diferença entre WWW e a Internet?}
+ \pause Internet é toda a infraestrutura de rede, enquanto que a WWW é apenas um serviço provido.
+\end{block}
+ \begin{block}{Quais seriam outros exemplos de serviços providos pela Internet}
+  \pause Email, FTP, P2P, transmissões multimídia etc
+\end{block}
+
+\end{frame}
+
+\begin{frame}{Definição de Hipertexto I}
+\begin{itemize}
+ \item Conjunto de documentos que fazem referência entre si, possibilitando navegação entre os diferentes tópicos
+ \item A partir da interreferência entre as diversas páginas é criado uma malha de inteconexões (de onde vem o termo \textit{Web}).
+
+\begin{figure}[htp!]
+ \centering
+ \includegraphics[scale=0.5]{./imagens/hipertexto.png}
+ % hipertexto.png: 307x280 pixel, 121dpi, 6.44x5.88 cm, bb=0 0 183 167
+ \label{fig:hipertexto}
+\end{figure}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Definição de Hipertexto II}
+
+\begin{itemize}
+ 
+\item O conceito de hipertexto não é único da WWW. Ele é bem anterior a Internet.
+\item Qual seria um outro exemplo de Hipertexto? \pause O dicionário! No dicionário os termos existentes se auto-referenciam
+\end{itemize}
+
+\end{frame}
+\subsection{História}
+\begin{frame}{Como surgiu a WWW?}
+ \begin{itemize}
+  \item Criado entre os anos de 1989-1991 (proposição do projeto, desenvolvimento e apresentação pública)
+  \item Criado pelo físico Tim Berners-Lee que ainda se mantém no comitê para o desenvolvimento da WWW, chamado W3C
+  \item A ideia original era criar uma infraestrutura para acesso a documentos em uma abordagem de comunicação \underline{cliente-servidor}. 
+ \end{itemize}
+\pause
+\begin{block}{Mas o que seria uma abordagem cliente-servidor?}
+ \pause 
+Trata-se de uma abordagem de comunicação em que uma máquina, chamada servidora, disponibiliza recursos a serem acessados por outras máquinas, chamadas de clientes. 
+\end{block}
+
+\end{frame}
+
+\begin{frame}{Modelo cliente-servidor}
+ \begin{figure}[htp!]
+ \centering
+ \includegraphics[scale=0.45]{./imagens/Cliente-servidor.jpg}
+ % Cliente-servidor.jpg: 410x324 pixel, 72dpi, 14.46x11.43 cm, bb=0 0 410 324
+\end{figure}
+
+\end{frame}
+
+
+\subsection{Conceitos importantes}
+\begin{frame}
+ Três conceitos são de fundamental importância no estudo da WWW: HTTP, URL e HTML
+
+\begin{block}{}
+ A partir dessas 3 ferramentas, os recursos podem ser acessados na Web fazendo-se uso de programas conhecidos como \textbf{Browsers}
+\end{block}
+
+\end{frame}
+
+\begin{frame}{HTTP}
+ \begin{itemize}
+  \item Abreviação de \textit{Hypertext Transfer Protocol}
+  \item Trata-se de um \underline{protocolo de camada de aplicação}, utilizado para recuperação de recursos na Internet
+  \item Diferentemente do TCP, o protocolo HTTP é um \underline{protocolo textual} (ou \textit{human-readable})
+  \item Possui um conjunto limitado de operações possíveis: \textbf{GET, POST, PUT, HEAD} etc.
+ \end{itemize}
+Ver \textbf{Wireshark...}
+\end{frame}
+
+\begin{frame}{Contextualizando...}
+ \begin{block}{O que são protocolos da camada de aplicação?}
+  \pause
+\begin{itemize}
+  \item São protocolos responsáveis por prover serviços às aplicações
+  \item Representam a 7ª camada no modelo OSI ou a 5ª no modelo TCP/IP
+  \item Normalmente são os protocolos que diretamente são acessados pelas aplicações
+  \item Outros exemplos de protocolos incluem: FTP, SSH, Bitorrent etc.
+\end{itemize}
+ \end{block}
+\end{frame}
+
+\begin{frame}
+\begin{block}{O que é um protocolo textual?}
+\pause
+
+São protocolos que apresentam uma estrutura textual nas suas descrições de mensagens
+\begin{figure}[htp!]
+ \centering
+ \includegraphics[scale=0.5]{./imagens/requisicao-get.png}
+ % requisicao-get.png: 539x193 pixel, 121dpi, 11.31x4.05 cm, bb=0 0 321 115
+\end{figure}
+\end{block}
+\end{frame}
+\begin{frame}{URL}
+\begin{itemize}
+  \item Abreviação de \textit{Uniform Resource Locator}
+  \item É uma forma padrão para representação da localização de um recurso
+  \item Pode ser utilizado por diversos protocolos (inclusive o HTTP) para identificar um recurso remoto
+  \item Possui o seguinte formato: \textbf{protocolo://máquina/caminho/recurso}
+
+\end{itemize}
+ 
+\end{frame}
+
+\begin{frame}{HTML}
+\begin{itemize}
+  \item Linguagem de marcação para transmitir documentos formatados através da rede
+  \item Trata-se de uma das formas mais básicas de transmissão de informação pela Web
+  \item Conteúdo é considerado estático 
+  \pause
+  \item \setcolor{red}{Não é uma linguagem de programação!!!} 
+\end{itemize}
+\pause
+\begin{block}{Conteúdo Estático x Conteúdo Dinâmico}
+ \begin{itemize}
+  \item No conteúdo estático as páginas HTML criadas previamente e são apenas requisitadas
+  \item No conteúdo dinâmico, há uma requisição por uma página e a página HTML é gerada em tempo real e entregue ao requisitante
+ \end{itemize}
+
+\end{block}
+
+ 
+\end{frame}
+
+
+
+\section{Introduçao linguagem HTML}
+\subsection{História}
+\begin{frame}{História}
+  A linguagem HTML foi desenvolvida em 1990 a partir de dois padrões existentes:
+\begin{itemize}
+  \item SGML: padrão que possibilitava a formatação de texto
+  \item HyTime: padrão para representação de documentos hipertextos 
+\end{itemize}
+A partir da união das funcionalidades do \textbf{SGML} e \textbf{HyTime} foi possível a criação do HTML. Atualmente o HTML está na versão 5.0 e sua especificação pode ser encontrada em \url{http://www.w3.org/TR/html5/}
+\end{frame}
+
+\begin{frame}{Sobre a interoperabilidade}
+ \begin{itemize}
+  \item HTML foi criado para ser uma linguagem independente de \textit{browser}, plataformas ou outro meio de acesso
+ \end{itemize}
+ 
+ \begin{block}{Porque ser interoperável é importante?}
+ \pause
+  Porque reduz-se custo na produção de diferentes versões do mesmo produto/software/serviço
+ \end{block}
+\end{frame}
+
+\subsection{Componentes da especificação e do navegador}
+\begin{frame}{Especificação modular}
+\begin{itemize}
+ \item Diferentemente das versões anteriores, o HTML 5 foi especificado seguindo uma abordagem modular
+ \item Isto permite que parte da especificação seja disponibiliza antes pelos \textbf{\textit{motores de renderização}}
+\end{itemize}
+
+\pause
+\begin{block}{O que viria a ser um motor de renderização}
+\pause
+ É um software que converte a linguagem de marcação em uma visualização. É considerado um dos componentes centrais de um navegador
+\end{block}
+\begin{itemize}
+ \item Um motor de renderização pode ser compartilhado por diversos navegadores
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Exemplos de motores de renderização}
+ \begin{itemize}
+  \item \textbf{Webkit:} Safari, Google Chrome
+  \item \textbf{Gecko:}  Firefox, Mozilla, Camino
+  \item \textbf{Trident:} Internet Explorer 4 a 9
+  \item \textbf{Presto:} Opera 7 a 10
+ \end{itemize}
+ 
+ Para saber como anda o suporte ao HTML em seu \textit{browser} basta acessar: \url{http://html5test.com/}
+
+
+\end{frame}
+
+\begin{frame}{Evolução do suporte ao HTML}
+\begin{figure}[h!]
+ \centering
+ \includegraphics[scale=0.22]{./imagens/chart.png}
+ % chart.png: 800x769 pixel, 72dpi, 28.22x27.13 cm, bb=0 0 800 769
+\end{figure}
+\end{frame}
+
+\begin{frame}{Outras tecnologias relacionadas}
+ \begin{itemize}
+  \item CSS: responsável por aplicar estilo de formatação nas páginas
+  \item Javascript: linguagem de programação interpretada que fornece interatividade às páginas Web
+  \item Tais assuntos serão vistos em detalhe nos Bimestres III e IV
+ \end{itemize}
+\end{frame}
+
+\subsection{Estrutura Básica, Doctype e Charset}
+\begin{frame}{Estrutura básica}
+\begin{itemize}
+ \item Ao longo das versões o HTML tem mantido uma estrutura semelhante na forma de descrever os elementos
+ \item Na versão 5 não é diferente: os elementos estão dispostos em uma estrutura hierárquica, com exceção do elemento \textit{doctype}
+\end{itemize}
+
+
+\begin{figure}[h!]
+ \centering
+ \includegraphics[scale=0.3]{./imagens/estrutura-basica.png}
+ % estrutura-basica.png: 952x263 pixel, 96dpi, 25.19x6.96 cm, bb=0 0 714 197
+\end{figure}
+ 
+\end{frame}
+
+\begin{frame}[fragile]{Elemento Doctype}
+ \textbf{Elemento:}
+ \begin{lstlisting}
+  <!DOCTYPE html> 
+ \end{lstlisting}
+ \begin{itemize}
+  \item Indica para o navegador e para outros meios qual a especificação de código utilizar
+  \item Em versões anteriores era necessário referenciar a versão especifica do DTD
+  \item A partir do HTML 5 a responsabilidade fica por conta do \textit{browser}
+ \end{itemize}
+ \pause
+ \begin{block}{Mas afinal, o que é um DTD?}
+  \pause
+  Trata-se de um conjunto de regras utilizadas para validação de um documento. 
+ \end{block}
+ 
+ 
+
+\end{frame}
+
+
+\begin{frame}[fragile]{Estrutura hierarquica da página}
+\begin{lstlisting}
+   HTML
+        |
+        \-HEAD
+        |  |
+        |  \-TITLE
+        |      |
+        |      \-"Título da página"
+        |
+        \-BODY
+          |
+          "Corpo do documento"
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}{Estrutura da página HTML}
+\begin{itemize}
+  \item Formado por \underline{tags} que especificam a estrutura e a formatação do documento
+  \item Possui como elemento inicial a tag \textbf{HTML}
+  \item As tags HTML não são sensíveis à caixa. Traduzindo: tanto faz escrever $<$HTML$>$, $<$Html$>$, $<$html$>$, $<$HtMl$>$, ... 
+  \item No entanto, recomenda-se a utilização em caixa baixa
+\end{itemize}
+\pause
+\begin{block}{Mas o que são \textbf{tags}?}
+\pause 
+São elementos de formatação da linguagem HTML. A partir delas é possível definir a formatação de algumas porções de texto
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]{Formas de representação e atributos}
+ \begin{itemize}
+  \item Tags HTML podem apresentar duas formas distintas:
+ \end{itemize}
+ 
+ \begin{lstlisting}
+  <i></i>
+ \end{lstlisting}
+ ou 
+ \begin{lstlisting}
+  <br>
+ \end{lstlisting}
+\begin{itemize}
+ \item Elementos podem apresentar atributos
+\end{itemize}
+
+\begin{lstlisting}
+ <div id="minhaDiv"></div>
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]{O elemento HTML}
+ \begin{itemize}
+  \item Representa o elemento raiz do documento
+  \item Deve haver apenas um único elemento por página
+ \end{itemize}
+ 
+ \begin{lstlisting}
+  <html lang="pt-br">
+ \end{lstlisting}
+
+ \pause
+ \begin{block}{Para que serve a opção \textit{lang}?}
+  É utilizado para informar aos \textit{user-agents} (as aplicações cliente) qual o idioma do conteúdo
+ \end{block}
+
+
+\end{frame}
+
+\section{Seção HEAD}
+\begin{frame}{Seção Head}
+\begin{itemize}
+  \item O elemento \textbf{head} contém informações sobre o documento, conhecidos como \textit{metadados}
+  \item Nele, o título da página pode ser elemento $<$title$>$, por exemplo, define um título, que é mostrado no alto da janela do browser. 
+\end{itemize}
+
+$<$\setcolor{red}{head}$> <$\setcolor{blue}{title}$>$Nossa primeira página$<$/\setcolor{blue}{title}$><$/\setcolor{red}{head}$>$
+ 
+\end{frame}
+
+\subsection{Tag Title}
+\subsubsection{$<$title$>$}
+\begin{frame}{Sobre o título da página}
+\begin{itemize}
+  \item Todo documento WWW deve ter um título
+  \item Esse título é referenciado em buscas pela rede, dando uma identidade ao documento
+  \item Para ver na prática a importância do título, se você adicionar a página criada aos favoritos do seu navegador o título da página será usado como âncora de acesso
+  \item É sugerido que os títulos dos documentos sejam sugestivos, evitando-se títulos genéricos como ``Introdução''
+\end{itemize}
+\end{frame}
+
+\subsection{Tag meta}
+\begin{frame}[fragile]{meta charset}
+\begin{itemize}
+ \item É possível controlar qual será a tabela de caracteres a ser utilizada pelo cliente
+ \item Importante sobretudo para textos com caracteres especiais e palavras com acento
+\end{itemize}
+
+\begin{lstlisting}
+ <meta charset="utf-8">
+\end{lstlisting}
+
+ou 
+
+\begin{lstlisting}
+ <meta http-equiv="content-Type" content="text/html; charset=utf-8">
+\end{lstlisting}
+
+
+\end{frame}
+
+
+
+\begin{frame}[fragile]{Ainda sobre a tag meta...}
+\begin{block}{Refresh}
+ Define uma URL a ser carregada após a expiração de um período específico
+\end{block}
+\begin{lstlisting}
+<head>
+<title> ... </tile>
+<meta http-equiv="refresh" content="segundos; URL= pagina.html">
+</head> 
+\end{lstlisting}
+onde, 
+\begin{itemize}
+  \item \textbf{pagina.html} é a página a ser carregada automaticamente 
+  \item \textbf{segundos} é o número de segundos passados até que a página indicada seja carregada
+\end{itemize}
+\end{frame}
+\begin{frame}{Ainda sobre a tag META...}
+Ver exemplo \textbf{Refresh...}
+\pause 
+\begin{block}{Mas quando um recurso como refresh deveria ser utilizado?}
+ \pause Em situações onde o conteúdo da página necessita ser atualizado constantemente, como em uma página de chat
+\end{block}
+
+\end{frame}
+
+
+\subsection{Tag Link}
+\begin{frame}[fragile]{Tag \textit{Link}}
+Existem dois tipos de links em uma página HTML:
+ \begin{itemize}
+  \item o link tradicional cujo efeito é obtido a partida a tag \textbf{a}, usado no \textit{body} 
+ \end{itemize}
+\begin{lstlisting}
+<a href="http://www.google.com">Teste</a> 
+\end{lstlisting}
+
+\begin{itemize}
+ \item Existe também a tag \textit{link}, cujo propósito é importar conteúdo externo, usado no head
+\end{itemize}
+\begin{lstlisting}
+ <link rel="stylesheet" type="text/css" href="estilo.css">
+\end{lstlisting}
+
+\end{frame}
+
+\subsection{$<$body$>$}
+\subsubsection{Objetivos}
+\begin{frame}{Seção Body}
+ \begin{itemize}
+  \item O objetivo da seção \textit{Body} é conter o conteúdo que será, de fato, visualizado pelo usuário
+  \item Deste modo é possível adicionar cabeçalhos, parágrafos, listas, tabelas, links para outros documentos, imagens, formulários, animações, vídeos, sons e scripts embutidos. 
+ \end{itemize}
+\end{frame}
+
+\section{Formatação de texto}
+\subsection{Cabeçalhos, separadores e listas}
+\begin{frame}[fragile]{Cabeçalhos}
+Há seis níveis de cabeçalhos em HTML, de $<$h1$>$ a $<$h6$>$:
+\begin{lstlisting}
+<h1>Este é um cabeçalho de nível 1</h1>
+<h2>Este é um cabeçalho de nível 2</h2>
+<h3>Este é um cabeçalho de nível 3</h3>
+<h4>Este é um cabeçalho de nível 4</h4>
+<h5>Este é um cabeçalho de nível 5</h5>
+<h6>Este é um cabeçalho de nível 6</h6>
+\end{lstlisting}
+
+O propósito dos cabeçalhos é possibilitar a demarcação de seções no texto
+
+\end{frame}
+
+\begin{frame}
+ \begin{block}{O que acontece quando usamos a quebra de linha em um documento HTML? (abrir exemplo \textbf{separadores/index.html} em editor de texto)}
+\pause
+Nada, pois os Browsers desconsideram tais quebras de linha unindo o texto... (ver novamente o exemplo, agora no browser). Sendo assim para organizar os textos, precisamos de separadores!!
+\end{block}
+Existem diferentes separadores possíveis:
+\begin{itemize}
+  \item \textbf{$<$br$>$}
+  \item \textbf{$<$p$>$}
+  \item \textbf{$<$hr$>$}
+\end{itemize}
+
+\end{frame}
+\begin{frame}[fragile]{$<$Br$>$}
+\begin{itemize}
+  \item Quando queremos mudar de linha, usamos o elemento $<$BR$>$
+  \item Isso só é necessário quando queremos uma quebra de linha em determinado ponto, pois os browsers já quebram as linhas automaticamente para apresentar os textos. (exemplo \textbf{br.html})
+  \item Deste modo é possível inserir diversas linhas no nosso documento...
+\end{itemize}
+\begin{lstlisting}
+Utilizando o <br> elemento BR <br><br><br> é <br> possível <br><br> adicionar diversas linhas <br><br><br><br> no documento
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{$<$p$>$}
+ Para separar blocos de texto, usamos o elemento $<$p$>$
+\begin{lstlisting}
+ Parágrafo 1;
+ <p>Parágrafo 2</p>.
+\end{lstlisting}
+que possui como efeito a criação de um parágrafo
+\pause 
+Combinando parágrafos e quebras de linha, podemos construir estruturas mais organizadas de texto
+\end{frame}
+
+\begin{frame}{Listas}
+Uma das formas mais comuns de estruturar uma porção de um documento é no formato de listas. Nesse sentido, existem diversas maneiras de estruturar o documento no formato de listas em HTML, sendo as mais conhecidas:
+
+\begin{itemize}
+  \item Listas de Definição ou Listas de glossário
+  \item Listas não-numeradas: são equivalentes às listas com marcadores do MS Word
+  \item Listas Numeradas
+\end{itemize}
+
+ 
+\end{frame}
+
+\begin{frame}[fragile]{Listas de definições}
+ Esta classe de lista são chamadas também de ``Listas de Glossários'', uma vez que tem o formato semelhante ao utilizado em estruturas de glossários. Ex.:
+\begin{lstlisting}
+termo a ser definido
+    definição 
+termo a ser definido
+    definição 
+\end{lstlisting}
+
+Este tipo de lista é muito utilizado para diversos efeitos de organização de páginas, por permitir a tabulação do texto.
+
+\end{frame}
+
+\begin{frame}[fragile]{Listas não-numeradas}
+ São equivalentes às listas com marcadores do MS Word: 
+\begin{lstlisting}
+ <ul>
+  <li>item de uma lista</li>
+  <li>item de uma lista, que pode ser tão grande quanto se queira, sem que seja necessário se preocupar com a formatação das margens de texto</li>
+  <li>item</li>
+</ul> 
+\end{lstlisting}
+
+\begin{itemize}
+  \item \textbf{UL:} Define o início da lista
+  \item \textbf{LI:} Define um novo item
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]{Listas não-numeradas}
+\begin{itemize}
+  \item Em listas não-numeradas é possível a adição de subníveis
+  \item Para tal, adiciona-se novos elementos \textbf{UL}
+\end{itemize}
+Exemplo:
+\begin{lstlisting}
+<ul>
+<li>Nível</li>
+    <ul> 
+	<li>Subnível</li>
+    </ul> 
+<li>Nível 2</li>
+</ul> 
+\end{lstlisting}
+\end{frame}
+
+% \begin{frame}{Estilos físicos e lógicos}
+%  A linguagem HTML permite dois tipos de estilos de formatações: \textbf{físico} e \textbf{lógico}
+% \begin{itemize}
+%   \item \textbf{Estilo físico:} a formatação física especifica explicitamente o estilo que se quer para o texto: itálico, grifado etc. Sua apresentação final não sofre grande alteração entre os navegadores
+%   \item \textbf{Estilo lógico:} a formatação lógica segue o significado lógico do texto marcado. Deste modo, sua interpretação depende grandemente de cada navegador
+% \end{itemize}
+
+
+\begin{frame}{Estilos de formação}
+\begin{itemize}
+  \item \textbf{$<$b$>$ =$>$} Texto em \textbf{negrito}
+  \item \textbf{$<$i$>$ =$>$} Texto em \textit{itálico}
+  \item \textbf{$<$u$>$ =$>$} Texto \underline{sublinhado}
+  \item \textbf{$<$small$>$ =$>$} Texto um pouco menor
+  \item \textbf{$<$sub$>$ =$>$} Frase em estilo $_{indice}$, como em H$_{2}$O
+  \item \textbf{$<$sup$>$ =$>$} Frase em estilo $^{expoente}$, como em Km$^{2}$
+\end{itemize}
+\end{frame}
+\subsection{Links}
+\begin{frame}[fragile]{Usando links}
+\begin{itemize}
+  \item Um dos mais importantes recursos do HTML é a capacidade de referenciar outros documentos
+  \item Além disso é possível fazer referência a pontos dentro do próprio documento (chamado âncoras)  
+  \item Tudo isso é possível através da tag \textbf{$<$a$>$}
+\end{itemize}
+\pause
+\begin{lstlisting}
+ <a href="http://www.google.com">meu link</a> 
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]{Links}
+Além disso, os seguintes atributos podem ser utilizados:
+\begin{itemize}
+  \item \textbf{href:} indica a URL que será carregada
+  \item \textbf{target:} indica o frame em que será carregado. Possibilita a abertura do link em uma nova página através do valor \textbf{blank}
+  \item \textbf{name:} marca um ponto de referência a ser utilizado como âncora. Geralmente é utilizado em páginas Web longas para possibilitar um retorno para um ponto específico
+\end{itemize}
+\begin{lstlisting}
+ <a name="inicio">Indicadores (uso de links)</a>
+ <a href="#inicio">Topo do documento</a>
+\end{lstlisting}
+\end{frame}
+
+\subsection{Inserção de imagens}
+\begin{frame}[fragile]{Inserindo imagens}
+Para inserção de imagens fazemos uso da tag \textbf{img}, com os seguintes parâmetros
+\begin{itemize}
+  \item \textbf{src:} indica a url para a imagem a ser carregada
+  \item \textbf{alt:} texto a ser exibido caso a imagem não possa ser carregada
+  \item \textbf{width:} largura da imagem
+  \item \textbf{height:} altura da imagem
+\end{itemize}
+Exemplo:
+\begin{lstlisting}
+ <img src="http://library.thinkquest.org/15074/media/html2.gif">
+\end{lstlisting}
+\end{frame}
+
+\subsection{Tabelas}
+\begin{frame}{O que são?}
+ \begin{itemize}
+  \item As tabelas foram uma das primeiras abordagens utilizadas para a organização das páginas Web
+  \item A ideia original era organizar a página Web como uma grade, onde cada parte do documento se encaixava em células específicas \pause
+  \item Deste modo, torna-se possível a inserção de textos, parágrafos, imagens, formulários, e várias outras formatações, inclusive outras tabelas!!
+ \end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]{Elementos básicos}
+ Para construções de tabelas, os seguintes elementos são utilizados:
+\begin{itemize}
+ \item \textbf{Table:} elemento que delimita uma tabela
+\end{itemize}
+\begin{lstlisting}
+<table>
+...
+</table> 
+\end{lstlisting}
+Títulos, linhas e elementos:
+\begin{itemize}
+  \item \textbf{Caption:} define o título da tabela
+  \item \textbf{Tr:} delimita uma linha
+  \item \textbf{Th:} delimita um cabeçalho para colunas ou linhas
+  \item \textbf{Td:} delimita um elemento ou célula
+\end{itemize}
+
+
+\end{frame}
+\begin{frame}[fragile]{Exemplo de tabela}
+ \begin{lstlisting}
+<table>
+<caption>Primeiro exemplo</caption>
+<tr><th>Coluna 1</th><th>Coluna 2</th></tr>
+<tr><td>linha1, coluna 1</td><td> linha 1, coluna 2</td></tr>
+<tr><td>linha 2, coluna 1</td><td>linha 2, coluna 2</td></tr>
+</table>
+ \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Mesclando colunas e células}
+\begin{itemize}
+ \item Uma das tarefas mais comuns ao se trabalhar com tabelas é a possibilidade de mesclar várias colunas ou células em um único elemento
+  \item Para tal, são utilizados os atributos \textbf{Colspan} e rowspan
+\end{itemize}
+\begin{lstlisting}
+<table border="1">
+<tr><th colspan="2">Colunas 1 e 2</th></tr>
+<tr><td>linha1, coluna 1</td><td> linha 1, coluna 2</td></tr>
+<tr><td>linha 2, coluna 1</td><td>linha 2, coluna 2</td></tr>
+<tr><th rowspan="3">3 linhas</th><td>uma linha</td></tr>
+<tr><td>duas linhas</td></tr>
+<tr><td>tres linhas</td></tr>
+</table> 
+\end{lstlisting}
+\end{frame}
+
+\subsection{Formulários}
+\begin{frame}{Formulários}
+\begin{itemize}
+  \item Até agora vimos apenas abordagens utilizadas para visualizar conteúdo recebido pelo servidor
+  \item Porém, podemos fazer uso de conteúdo ao servidor através dos formulários
+  \item Um formulário é composto por um elemento \textbf{form} (que agrega as entradas) e diversos \textbf{inputs}
+  \pause \item O elemento \textit{form} não é visível enquanto que os \textit{inputs} são!
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{O elemento Form}
+\begin{lstlisting}
+<form>
+.
+elementos input
+.
+</form>
+\end{lstlisting}
+
+\pause
+Atributos da tag \textit{form}
+\begin{itemize}
+  \item action: Ação a ser realizada
+  \item accept-charset
+  \item enctype: especifica como a informação deverá ser codificada
+  \item method: define o método da requisição (get ou post)
+  \item name: nome do formulário
+  \item autocomplete (on$|$off): 
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Elementos \textit{input}}
+\begin{itemize}
+  \item São considerados os principais elementos
+  \item É utilizado para selecionar as informações do usuário que será enviada para o servidor
+  \item Varia na forma como o elemento é exibido ao usuário (através do atributo \textbf{type})
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{O elemento \textit{Textfield}}
+\begin{itemize}
+ \item Apresenta um campo de texto para inserção de dados do usuário
+\end{itemize}
+
+ \begin{lstlisting}
+  First name: <input type="text" name="firstname" placeholder="Digite alguma coisa" ><br >
+  Last name: <input type="text" name="lastname" placeholder="Digite alguma coisa">
+ \end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]{O elemento \textit{Password}}
+ \begin{itemize}
+  \item Possibilita a inserção de textos no formato codificado (conjunto de ``***'')
+  \item Bastante semelhante ao textfield
+ \end{itemize}
+\begin{lstlisting}
+  First name: <input type="password" name="firstname" ><br >
+  Last name: <input type="text" name="lastname" >
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]{Radio Button}
+\begin{itemize}
+ \item Possibilita a escolha de uma opção em um conjunto de opções
+\end{itemize}
+\begin{lstlisting}
+  <input type="radio" name="sex" value="male" > Male<br >
+  <input type="radio" name="sex" value="female" > Female
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Checkbox}
+\begin{itemize}
+ \item Semelhante ao radio box, porém possibilita a escolha de multiplas opções de maneira simultânea
+\end{itemize}
+\begin{lstlisting}
+<form>
+  <input type="checkbox" name="vehicle" value="Bike" > I have a bike<br >
+  <input type="checkbox" name="vehicle" value="Car" > I have a car
+</form>
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Outros tipos de inputs}
+
+Color
+
+\begin{lstlisting}
+ <input type="color" name="favcolor">
+\end{lstlisting}
+Date
+\begin{lstlisting}
+ <input type="date" name="bday">
+\end{lstlisting}
+Datetime
+\begin{lstlisting}
+ <input type="datetime" name="bdaytime">
+\end{lstlisting}
+Datetime-local
+\begin{lstlisting}
+<input type="datetime-local" name="bdaytime">
+\end{lstlisting}
+
+
+
+
+
+%  \begin{itemize}
+%   \item color date, datetime, email, month, number, range, tel, time, week
+%  \end{itemize}
+
+\end{frame}
+
+
+\begin{frame}[fragile]{Outros tipos de inputs}
+
+Email
+\begin{lstlisting}
+ <input type="email" name="usremail">
+\end{lstlisting}
+File
+\begin{lstlisting}
+ <input type="file" name="img"> 
+\end{lstlisting}
+Hidden
+\begin{lstlisting}
+ <input type="image" src="img_submit.gif" alt="Submit"> 
+\end{lstlisting}
+Month
+\begin{lstlisting}
+ <input type="month" name="bdaymonth">
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]{Outros tipos de inputs}
+Number
+\begin{lstlisting}
+<input type="number" name="quantity" min="1" max="10" step="2"> 
+\end{lstlisting}
+Range
+\begin{lstlisting}
+ <input type="range" name="points" min="1" max="10" step="2">
+\end{lstlisting}
+Reset
+\begin{lstlisting}
+ <input type="reset">
+\end{lstlisting}
+Telefone
+\begin{lstlisting}
+ <input type="tel" name="usrtel">
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]{Outros tipos de inputs}
+Time
+\begin{lstlisting}
+ <input type="time" name="usr_time">
+\end{lstlisting}
+URL
+\begin{lstlisting}
+ <input type="url" name="homepage">
+\end{lstlisting}
+Week
+\begin{lstlisting}
+ <input type="week" name="week_year">
+\end{lstlisting}
+\end{frame}
+
+\section{Novos elementos HTML5}
+\subsection{Elementos de media}
+\begin{frame}[fragile]{Tag audio}
+Oferece suporte a adição de fluxos de áudio para os formatos MP3, Wav, and Ogg
+\begin{lstlisting}
+<audio controls>
+  <source src="horse.ogg" type="audio/ogg">
+  <source src="horse.mp3" type="audio/mpeg">
+  Your browser does not support the audio tag.
+</audio> 
+\end{lstlisting}
+\begin{itemize}
+ \item src define a origem do arquivo
+ \item autoplay o áudio começa a tocar assim que o arquivo está pronto
+ \item loop 
+ \item muted
+ \item preload especifica como o autor deseja que seja carregado o arquivo (auto, metadata, none)
+ \item controls
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]{Tag video}
+Define suporte a adição de fluxos de vídeo para os formatos MP4, WebM, and Ogg
+\begin{lstlisting}
+<video width="320" height="240" controls>
+  <source src="movie.mp4" type="video/mp4">
+  <source src="movie.ogg" type="video/ogg">
+  Your browser does not support the video tag.
+</video> 
+\end{lstlisting}
+\begin{itemize}
+\item autoplay
+\item controls
+\item loop
+\item muted
+\item poster 
+\end{itemize}
+
+
+\end{frame}
+
+\begin{frame}[fragile]{Tag Track}
+ Define suporte a legendas para áudio ou vídeo
+ 
+ \begin{lstlisting}
+  <video width="320" height="240" controls>
+  <source src="forrest_gump.mp4" type="video/mp4">
+  <source src="forrest_gump.ogg" type="video/ogg">
+  <track src="subtitles_en.vtt" kind="subtitles" srclang="en" label="English">
+  <track src="subtitles_no.vtt" kind="subtitles" srclang="no" label="Norwegian">
+</video>
+ \end{lstlisting}
+
+\end{frame}
+
+\subsection{Organização da página}
+\begin{frame}[fragile]{Organização da página}
+ \begin{itemize}
+  \item É comum organizarmos materiais segundo alguma estrutura: capítulos, seções, subseções, cabeçalhos, rodapés etc
+  \item Antes do HTML5 a tag \textbf{div} fazia era responsável pela organização
+ \end{itemize}
+\pause
+ \begin{figure}[h!]
+ \centering
+ \includegraphics[scale=0.35]{./imagens/img_div.png}
+ % img_div.png: 219x258 pixel, 96dpi, 5.79x6.83 cm, bb=0 0 164 193
+\end{figure}
+
+\end{frame}
+
+\begin{frame}{Tag div e os elementos de blocos}
+ \begin{itemize}
+  \item é um elemento de \textbf{bloco} cujo propósito é agrupar outros elementos
+  \item Não possui nenhuma semântica agregada
+ \end{itemize}
+ \begin{block}{O que é um elemento de bloco?}
+ \begin{itemize}
+  \item É uma categoria de elementos HTML
+  \item Aparecem apenas dentro do \textit{body} e sua característica mais marcante é que normalmente são formatados com uma quebra de linha no início do elemento
+  \item \textbf{Normalmente} pode conter outros elementos de \textbf{linha} ou de bloco
+ \end{itemize}
+ \end{block}
+\end{frame}
+
+\begin{frame}{Outros elementos de bloco}
+\begin{itemize}
+ \item h1, h2, ... h6
+ \item audio, video,...
+ \item p, form, table, tfoot, ol, ul
+ \item article, canvas, blockquote, header, aside,...
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Tag span e elementos de linha}
+\begin{itemize}
+ \item é um elemento de \textbf{linha} cujo propósito é agrupar texto ou outros elementos de linha
+ \item Também não possui nenhuma semântica agregada
+\end{itemize}
+\begin{block}{O que é um elemento de linha?}
+\begin{itemize}
+ \item Também representam uma categoria de elementos HTML5
+ \item Aparecem no \textit{body} e normalmente \textbf{NÃO} adicional uma quebra de linha no início do elemento
+ \item \textbf{Normalmente} pode conter apenas outros elementos de linha e texto
+\end{itemize}
+\end{block}
+
+
+\end{frame}
+
+\begin{frame}{Outros elementos de linha}
+\begin{itemize}
+ \item b, i, small, tt
+ \item abbr, acronym, cite, code, dfn, em, kbd, strong, samp, var
+ \item a, bdo, br, img, map, object, q, script, span, sub, sup
+ \item button, input, label, select, textarea
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}{Elementos semânticos do HTML5}
+\begin{itemize}
+ \item A partir do HTML5 novos elementos para organização da página foram adicionados
+ \item Agora eles não apenas dividem a página mas também dão semântica ao conteúdo
+ \end{itemize}
+
+\begin{figure}[h!]
+ \centering
+ \includegraphics[scale=0.4]{./imagens/img_sem_elements.png}
+ % img_sem_elements.png: 219x258 pixel, 96dpi, 5.79x6.83 cm, bb=0 0 164 193
+\end{figure}
+
+\begin{itemize}
+ \item Normalmente \textbf{NÃO} modificam a formatação!
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}{Alguns elementos semânticos}
+\begin{itemize}
+ \item article: define um artigo
+ \item aside: define conteúdo a ser posicionado na lateral da página
+ \item figure e figcaption: definem um container e uma legenda para imagens
+ \item header e footer: definem cabeçalhos e rodapés da página
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Alguns elementos semânticos}
+\begin{itemize}
+\item main: especifica a seção principal do documento. Não deve vir dentro de nenhum elemento de bloco
+\item section: especifica uma seção
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]{Praticando com os elementos \textit{details} e \textit{summary}}
+\begin{lstlisting}
+<details>
+  <summary>Copyright 1999-2011.</summary>
+  <p> - by Refsnes Data. All Rights Reserved.</p>
+  <p>All content and graphics on this web site are the property of the company Refsnes Data.</p>
+</details>
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Praticando com o elemento \textit{nav}}
+\begin{lstlisting}
+<nav>
+  <a href="/html/">HTML</a> |
+  <a href="/css/">CSS</a> |
+  <a href="/js/">JavaScript</a> |
+  <a href="/jquery/">jQuery</a>
+</nav>
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]{Praticando com os elementos \textit{mark} e \textit{time}}
+\begin{lstlisting}
+ <p>Do not forget to buy <mark>milk</mark> today.</p>
+\end{lstlisting}
+
+\begin{lstlisting}
+ p>We open at <time>10:00</time> every morning.</p>
+<p>I have a date on <time datetime="2008-02-14">Valentines day</time>.</p> 
+\end{lstlisting}
+
+
+\end{frame}
+
+
+
+
+\end{document}

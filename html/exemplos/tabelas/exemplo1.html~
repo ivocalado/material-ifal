@@ -1,0 +1,14 @@
+<html>
+<head>
+<title>
+</title>
+</head>
+<body>
+<TABLE BORDER="0">
+<CAPTION>Primeiro exemplo</CAPTION>
+<TR><TH>Coluna 1</TH><TH>Coluna 2</TH></TR>
+<TR><TD>linha1, coluna 1</TD><TD> linha 1, coluna 2</TD></TR>
+<TR><TD>linha 2, coluna 1</TD><TD>linha 2, coluna 2</TD></TR>
+</TABLE>
+</body>
+</html>

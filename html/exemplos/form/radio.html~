@@ -1,0 +1,13 @@
+<html>
+<head>
+<title>
+</title>
+</head>
+<body>
+<form>
+<option type="radio" name="sex" value="male" /> Male<br />
+<option type="radio" name="sex" value="female" /> Female
+</form>
+<option selected="selected">Valor</option>
+</body>
+</html>

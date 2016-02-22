@@ -1,0 +1,30 @@
+<html>
+<head><title>Exemplo de cabeÃ§alho</title>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+
+</head>
+<body>
+<UL>
+<LI>Documentos básicos
+<LI>Documentos avançados
+    <UL> 
+    <LI>formulários
+
+        <UL> 
+        <LI>CGI 
+        </UL> 
+
+    <LI>contadores 
+    <LI>relógios 
+    </UL> 
+<LI>Detalhes sobre imagens
+</UL> 
+
+<UL>
+<LI TYPE=DISC>um item
+<LI TYPE=CIRCLE>mais um item
+<LI TYPE=SQUARE>último item
+</UL> 
+
+</body>
+</html>

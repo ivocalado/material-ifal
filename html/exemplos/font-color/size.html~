@@ -1,0 +1,12 @@
+<html>
+<head>
+<title>
+</title>
+</head>
+<body>
+<FONT SIZE="+2">Letra maior</FONT> </br>
+<FONT SIZE=3>Letra normal</FONT> </br>
+Letra normal sem o uso do elemento font</br>
+<FONT SIZE=-2>Letra menor</FONT> 
+</body>
+</html>
