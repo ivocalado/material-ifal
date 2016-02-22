@@ -1,0 +1,25 @@
+<html>
+<head>
+<script type="text/javascript">
+	function mensagem(m) {
+		alert("Ola " + this.name);
+		alert(m);
+	}
+	function person(nome, idade) {
+		this.name = nome;
+		this.age = idade;
+		this.message = mensagem;
+	}
+</script>
+</head>
+<body>
+
+<script type="text/javascript">
+	p = new person("Ivo", "20");
+	alert(p.age);
+	alert(p.name);
+	p.message();	
+</script>
+
+</body>
+</html>

@@ -1,0 +1,49 @@
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html;charset=utf8">
+<script type="text/javascript">
+
+function calcular() {
+	a = parseFloat(document.getElementById("a").value)
+	b = parseFloat(document.getElementById("b").value)
+	c = parseFloat(document.getElementById("c").value)
+	resultado = document.getElementById("resultado")
+
+	if(isNaN(a) || isNaN(b) || isNaN(c)) {
+		resultado.innerHTML = "<b>Os parâmetros informados são inválidos!</b>"
+		return;
+	}
+
+	delta = b*b - 4*a*c;
+
+	saida = "A equação "+a+"x<sup>2</sup> + ("+b+")x + (" + c+") = 0"
+	var calculo = ""
+	if(delta < 0) {
+		calculo += " não possui raízes reais."
+	} else {
+		if(delta == 0) {
+			x = -b/(2*a)
+			calculo += " possui uma única raiz cujo valor é " + x
+		} else {
+			x1 = (-b+delta)/(2*a)
+			x2 = (-b-delta)/(2*a)
+			calculo += " possui duas raizes cujos valores são x' = " + x1 + " e x'' = "+ x2
+		}
+	}
+	resultado.innerHTML = saida + calculo
+}
+</script>
+</head>
+<body>
+<fieldset style="float:left">
+A = <input type="text" id="a" style="width:200px"><br>
+B = <input type="text" id="b" style="width:200px"><br>
+C = <input type="text" id="c" style="width:200px"><br>
+<input type="button" value="Calcular" onclick="calcular()">
+</fieldset>
+<br>
+<div id="resultado"></div>
+</body>
+</html>
+
+

@@ -1,0 +1,25 @@
+<html>
+<head>
+<script type="text/javascript">
+function checkForm() {
+	element1 = document.getElementById("input1");
+
+	resultado = (element1.value == "Sim") || (element1.value == "sim")
+	if(resultado) {
+		alert("Formulário submetido");
+		return true;
+	} else {
+		alert("Formulario Não Submetido");
+		return false;
+	}
+		
+}
+</script>
+</head>
+<body>
+<form method="post" action="paginarequisitada.htm" >
+Entrada 1: <input type="text" value="" id="input1" /> <br/>
+<input type="submit" onclick="return checkForm();" value="Submeter" id="input3"/> <br/>
+</form>
+</body>
+</html>

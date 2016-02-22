@@ -1,0 +1,27 @@
+<html>
+<head>
+<script type="text/javascript">
+function checagem() {
+	entrada1 = document.getElementById("caixa");
+	entrada2 = document.getElementById("caixa2");	
+	if((entrada1.value.length == 0) || (entrada2.value.length == 0)) {
+		document.getElementById("saida").innerHTML = "Erro!";
+		document.getElementById("saida").style.color="red";
+
+		return false;	
+	}
+	return true;
+}
+
+</script>
+</head>
+<body>
+
+<form onSubmit="return checagem()">
+	<input id="caixa" type="text" /><br/>
+	<input id="caixa2" type="text" />
+	<input id="botao" type="submit" value="registrar"/>
+</form>
+<div id="saida">dsakfjsadlfksa</div>
+</body>
+</html>

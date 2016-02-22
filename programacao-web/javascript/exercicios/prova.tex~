@@ -1,0 +1,57 @@
+\documentclass[a4paper,10pt]{article}
+\usepackage[latin1]{inputenc}
+\usepackage[brazil]{babel}
+
+%opening
+\title{Instituto Federal de Educação, Ciência e Tecnologia de Alagoas -- IFAL}
+\author{Introdução à Computação -- Curso Integrado de Informática - Prova}
+
+\begin{document}
+
+\maketitle
+
+% Forma de resolução: \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+
+% \vspace{2cm}
+
+
+
+\textbf{1.} Explique o que é um bit, um byte, qual a relação que há entre eles e porque?
+
+\textbf{2.} Qual a importância da tabela ASCII?
+
+\textbf{3.} João é um internauta que gosta bastante de assistir filmes. Certo dia, ele inicia o download de um filme que ocupa originalmente 700MB. Sabendo que a velocidade de download média contratada por João é de 300kbps, em quantos minutos ele poderá assistir o filme?
+
+\textbf{4.} A computação é uma ciência que deriva da matemática. Para se ter uma ideia o termo \textbf{computar} significa contar. Neste sentido, dispositivos que auxiliavam o processo de contagem são considerados precursores dos computadores. Qual foi o primeiro dispositivo utilizado no processo de contagem?
+
+\textbf{5.} Quem foi Ada Lovelace e qual foi o trabalho criado por Charles Babbage?
+
+\textbf{6.} Quais são as unidades que compoem o modelo de Von Neumann?
+
+\textbf{7.} Realize as seguintes conversões de base:\\
+
+\begin{description}
+ \item[a)] 3462$_{7}$ =$>$ X$_{3}$
+\item[b)] 3462$_{9}$ =$>$ X$_{16}$
+\item[c)] BABADA$_{16}$ =$>$ X$_{10}$
+\item[d)] 11001011$_{2}$ =$>$ X$_{4}$
+
+\end{description}
+
+\textbf{8.} Realize as seguintes operações aritméticas em \textbf{binário}:
+
+\begin{description}
+ \item 1101110 + 11001110 (Com tamanho máximo de 8 bits)
+ \item 110111001 - 100101101 
+ \item 10111011 - 10011011 (Com complemento de 2)
+ \item 1011011 + 0001110
+ \item 1011 * 1101
+
+\end{description}
+
+
+
+
+
+
+\end{document}

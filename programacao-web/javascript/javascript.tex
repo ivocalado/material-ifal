@@ -1,0 +1,1237 @@
+%\documentclass[t,handout]{beamer}
+\documentclass{beamer}
+
+
+\usepackage[latin1]{inputenc}
+
+\usepackage[portuguese]{babel}
+\usepackage[tight]{subfigure}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{url}
+% \usepackage{inconsolata}
+\newcommand{\setcolor}[2]{\color{#1}{#2}\color{black}}
+
+
+%Pacote de listagem de cï¿½digo
+\usepackage{listings}
+%\lstset{numbers=left, stepnumber=1, firstnumber=1,
+%numberstyle=\tiny, extendedchars=true, breaklines=true, frame=tb,
+%basicstyle=\footnotesize, stringstyle=\ttfamily,
+%showstringspaces=false }
+
+\lstset{extendedchars=true, breaklines=true, frame=tb,
+basicstyle=\footnotesize, stringstyle=\ttfamily,
+showstringspaces=false,language=HTML }
+
+% \usecolortheme[RGB={130,35,150}]{structure}
+% \usecolortheme[RGB={33,33,94}]{structure}
+\usecolortheme[RGB={153,204,123}]{structure}
+\setbeamertemplate{footline}[frame number]
+\setbeamertemplate{navigation symbols}{}
+
+% \usetheme{Frankfurt} %LEGAL     !!!
+% \usetheme{Madrid}     %LEGAL/L%IMPO/COM CAIXA     (sem barra de desenvolvimento)
+
+% \usetheme{Antibes} %NAO
+% \usetheme{Berlin} %PODE SER...     (BARRA DE DESENVOLVIMANTO)
+% \usetheme{Berkeley}     %FEIO
+% \usetheme{Boadilla} %TUDO BRANCO...
+% \usetheme{Copenhagen}     %NAO
+% \usetheme{Darmstadt} %LEGAL!     !!!
+% \usetheme{Dresden}     %LEGAL/LIMPO/SEM CAIXA     (sem caixa fica ruim...)
+
+% \usetheme{Goettingen}     %FEIO DEMAIS!
+ \usetheme{Ilmenau} %LEGAL (forte candidato)
+% \usetheme{JuanLesPins} %BACANA
+% \usetheme{Luebeck}     %FEIO
+
+% \usetheme{Malmoe}     %FEIO
+% \usetheme{Warsaw} %NAO...
+% \usetheme{Seattle}
+% \usetheme{CambridgeUS}
+% \usetheme{Singapore}
+
+%Insere o numero de frames no slide
+\newcommand*\oldmacro{}
+\let\oldmacro\insertshortauthor% save previous definition
+\renewcommand*\insertshortauthor{%
+  \leftskip=.3cm% before the author could be a plus1fill ...
+  \insertframenumber\,/\,\inserttotalframenumber\hfill\oldmacro}
+
+
+\author[Ivo Calado]{Ivo Calado}
+\date{\today}
+\institute[IFAL]{Instituto Federal de Educação, Ciência e Tecnologia de Alagoas}
+\title{Programação Web}
+\logo{\includegraphics[width=0.2\linewidth]{imagens/ifal-logo.jpg}}
+\subtitle{\textit{Javascript}}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+% \section{Roteiro}
+% \AtBeginSection[]
+{\frame{
+\frametitle{Roteiro}
+\tableofcontents[hidesubsections]
+}
+}
+
+\section{Introdução}
+\subsection{O que é Javascript}
+\begin{frame}{O que vimos até aqui?}
+\begin{itemize}
+  \item Linguagens que possuem como foco a visualização da informação
+  \item Não possibilitam a execução de fluxos de código
+  \pause \item \setcolor{red}{Não são destinadas a programadores!!}
+  \pause
+  \item JavaScript foi projetado para adicionar interatividade à páginas HTML
+  \item Trata-se de uma linguagem de script
+  \item Trata-se de uma linguagem interpretada
+\end{itemize}
+\pause
+\begin{block}{O que é uma linguagem interpretada?}
+\pause Significa que o script é executada sem uma prévia compilação
+\end{block}
+
+\end{frame}
+
+\begin{frame}{Curiosidades}
+\begin{block}{Qual a relação entre Java e JavaScript?}
+\pause
+Nenhuma. Trata-se de linguagens completamente diferentes. Uma criada pela Sun e a outra pela Netscape!
+\end{block}
+\pause
+\begin{block}{Qual o nome oficial da linguagem JavaScript?}
+ ECMAScript! Desenvolvido e mantido pela \textit{ECMA International Organization}
+\end{block}
+\end{frame}
+
+\section{Básico do JavaScript}
+\subsection{Hello World!}
+\begin{frame}[fragile]{Hello World}
+Para adicionar algum script JavaScript basta fazer uso da tag \textbf{script} tendo como valor do campo \textbf{type}: \textbf{text/javascript}
+\begin{lstlisting}
+<html>
+  <body>
+    <script type="text/javascript">
+      document.write("<h1>Hello World!</h1>");
+    </script>
+  </body>
+</html> 
+\end{lstlisting}
+
+\begin{block}{}
+\textbf{document.write} é a maneira padrão para escrita na saída!
+\end{block}
+
+\end{frame}
+
+\begin{frame}[fragile]{Como tornar JavaScript compatível com navegadores antigos?}
+\begin{itemize}
+   \item Deve-se fazer uso dos comentários HTML para ``esconder'' o código JavaScript do navegador para manter a retrocompatibilidade!
+\end{itemize}
+\begin{lstlisting}
+<html>
+  <body>
+    <script type="text/javascript">
+    <!--
+      document.write("Hello World!");
+    //-->
+    </script>
+  </body>
+</html>
+\end{lstlisting}
+
+\end{frame}
+\subsection{Onde colocar o código JavaScript?}
+\begin{frame}[fragile]{No HEAD?}
+ \begin{itemize}
+  \item Scripts colocados na seção HEAD não são executados imediatamente e devem ser localizados em funções!
+ \end{itemize}
+\begin{lstlisting}
+<html>
+<head>
+<script type="text/javascript">
+function message()
+{
+alert("This alert box was called with the onload event");
+}
+</script>
+</head>
+<body onload="message()">
+</body>
+</html>
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]{No Body?}
+\begin{itemize}
+ \item Se você não deseja que seu script esteja em uma função ou que ele seja destinado a escrever conteúdo na tela então coloque-o na seção \textbf{body}!
+\end{itemize}
+\begin{lstlisting}
+<html>
+  <head></head>
+  <body>
+    <script type="text/javascript">
+    document.write("This message is written by JavaScript");
+   </script>
+  </body>
+</html>
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Usando em um arquivo externo?}
+\begin{itemize}
+ \item Se você deseja compartilhar seu código JavaScript entre diversas páginas, pode-se fazer uso de uma página externa
+\end{itemize}
+\begin{lstlisting}
+<html>
+  <head>
+    <script type="text/javascript" src="xxx.js"></script>
+  </head>
+  <body onload="helloworld()">
+  </body>
+</html>
+\end{lstlisting}
+
+\end{frame}
+
+\subsection{Comandos}
+\begin{frame}[fragile]{Uso do ponto e vírgula}
+\begin{itemize}
+  \item Em JavaScript, é facultativo o uso do ; (ponto e vírgula) para delimitar o fim de um comando!
+  
+\end{itemize}
+\begin{lstlisting}
+<html>
+  <body>
+    <script type="text/javascript">
+    document.write("Fim de linha COM ponto e virgula");
+    document.write("Fim de linha SEM ponto e virgula")
+   </script>
+  </body>
+</html>
+\end{lstlisting}
+
+\end{frame}
+\begin{frame}[fragile]{Pulando linha em JavaScript}
+\begin{itemize}
+ \item Como você deve ter percebido no exemplo anterior, as duas frases ficaram na mesma linha
+  \item Este comportamento acontece porque toda saída de enviada pelo JavaScript é tratata como código HTML. Por isso, deve-se fazer uso do ``$<$br/$>$'' ao final da frase
+\end{itemize}
+\begin{lstlisting}
+    document.write("Fim de linha COM ponto e virgula<br/>");
+    document.write("Fim de linha SEM ponto e virgula<br/>")
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]{Comentários de linhas e multilinhas}
+\begin{itemize}
+  \item JavaScript oferece dois tipos de comentários ``//'' e ``/* */''
+  \item A semântica é a mesma do que acontece em linguagens como \textbf{Java} e \textbf{C++}
+\end{itemize}
+\begin{lstlisting}
+<html>
+<body>
+<script type="text/javascript">
+/*
+The code below will write 
+   one heading 
+*/
+document.write("<h1>This is a heading</h1>");
+</script>
+</body>
+</html>
+\end{lstlisting}
+
+\end{frame}
+\subsection{Usando variáveis}
+\begin{frame}{Usando variáveis}
+ \begin{itemize}
+  \item Variáveis em JavaScript tem a mesma semântica que em outras linguagens, isto é, armazenar informações na memória
+  \item Assim como o restante do JavaScript, são \textbf{case-sensitive}
+  \item Podem ser iniciadas por [aA-zZ], \_ ou \$
+  \item A partir do segundo caracter poder ser dos seguintes tipos [aA-zZ], [0-9],  \_ ou \$
+ \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Exemplo do uso de variáveis}
+\begin{lstlisting}
+<html>
+  <body>
+    <script type="text/javascript">
+      var firstname;
+      firstname="Hege";
+      document.write(firstname);
+      document.write("<br />");
+      firstname="Tove";
+      document.write(firstname);
+    </script>
+  </body>
+</html>
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]{Uso de variáveis não declaradas}
+\begin{itemize}
+ \item É possível atribuir valores à variáveis ainda não declaradas.
+\end{itemize}
+\begin{lstlisting}
+<html>
+  <body>
+    <script type="text/javascript">
+      firstname="Hege";
+    </script>
+  </body>
+</html>
+\end{lstlisting}
+\begin{itemize}
+ \item Nestes caso, a variável é criada no momento da atribuição!
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Arrays}
+\begin{itemize}
+  \item Em JavaScript é possível criar array para armazenamento de diversos tipos de objetos
+  \item Os objetos não precisam ser do mesmo tipo
+  \item Existem 4 tipos de instanciação!  
+\end{itemize}
+\begin{lstlisting}
+var myCars=new Array();
+var myCars=new Array(10);
+var myCars=new Array("Saab","Volvo","BMW");
+var myCars=["Saab","Volvo","BMW"];
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Indexando arrays}
+\begin{itemize}
+ \item Assim como Java, arrays em JavaScript são indexados a partir da posição 0
+\end{itemize}
+\begin{lstlisting}
+var myCars=["Saab","Volvo","BMW"];
+document.write(myCars[0]) // Imprime Saab
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]{Unindo arrays}
+\begin{itemize}
+ \item Em JavaScript é possível unir dois arrays de maneira bastante simples
+\end{itemize}
+\begin{lstlisting}
+<script type="text/javascript">
+var parents = ["Jani", "Tove"];
+var children = ["Cecilie", "Lone"];
+var family = parents.concat(children);
+document.write(family);
+</script>
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]{Unindo todos elementos de um array em uma string}
+É possível unir todos os elementos de um array em uma única string através do método \textbf{join}
+
+\begin{lstlisting}
+var fruits = ["Banana", "Orange", "Apple", "Mango"];
+document.write(fruits.join() + "<br />"); //Utiliza o separador padrão ","
+
+document.write(fruits.join("+") + "<br />"); //Utiliza o separador passado por parâmetro
+
+document.write(fruits.join(" and ")); //Utiliza o separador passado por parâmetro
+
+</script>
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}{Exercício}
+Pesquisar e criar exemplos para os seguintes métodos de um array:
+
+\begin{itemize}
+ \item push
+  \item pop
+  \item reverse
+  \item shift
+  \item slice
+  \item sort
+  \item unshift (se possível, testar no Firefox e IE)
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{O objeto String}
+Em JavaScript o objeto String possui as seguintes propriedades/métodos
+\begin{itemize}
+ \item length
+  \item toUpperCase()
+  \item big()
+  \item small()
+  \item bold()
+  \item italics()
+  \item fixed()
+  \item strike()
+  \item etc
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Exercício para casa!}
+Pesquisar a utilização dos objetos:
+\begin{itemize}
+  \item Date
+  \item Boolean
+  \item Math
+  \item RegExp
+\end{itemize}
+
+\end{frame}
+
+
+
+\begin{frame}{Operadores aritméticos}
+\begin{itemize}
+ \item JavaScript oferece 7 operadores aritméticos (\textbf{+, -, *, /, \%, ++, --})
+\pause \item Além disso, são oferecidos os operadores de atribuição correspondentes (\textbf{=, +=, -=. *=, /= e \%=})
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]{Concatenação de strings}
+\begin{itemize}
+  \item O operador ``+'' pode ser utilizado também no processo de concatenação de strings
+  \item Se pelo menos um dos operandos for uma string então será realizado a concatenação
+\end{itemize}
+
+\begin{lstlisting}
+v1 = 20
+v2 = "11" 
+v3 = v1 + v2
+\end{lstlisting}
+Irá resultar na string \textbf{2011} e não no número \textbf{31}!!!
+\end{frame}
+
+\begin{frame}[fragile]{Operadores de comparação}
+\begin{itemize}
+ \item JavaScript especifica 7 operadores de comparação: \textbf{==, ===, !=, $>$, $<$, $>$=, $<$=} e 
+\end{itemize}
+\begin{lstlisting}
+<script type="text/javascript">
+  x = 5
+  println(x == 5)
+  println(x == "5")
+  println(x === 5)
+  println(x === "5")
+</script>
+
+\end{lstlisting}
+\pause
+\begin{itemize}
+ \item 3 operadores lógicos: \textbf{\&\&, $||$, !}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]{Operadores ternário}
+Assim como Java e C++, em JavaScript é possível fazer uso do operador ternário.
+
+\begin{block}{}
+ Qual o resultado da variável \textbf{valor} após a execução do seguinte script?
+\end{block}
+
+\begin{lstlisting}
+<script type="text/javascript">
+  x = 5
+  valor = (x != 5)? "string de teste" : 10
+</script>
+
+\end{lstlisting}
+
+\end{frame}
+
+\subsection{Controle de fluxo}
+\begin{frame}[fragile]{Expressões condicionais: if-else}
+\begin{itemize}
+ \item A utilização da estrutura de seleção \textbf{if-else} é semelhante à Java
+\end{itemize}
+\begin{lstlisting}
+if (condition)
+{
+  statement 1;
+  statement 2;
+} // Os dois comandos são executados
+if (condition)
+  statement 1;
+  statement 2;
+  statement 3;
+// Apenas o primeiro comando é executado
+\end{lstlisting}
+
+
+\end{frame}
+\begin{frame}[fragile]{Exemplo if-else}
+\begin{lstlisting}
+<html>
+<body>
+<script type="text/javascript">
+	var d = new Date();
+	var time = d.getHours();
+	if (time < 12)
+	{
+		document.write("<b>Bom dia</b>");
+	} else
+		document.write("<b>Boa tarde</b>");
+</script>
+</body>
+</html>
+\end{lstlisting}
+ 
+\end{frame}
+\begin{frame}{Exercício}
+Criar uma página HTML que possua um script JavaScript que faz uso da função \textbf{Math.random()} para gerar números aleatórios e caso o valor for maior que 0.5 criar o link para a página do Google. Caso contrário, redirecionar para a página globo.com .
+\end{frame}
+
+\begin{frame}{Exercício II}
+\begin{itemize}
+ \item Altere o exemplo \textbf{if.html} para que, dependendo da hora obtida no sistema seja impressa a aula atual (1ª, 2ª, 3ª, intervalo, 4ª, 5ª, 6ª).\\
+
+\item Sabe-se que o método \textbf{getMinutes()} do objeto Date retorna os minutos atuais e \textbf{getHours()} retorna a hora atual.
+
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{O comando For}
+\begin{itemize}
+ \item Em JavaScript, a estrutura for segue a mesma sintaxe da linguagem Java
+\end{itemize}
+\begin{lstlisting}
+for (var=startvalue;var<=endvalue;var=var+increment)
+{
+  //codigo a ser executado
+}
+\end{lstlisting}
+\pause
+\begin{itemize}
+\item As estruturas \textbf{while} e \textbf{do-while} seguem a mesma estrutura da linguagem JavaScript
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Exercício}
+\begin{itemize}
+ \item Implemente uma página Web que escreva os 6 tipos de cabeçalhos fazendo uso do comando \textbf{for}
+\end{itemize}
+
+
+\end{frame}
+
+
+
+\begin{frame}{Controles de fluxo adicionais}
+\begin{itemize}
+ \item break, continue e \textbf{for..in}
+\end{itemize}
+\begin{block}{Qual a diferença entre \textbf{break} e \textbf{continue}}
+\pause \textbf{continue} interrompe a iteração atual e inicia na próxima iteração. \\
+\textbf{break} interrompe todo o loop.
+\end{block}
+\end{frame}
+\begin{frame}[fragile]{for..in}
+\begin{itemize}
+ \item A estrutura \textbf{for..in} tem a mesma semântica do \textbf{for} extendido do Java
+  \item Visa realizar iteração sobre arrays e listas
+\end{itemize}
+
+\begin{lstlisting}
+var x;
+var mycars = new Array();
+mycars[0] = "Saab";
+mycars[1] = "Volvo";
+mycars[2] = "BMW";
+for (x in mycars)
+{
+	document.write(mycars[x] + "<br />");
+}
+\end{lstlisting}
+
+
+\end{frame}
+
+\section{JavaScript avançado}
+\begin{frame}{}
+\begin{center}
+ \Huge Caixa de diálogo e Ciclo de vida das variáveis
+\end{center}
+
+ 
+\end{frame}
+
+\subsection{Caixas Popup}
+\begin{frame}{Caixas Popup}
+JavaScript oferece três tipos de caixas de diálogo
+ \begin{itemize}
+  \item \textbf{AlertBox:} tem como objetivo informar ao usuário alguma mensagem
+  \item \textbf{ConfirmBox:} recebe uma entrada do usuário a partir da confirmação
+  \item \textbf{PromptBox:} recebe uma entrada do usuário a partir de uma entrada de texto
+ \end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]{Alert Box}
+\begin{lstlisting}
+<head>
+<script type="text/javascript">
+function show_alert()
+{
+alert("Hello! I am an alert box!");
+}
+</script>
+</head>
+<body>
+<input type="button" onclick="show_alert()" value="Show
+alert box" />
+</body>
+
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]{Confirm Box}
+\begin{lstlisting}
+<html> <head>
+<script type="text/javascript">
+  function show_confirm() {
+    var r=confirm("Press a button!");
+    if (r==true) {
+      alert("You pressed OK!");
+    } else {
+      alert("You pressed Cancel!");
+    }
+}
+</script> </head>
+<body>
+   <input type="button" onclick="show_confirm()" value="Show a confirm box" />
+</body> </html> 
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Prompt Box}
+\begin{lstlisting}
+<html>
+<head>
+<script type="text/javascript">
+function disp_prompt() {
+  var fname=prompt("Please enter your name:","Your name")
+  alert(fname);
+}
+</script>
+</head>
+<body>
+<input type="button" onclick="disp_prompt()" value="Display
+a prompt box" />
+</body> </html>
+\end{lstlisting}
+
+\end{frame}
+
+\subsection{Funções}
+\begin{frame}[fragile]{Funções}
+\begin{itemize}
+ \item Funções em JavaScript tem o mesmo propósito que em linguagens como Java e C++
+  \item Possibilitam o reúso de código
+\item Funções podem ser definidas no \textbf{HEAD}, \textbf{BODY} ou num arquivo externo \textbf{.js}, porém recomenda-se não adicionar na seção BODY
+\end{itemize}
+\begin{lstlisting}
+function nome_da_funcao(var1,var2,...,varX)
+{
+  some code
+}
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}{Ciclo de vida de variáveis em JavaScript}
+\begin{itemize}
+ \item Se você declara uma variável dentro de uma função, ela terá escopo apenas \textbf{local} e quando a função for finalizada a variável será destruída
+  \item Contudo, variáveis criadas fora de funções podem ser visualizadas de qualquer parte da página, chamadas variáveis \textbf{globais} e existem desde o momento que a página é carregada até quando ela for fechada
+\end{itemize}
+
+\end{frame}
+
+\subsection{Eventos}
+\begin{frame}{}
+\begin{center}
+ \Huge Eventos
+\end{center}
+
+ 
+\end{frame}
+
+\begin{frame}{Eventos}
+\begin{itemize}
+ \item Eventos são ações que podem ser detectadas em JavaScript
+  \item A partir da implementação de eventos, podemos criar páginas dinâmicas
+  \item Cada elemento em HTML têm um próprio conjunto de eventos que podem ser capturados
+  \item A especificação dos eventos que serão ``escutados'' é definido nas tags HTML
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Exemplos de Eventos}
+\begin{itemize}
+ \item Clique do mouse
+  \item Carregamento de uma página Web ou imagem
+  \item Mover o mouse sobre uma certa área da página Web
+  \item Selecionar um campo de entrada de dados em um formulário
+  \item Submeter um formulário
+\end{itemize}
+\pause
+\begin{block}{}
+Eventos são normalmente usados em combinações com funções e, portanto, a função não será executado até que o evento seja lançado 
+\end{block}
+
+\end{frame}
+
+\begin{frame}{Eventos \textit{OnLoad} e \textit{OnUnload}}
+ \begin{itemize}
+  \item Esta classe de eventos são lançados no carregamento e no fechamento de uma página HTML
+  \item OnLoad geralmente é utilizado para checar o tipo de browser utilizado ou a versão do navegador
+  \item Um outro uso seria setar \textit{Cookies} quando o usuário entra ou sai da página Web
+ \end{itemize}
+
+\end{frame}
+
+\begin{frame}{Eventos OnFocus, OnBlur e OnChange}
+\begin{itemize}
+ \item OnFocus e OnBlur são eventos complementares. O primeiro é lançado quando um elemento ganha foco e o segundo quando perde foco
+  \item Onchange, por sua vez, é lançado apenas se o conteúdo do elemento tiver sido alterado
+\end{itemize}
+ 
+\end{frame}
+
+\begin{frame}[fragile]{Evento OnSubmit}
+\begin{itemize}
+ \item Evento lançado antes de um fomulário ser enviado
+  \item Geralmente usado para fazer a validação dos campos do formulário
+\end{itemize}
+\begin{lstlisting}
+<form method="post" action="destino.htm" onsubmit="return checkForm()">
+\end{lstlisting}
+
+\end{frame}
+
+
+\begin{frame}[fragile]{Eventos OnMouseOver e OnMouseOut}
+\begin{itemize}
+ \item Controlam quando o mouse entra e sai de um componente respectivamente
+\end{itemize}
+
+\begin{lstlisting}
+<a href="http://www.google.com.br/" onMouseOver="mouse(); return true">google</a>
+<a href="http://g1.globo.com/" onMouseOut="mouse2(); return true">G1</a>
+\end{lstlisting}
+
+
+\end{frame}
+
+\begin{frame}[fragile]{Evento OnClick}
+\begin{itemize}
+ \item Evento lançado quando o usuário clica em um componente visível da tela
+ \item Um exemplo de utilização é em botões de submissão. Caso a função JavaScript retorne falso o formulário não é submetido
+\end{itemize}
+
+\begin{lstlisting}
+<input type="submit" onclick="return checkForm();" value="Submeter" id="input3"/>
+\end{lstlisting}
+
+
+\end{frame}
+\subsection{Tratamento de exceções}
+\begin{frame}{}
+\begin{center}
+ \Huge Tratamento de Exceções 
+\end{center}
+
+ 
+\end{frame}
+
+\begin{frame}[fragile]{Tratamento de exceções}
+\begin{itemize}
+ \item Assim como outras linguagens de programação, JavaScript oferece suporte ao tratamento de erros através do uso de exceções
+  \item A sintaxe em JavaScript é bastante semelhante ao que acontece em C++ e Java
+\end{itemize}
+\begin{lstlisting}
+ try {
+     // Bloco que pode lancar exceção  
+} catch(ex) {
+    //Tratamento de exceção
+    str = ex.message //recupera o erro gerado
+}
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]{A cláusula \textbf{throw}}
+\begin{itemize}
+ \item Além de capturar exceções, podemos lançá-las
+  \item Para tal, fazemos uso da cláusula throw
+  \item Ela possui a mesma semântica do comando análogo, em Java, throw!
+\end{itemize}
+
+\begin{lstlisting}
+if(x>10)
+{
+  throw "Err1";
+} else 
+   if(x<0) {
+  throw "Err2";
+}
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}{Exercício! :)}
+\begin{itemize}
+ \item Pesquisar sobre o objeto \textbf{navigator}
+\end{itemize}
+
+\begin{block}{Qual a função deste objeto?}
+\pause
+O objeto \textbf{navigator} contém todas as informações sobre o browser visitante, como:
+\begin{itemize}
+ \item Nome da aplicação
+  \item Versão do navegador
+  \item Plataforma
+  \item etc
+\end{itemize}
+
+\end{block}
+\end{frame}
+
+\begin{frame}{Exercício 2! :)}
+\begin{itemize}
+ \item Pesquisar sobre eventos relacionados a tempo
+  \item \textbf{setTimeout} e \textbf{clearTimeout}
+\end{itemize}
+\end{frame}
+
+% \begin{block}{Criar um jogo de Ditado!}
+% A tela terá duas áreas de entrada uma caixa de texto onde o usuário irá digitar palavras. Irá aparecer ao lado dessa caixa a palavra que o usuário deverá digitar. Ele terá um certo tempo para digitar (baseado no tamanho de cada palavra). Caso ele consiga digitar 
+% \end{block}
+% \end{frame}
+
+
+
+\section{JavaScript avançado II}
+% \subsection{Detecção do Navegador}
+\subsection{HTML DOM}
+\begin{frame}{}
+\begin{center}
+ \Huge HTML DOM
+\end{center}
+
+ 
+\end{frame}
+
+\begin{frame}{O que é?}
+\begin{block}{O que é?}
+\pause 
+De acordo com o W3C o DOM (Documento Object Model) é definido como:\\
+\textit{"The W3C Document Object Model (DOM) is a platform and language-neutral interface that allows programs and scripts to dynamically access and update the content, structure, and style of a document."}
+\end{block}
+\pause
+Em resumo HTML DOM == HTML + DOM
+
+\end{frame}
+
+\begin{frame}{Em outras palavras...}
+\begin{itemize}
+ \item Trata-se de um padrão de modelagem dos elementos HTML como objetos
+  \item Uma abordagem padrão para acesso e alteração do HTMl programaçõ
+  \item Um padrão W3C
+\end{itemize}
+Em outras palavras: \textbf{O HTML DOM é um padrão para recuperação, alteração, adição ou remoção de elementos HTML e suas propriedades}
+ 
+\end{frame}
+
+\begin{frame}{Nós DOM}
+O DOM segue a mesma filosofia de modelagem do JDOM, ou seja:
+\begin{itemize}
+  \item O documento inteiro é um nó
+  \item Cada elemento HTML é um nó
+  \item O texto dos elementos HTML são nós
+  \item Cada atributo do HTML é um atributo de um nó
+  \item Comentários são nós de comentário
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]{Exemplo}
+\begin{lstlisting}
+<html>
+  <head>
+    <title>DOM Tutorial</title>
+  </head>
+  <body>
+    <h1>DOM Lesson one</h1>
+    <p>Hello world!</p>
+  </body>
+</html> 
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}{Navegando entre a hierarquia de nós}
+\begin{center}
+ \includegraphics[scale=0.6]{./imagens/navigate-dom.png}
+ % navigate-dom.gif: 362x255 pixel, 72dpi, 12.77x9.00 cm, bb=0 0 362 255
+\end{center}
+ 
+\end{frame}
+
+\begin{frame}{Propriedades básicas de um elemento HTML DOM}
+\begin{itemize}
+  \item x.innerHTML - conteúdo textual de x
+  \item x.nodeName - o nome de x 
+  \item x.nodeValue - o valor do x
+  \item x.parentNode - referência ao elemento pai de x
+  \item x.childNodes - Nós filhos de x
+  \item x.attributes - nós atributos de x
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]{A propriedade \textbf{innerHTML}}
+\begin{itemize}
+ \item É utilizado para recuperar ou substituir o conteúdo de um elemento HTML, inclusive \textbf{$<$html$>$} e \textbf{$<$body$>$}
+  \item Pode ser utilizada também para visualizar o código fonte de uma página alterada dinamicamente
+\end{itemize}
+ \begin{lstlisting}
+<p id="intro">Hello World!</p>
+
+<script type="text/javascript">
+  txt=document.getElementById("intro").innerHTML;
+  document.write("<p>The text from the intro paragraph: " + txt + "</p>");
+</script>
+ \end{lstlisting}
+
+
+\end{frame}
+
+
+\begin{frame}[fragile]{Propriedades childNodes e nodeValue}
+Uma segunda forma de obtenção é a partir da combinação das propriedades childNodes e nodeValue
+
+\begin{lstlisting}
+<p id="intro">Hello World!</p>
+
+<script type="text/javascript">
+  txt=document.getElementById("intro").childNodes[0].nodeValue;
+  document.write("<p>The text from the intro paragraph: " + txt + "</p>");
+</script>
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}{Acessando Nós}
+Existem basicamente três forma de acessar os nós da árvore HTML:
+\begin{itemize}
+ \item \textbf{getElementById}
+\item \textbf{getElementByTagName}
+\item Navegando na estrutura dos nós
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]{getElementById}
+\begin{itemize}
+  \item Trata-se do método mais utilizado para recuperação de valores
+ \item Recebe como o id do objeto a ser acessado
+\end{itemize}
+
+\textbf{Ver exemplo...}
+\end{frame}
+
+\begin{frame}[fragile]{getElementsByTagName}
+\begin{itemize}
+ \item Retorna todos os elementos da tag passada por parâmetro
+\end{itemize}
+\begin{lstlisting}
+  document.getElementsByTagName("p");  // Retorna todos os elementos p do HTML
+\end{lstlisting}
+\pause
+\begin{block}{Qual o significado do código abaixo?}
+\begin{lstlisting}
+document.getElementById('main').getElementsByTagName("p"); 
+\end{lstlisting}
+\pause
+\begin{itemize}
+ \item Os itens podem são indexados como em um vetor!!
+\end{itemize}
+
+\end{block}
+
+
+
+\end{frame}
+
+\begin{frame}{Exercício}
+Criar um formulário que antes de ser submetido será checado por valores vazio. E caso isso ocorra, cancele a transmissão e imprima um texto na cor vermelha indicando que houve erro.
+\end{frame}
+
+\begin{frame}[fragile]{Alterando as propriedades de um elemento}
+\begin{itemize}
+ \item Até agora vimos como alterar o conteúdo de um elemento HTML via propriedade \textbf{innerHTML}
+  \item Porém, é possível alterar o conteúdo diretamente sem ``reescrever'' um novo HTML
+\end{itemize}
+\begin{lstlisting}
+<html>
+<body>
+<script type="text/javascript">
+  document.body.bgColor="lavender";
+</script>
+</body>
+</html> 
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]{Exemplo 2}
+\begin{lstlisting}
+ <html>
+<body>
+<p id="p1">Hello World!</p>
+<script type="text/javascript">
+document.getElementById("p1").innerHTML="New text!";
+</script>
+</body>
+</html> 
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]{Mudando um elemento a partir de eventos}
+\begin{itemize}
+ \item É possível alterar uma propriedade diretamente a partir do lançamento de um evento
+\end{itemize}
+\begin{lstlisting}
+<html>
+<body>
+<input type="button" onclick="document.body.bgColor='lavender';"
+value="Change background color" />
+</body>
+</html> 
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{JavaScript + CSS}
+\begin{itemize}
+ \item Em JavaScript as regras CSS podem ser customizadas durante a execução
+  \item Para isso, faz-se uso da propriedade \textbf{style} de cada elemento
+\end{itemize}
+\begin{lstlisting}
+<script type="text/javascript">
+function ChangeStyle()
+{
+  document.getElementById("p1").style.color="blue";
+  document.getElementById("p1").style.fontFamily="Arial";
+}
+</script>
+\end{lstlisting}
+
+
+\end{frame}
+
+\begin{frame}{Exercício}
+ Altere o exercício anterior para que as propriedades sejam customizadas via CSS
+\end{frame}
+
+% \begin{frame}[fragile]{Alguns exemplos de HTML DOM}
+% \begin{lstlisting}
+% 
+% \end{lstlisting}
+% 
+% \end{frame}
+
+\subsection{AJAX}
+\begin{frame}{O que é AJAX}
+\begin{itemize}
+ \item \textit{Asynchronous JavaScript and XML}
+ 
+ \item É uma técnica para criar páginas web de maneira rápida e dinâmicas
+ 
+ \item Possibilita que as páginas Web sejam atualizadas assincronamente pela troca de pequenos pedaços de informação entre o servidor
+ 
+ \item Torna possível a atualização de pedaços da página Web, sem a necessidade de atualização da página inteira
+ 
+ \item Páginas Web antigas por outro lado devem recarregar a página inteira se alguma parte precisar ser atualizada
+ 
+ \item Exemplos de aplicações com AJAX: Google Maps, Gmail, Youtube, Facebook etc
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+ \begin{figure}[h!]
+ \centering
+ \includegraphics[scale=0.7]{./imagens/ajax.png}
+ % ajax.gif: 569x324 pixel, 72dpi, 20.07x11.43 cm, bb=0 0 569 324
+\end{figure}
+
+\end{frame}
+
+\begin{frame}
+
+AJAX é baseado em padrões da Web, e utiliza uma combinação de:
+\begin{itemize}
+ \item Objeto XMLHttpRequest (utilizado para a troca assíncrona de dados com o servidor)
+ \item JavaScript/DOM (utilizado para exibir/interagir com a informação)
+ \item CSS (utilizado para formatar a informação)
+ \item XML (geralmente utilizado como formato de troca de informações entre cliente e servidor
+\end{itemize}
+
+ 
+\end{frame}
+
+\begin{frame}{O objeto XMLHttpRequest}
+ \begin{itemize}
+  \item Todos os navegarores modernos suportam o objeto XMLHttpRequest (IE5 e IE6 usam um objeto semelhante ActiveXObject)
+  \item O objeto XMLHttpRequest é utilizado para a troca de dados entre o servidor e o cliente
+ \end{itemize}
+ 
+ \begin{block}{Como criar um objeto XMLHttpRequest?}
+  $variable=new XMLHttpRequest();$
+ \end{block}
+ 
+ \begin{block}{Como criar um objeto ActiveXObject?}
+$variable=new ActiveXObject(``Microsoft.XMLHTTP'');$
+ \end{block}
+
+\end{frame}
+
+\begin{frame}[fragile]{Como manter compatibilidade entre navegadores novos e antigos?}
+\begin{lstlisting}
+var xmlhttp;
+if (window.XMLHttpRequest) {
+    // code for IE7+, Firefox, Chrome, Opera, Safari
+    xmlhttp=new XMLHttpRequest();
+} else {// code for IE6, IE5
+    xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+}
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]{Como enviar uma requisição para o servidor}
+Para enviar dados para um servidor, utilizamos os métodos \textit{open()} e \textit{send()} do objeto XMLHttpRequest
+
+\begin{block}{GET}
+ \begin{lstlisting}
+    xmlhttp.open("GET","demo_get.asp",false);
+    xmlhttp.send()
+ \end{lstlisting}
+
+ \end{block}
+ 
+ \begin{block}{GET com atributos} 
+ 
+\begin{lstlisting}
+    xmlhttp.open("GET","demo_get2.asp?fname=Henry&lname=Ford",false);
+    xmlhttp.send();
+ \end{lstlisting}
+
+ \end{block}
+ 
+\end{frame}
+
+\begin{frame}[fragile]{Como enviar uma requisição para o servidor}
+ \begin{block}{POST com atributos}
+ \begin{lstlisting}
+    xmlhttp.open("POST","ajax_test.asp",true);
+    xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+    xmlhttp.send("fname=Henry&lname=Ford");
+ \end{lstlisting}
+\end{block}
+\end{frame}
+
+\begin{frame}{Para que serve o terceiro parâmetro (bool)?}
+ \begin{itemize}
+  \item É utilizado para indicar se a requisição será assíncrona (\textbf{true}) ou síncrona (\textbf{false})
+  
+  \item Requisições síncronas fazem com que o script fique congelado até obter uma resposta do servidor. \textbf{Normalmente não é utilizado por causar travamento momentâneo do cliente}
+  
+  \item Requisições assíncronas são recomendadas pois:
+  
+  \begin{itemize}
+   \item Possibilitam que outros scripts sejam executados enquanto aguarda a resposta do servidor
+   \item Possibilita a indicação de uma função que será invocada quando a informação estiver disponível
+  \end{itemize}
+ 
+ \end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]{Async = false}
+ \begin{lstlisting}
+      xmlhttp.open("GET","http://localhost:8080/ExemploHora/gethora",false);
+      xmlhttp.send();
+      document.getElementById("test").innerHTML=xmlhttp.responseText;
+ \end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]{Async = true}
+\begin{lstlisting}
+xmlhttp.onreadystatechange = function() {
+    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+	document.getElementById("test").innerHTML = xmlhttp.responseText;
+    }
+}
+
+xmlhttp.open("GET", "http://localhost:8080/ExemploHora/gethora", true);
+xmlhttp.send();
+\end{lstlisting}
+
+Pesquisar como funciona a chamada \textbf{xmlhttp.responseXML}
+\end{frame}
+
+\begin{frame}{O evento onreadystatechange}
+\begin{itemize}
+ \item O evento onreadystatechange é disparado toda vez que o status da requisição muda
+ \item O status da requisição é armazenado no atributo readyState do objeto XMLHttpRequest e pode possuir os seguintes valores:
+ \begin{itemize}
+  \item 0: requisição não inicializada
+  \item 1: conexão com o servidor estabelecida
+  \item 2: requisição recebida
+  \item 3: requisição em processamento
+  \item 4: requisição finalizada e resposta pronta
+ \end{itemize}
+ \item A variável \textit{status} armazena o resultado final da resposta recebida:
+ \begin{itemize}
+  \item 200: Resposta recebida com sucesso
+  \item 404: Página não encontrada
+ \end{itemize}
+
+
+\end{itemize}
+
+
+
+\end{frame}
+
+
+
+
+
+
+
+\end{document}

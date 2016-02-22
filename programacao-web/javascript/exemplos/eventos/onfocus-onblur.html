@@ -1,0 +1,21 @@
+<html>
+<head>
+<script type="text/javascript">
+function saiuDeFoco(id) {
+	element = document.getElementById(id)
+	alert("Saiu de foco:" + element.value);
+}
+function alterou(id) {
+	element = document.getElementById(id)
+	alert("Novo valor:" + element.value);
+}
+
+
+</script>
+</head>
+<body>
+Entrada 1: <input type="text" value="" id="input1" onFocus="saiuDeFoco(this.id)"/> <br/>
+Entrada 2: <input type="text" value="" id="input2" onChange="alterou(this.id)"/> <br/>
+Entrada 3: <input type="text" value="" id="input3"/> <br/>
+</body>
+</html>

@@ -1,0 +1,29 @@
+<html>
+<head>
+<script type="text/javascript">
+function checkForm() {
+	element1 = document.getElementById("input1");
+	element2 = document.getElementById("input2");
+	element3 = document.getElementById("input3");
+
+	resultado = (element1.value == "") || (element2.value == "") || (element3.value == "")
+	if(resultado) {
+		alert("Nao eh possivel submeter");
+		return false;
+	} else {
+		alert("Formulario submetido");
+		return true;
+	}
+		
+}
+</script>
+</head>
+<body>
+<form method="post" action="paginarequisitada.htm" onsubmit="return checkForm()">
+Entrada 1: <input type="text" value="" id="input1" /> <br/>
+Entrada 2: <input type="text" value="" id="input2" /> <br/>
+Entrada 3: <input type="text" value="" id="input3"/> <br/>
+<input type="submit" value="Submeter" id="input3"/> <br/>
+</form>
+</body>
+</html>
