@@ -1,0 +1,295 @@
+%\documentclass[t,handout]{beamer}
+\documentclass{beamer}
+
+
+\usepackage[latin1]{inputenc}
+
+\usepackage[portuguese]{babel}
+\usepackage[tight]{subfigure}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{url}
+% \usepackage{inconsolata}
+\newcommand{\setcolor}[2]{\color{#1}{#2}\color{black}}
+
+%Pacote de listagem de cï¿½digo
+\usepackage{listings}
+%\lstset{numbers=left, stepnumber=1, firstnumber=1,
+%numberstyle=\tiny, extendedchars=true, breaklines=true, frame=tb,
+%basicstyle=\footnotesize, stringstyle=\ttfamily,
+%showstringspaces=false }
+
+\lstset{extendedchars=true, breaklines=true, frame=tb,
+basicstyle=\footnotesize, stringstyle=\ttfamily,
+showstringspaces=false,language=HTML }
+
+% \usecolortheme[RGB={130,35,150}]{structure}
+% \usecolortheme[RGB={33,33,94}]{structure}
+\usecolortheme[RGB={153,204,123}]{structure}
+\setbeamertemplate{footline}[frame number]
+\setbeamertemplate{navigation symbols}{}
+
+% \usetheme{Frankfurt} %LEGAL     !!!
+% \usetheme{Madrid}     %LEGAL/L%IMPO/COM CAIXA     (sem barra de desenvolvimento)
+
+% \usetheme{Antibes} %NAO
+% \usetheme{Berlin} %PODE SER...     (BARRA DE DESENVOLVIMANTO)
+% \usetheme{Berkeley}     %FEIO
+% \usetheme{Boadilla} %TUDO BRANCO...
+% \usetheme{Copenhagen}     %NAO
+% \usetheme{Darmstadt} %LEGAL!     !!!
+% \usetheme{Dresden}     %LEGAL/LIMPO/SEM CAIXA     (sem caixa fica ruim...)
+
+% \usetheme{Goettingen}     %FEIO DEMAIS!
+ \usetheme{Ilmenau} %LEGAL (forte candidato)
+% \usetheme{JuanLesPins} %BACANA
+% \usetheme{Luebeck}     %FEIO
+
+% \usetheme{Malmoe}     %FEIO
+% \usetheme{Warsaw} %NAO...
+% \usetheme{Seattle}
+% \usetheme{CambridgeUS}
+% \usetheme{Singapore}
+
+%Insere o numero de frames no slide
+\newcommand*\oldmacro{}
+\let\oldmacro\insertshortauthor% save previous definition
+\renewcommand*\insertshortauthor{%
+  \leftskip=.3cm% before the author could be a plus1fill ...
+  \insertframenumber\,/\,\inserttotalframenumber\hfill\oldmacro}
+
+
+\author[Ivo Calado]{Ivo Calado}
+\date{\today}
+\institute[IFAL]{Instituto Federal de Educação, Ciência e Tecnologia de Alagoas}
+\title{Programação para Web}
+\logo{\includegraphics[width=0.2\linewidth]{imagens/ifal-logo.jpg}}
+\subtitle{\textit{XHTML}}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+% \section{Roteiro}
+% \AtBeginSection[]
+{\frame{
+\frametitle{Roteiro}
+\tableofcontents[hidesubsections]
+}
+}
+
+\section{Introdução}
+\subsection{O que é?}
+\begin{frame}{O que é?}
+\pause
+\begin{itemize}
+  \item Trata-se de uma padronização praticamente identica ao HTML 4.01 com apenas algumas diferenças
+  \item XHTML é uma versão mais restrita e limpa do HTML
+  \item XHTML foi desenvolvido pela W3C para ajudar desenvolvedores na transição do HTML para XML
+  \item Migrando para XHTML, desenvolvedores Web podem fazer parte do mundo do XML mas mantendo retrocompatibilidade com o HTML
+  \pause
+  \item Agora, um documento HTML passa a ser definido como uma aplicação XML
+\end{itemize}
+\end{frame}
+
+\subsection{Benefícios}
+\begin{frame}{O que ganhamos com o XHTML?}
+\begin{itemize}
+ \item Documentos XHTML estão em conformidade com XML. Deste modo podem ser facilmenteo visualizados, editados e validados por ferramentas de XML
+ \item Especialmente útil para navegadores de dispositivos embarcados que não podem ficar se preocupando em tentar dar ``significado'' à documentos HTML mal formados
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Porque usar XHTML?}
+\begin{itemize}
+  \item Possui uma sintaxe mais rígida que o HTML
+  \item Possibilita a criação de páginas Web mais consistentes e mais bem estruturados que no HTML
+  \item Páginas que seguem o padrão XHTML recebem um selo de qualidade da W3C
+\end{itemize}
+\end{frame}
+
+\section{Sintaxe}
+\subsection*{}
+\begin{frame}{O que já sabemos...}
+\begin{itemize}
+ \item A sintaxe é bastante parecida com o HTML \pause
+ \item Praticamente toda a sintaxe é compatível com o HTML porém o inverso não é verdadeiro
+  \item Há diversos pontos que devem ser considerados na sintaxe, como: DOCTYPE, case-sensitive, fechamento de tags, formatação de atributos etc
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Exemplo de XHTML}
+\begin{lstlisting}
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/TR/xhtml1" xml:lang="en" lang="en">	
+   <head>
+      <title>Every document must have a title</title>
+   </head>
+   <body>
+   ...your content goes here...
+   </body>
+</html>
+\end{lstlisting}
+
+\end{frame}
+
+
+\subsection{DOCTYPE}
+\begin{frame}[fragile]{Declaração de DOCTYPE}
+\begin{itemize}
+ \item Em documentos XML é comum o uso de documentos dtd ou XMLSchema que possibilitem a validação da sintaxe de um documentos
+  \item Neste sentido, devemos identificar no documento XHTML as regras de validação
+\end{itemize}
+\begin{lstlisting}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}{Tipos de arquivos DTD}
+\begin{itemize}
+ \item Existem 3 tipos de arquivos DTD que são o \textbf{Strict}, \textbf{Transitional} e \textbf{Frameset}
+  \item A diferença entre os 3 arquivos de validação está nos atributos aceitos
+  \item Dependendo do tipo da página Web (uso ou não de CSS, uso de frames), deve-se fazer a seleção do DTD correto
+  \item Validadores podem ser utilizados para fazer a seleção correta
+
+\end{itemize}
+
+ 
+\end{frame}
+
+\begin{frame}[fragile]{Tipos de DTD}
+\begin{lstlisting}
+ <!DOCTYPE html
+PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<!DOCTYPE html
+PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!DOCTYPE html
+PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">
+\end{lstlisting}
+
+\end{frame}
+
+\subsection{Case sensitive e fechamento de tags}
+\begin{frame}[fragile]{\textit{Case sensitive}}
+Enquanto que em HTML podemos fazer algo assim:
+\begin{lstlisting}
+<HtML> <HEad> </heAD> </HTML>
+\end{lstlisting}
+em XHTML TODOS os atributos e tags devem ser minúsculos\\ \pause 
+Exemplo:
+\begin{lstlisting}
+<!-- This is invalid in XHTML -->
+<A Href="/xhtml/xhtml_tutorial.html">XHTML Tutorial</A>
+<!-- Correct XHTML way of writing this is as follows -->
+<a href="/xhtml/xhtml_tutorial.html">XHTML Tutorial</a>
+ \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Fechamento de \textit{tags}}
+\begin{itemize}
+ \item Todas as tags devem ser fechadas
+\end{itemize}
+\begin{lstlisting}
+<!-- This is invalid in XHTML -->
+<p>This paragraph is not written according to XHTML syntax.
+<!-- This is also invalid in XHTML -->
+<img src="/images/xhtml.gif">
+\end{lstlisting}
+\pause
+\begin{lstlisting}
+<!-- This is also valid now -->
+<img src="/images/xhtml.gif" />
+\end{lstlisting}
+\end{frame}
+
+\subsection{Formatação de atributos}
+\begin{frame}[fragile]{Formatação de atributos}
+Em HTML é possível um código como esse
+\begin{lstlisting}
+<img src="/images/xhtml.gif" width=250 height=50 />
+\end{lstlisting}
+Porém em XHTML todos os atributos devem estar entre aspas \pause
+\begin{lstlisting}
+<img src="/images/xhtml.gif" width="250" height="50" />
+\end{lstlisting}
+
+\end{frame}
+
+
+% \begin{frame}[fragile]{Minimização de atributos}
+%  \end{frame}
+
+
+\subsection{Minimização de atributos}
+\begin{frame}[fragile]{Minimização de atributos}
+Em algumas tags é possível a utilização de atributos sem valor
+\begin{lstlisting}
+<option selected>
+\end{lstlisting}
+Porém, atributos sem valor não são possível em XML. Deste modo, a seguinte abordagem foi utilizada
+\begin{lstlisting}
+  <option selected="selected">
+\end{lstlisting}
+
+\end{frame}
+
+
+
+
+\subsection{Atributo id e fechamento de tags}
+\begin{frame}[fragile]{Atributo name e id}
+\begin{itemize}
+ \item Em HTML é comum a utilização do atributo \textbf{name} para identificação do elemento... \pause
+ \item Porém, em XHTML o atributo \textbf{id} assume este papel
+\end{itemize}
+\begin{lstlisting}
+<img src="/images/xhtml.gif" id="xhtml_logo" />
+\end{lstlisting}
+\end{frame}
+\begin{frame}[fragile]{Fechamento de tags}
+Tags em XHTML devem estar corretamente fechadas
+\begin{lstlisting}
+<b><i> This text is bold and italic</b></i> (ERRADO)
+<b><i> This text is bold and italic</i></b>
+\end{lstlisting}
+\end{frame}
+
+\section{O que temos mais em XHTML?}
+\begin{frame}{O que temos mais em XHTML?}
+\begin{itemize}
+ \item Atributos base: \textbf{class}, \textbf{id}, \textbf{style}, \textbf{title}
+ \item Atributos de linguagem: \textbf{dir}, \textbf{lang}
+ \item Eventos: \textbf{onload}, \textbf{onchange}, \textbf{onsubmit}. Veremos com mais detalhes em DHTML!
+ \item Módulos: a especificação XHTML é dividida em diversos módulos dependendo da funcionalidade. Ou seja, um dispositivo pode implementar apenas alguns recursos
+\end{itemize} 
+\end{frame}
+
+% \begin{frame}{Módulos}
+% São definidos 28 módulos
+% \begin{itemize}
+%   \item Estrutura: define os elementos básicos do xhtml como \textit{body}, \textbf{head}, \textbf{html}
+%   \item Texto: define os elementos básicos de formatação como h1, h2, h*, p, pre etc.
+%   \item Hipertexto: define os elementos para realização de referencias
+%   \item Lista: define os elemntos para representação de listas
+%   \item \url{http://www.tutorialspoint.com/xhtml/xhtml_version-1.1.htm}
+% \end{itemize}
+% 
+% \end{frame}
+
+\section{Validando documentos XHTML}
+\begin{frame}{Validando documentos XHTML}
+\url{http://www.validome.org/}
+ 
+\end{frame}
+
+\end{document}

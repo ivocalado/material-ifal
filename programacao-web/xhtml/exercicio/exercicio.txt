@@ -1,0 +1,15 @@
+
+Usando o conhecimento que adquiriu, desenvolva um protótipo de uma página web de um jornal. Este protótipo deve conter:
+
+    * Seções (div) separadas para o cabeçalho, menu e corpo do jornal.
+    * Identifique corretamente cada uma das seções (id).
+    * O cabeçalho deve ter um título (h1) e um subtítulo (h2).
+    * O menu deve ter links (a) para as várias secções do jornal organizadas segundo uma lista (ul).
+    * O corpo do jornal deve ter uma seção (div) para cada notícia identificada corretamente (class).
+    * Uma notícia deve ter um título (h3), uma introdução (p) e o desenvolvimento.
+    * Cada notícia deve ter ainda uma imagem (img).
+    * A introdução da notícia deve ter uma classe (class) que indique que se trata da introdução.
+    * Utilize elementos "title" nos elementos
+    * Valide o documento em validme.org
+    * Adicione o selo de validação.
+   
