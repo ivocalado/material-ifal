@@ -1,0 +1,251 @@
+%\documentclass[t,handout]{beamer}
+\documentclass{beamer}
+
+
+\usepackage[latin1]{inputenc}
+
+\usepackage[portuguese]{babel}
+\usepackage[tight]{subfigure}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{url}
+% \usepackage{inconsolata}
+\newcommand{\setcolor}[2]{\color{#1}{#2}\color{black}}
+
+%Pacote de listagem de cï¿½digo
+\usepackage{listings}
+%\lstset{numbers=left, stepnumber=1, firstnumber=1,
+%numberstyle=\tiny, extendedchars=true, breaklines=true, frame=tb,
+%basicstyle=\footnotesize, stringstyle=\ttfamily,
+%showstringspaces=false }
+
+\lstset{extendedchars=true, breaklines=true, frame=tb,
+basicstyle=\footnotesize, stringstyle=\ttfamily,
+showstringspaces=false,language=HTML }
+
+% \usecolortheme[RGB={130,35,150}]{structure}
+% \usecolortheme[RGB={33,33,94}]{structure}
+\usecolortheme[RGB={153,204,123}]{structure}
+\setbeamertemplate{footline}[frame number]
+\setbeamertemplate{navigation symbols}{}
+
+% \usetheme{Frankfurt} %LEGAL     !!!
+% \usetheme{Madrid}     %LEGAL/L%IMPO/COM CAIXA     (sem barra de desenvolvimento)
+
+% \usetheme{Antibes} %NAO
+% \usetheme{Berlin} %PODE SER...     (BARRA DE DESENVOLVIMANTO)
+% \usetheme{Berkeley}     %FEIO
+% \usetheme{Boadilla} %TUDO BRANCO...
+% \usetheme{Copenhagen}     %NAO
+% \usetheme{Darmstadt} %LEGAL!     !!!
+% \usetheme{Dresden}     %LEGAL/LIMPO/SEM CAIXA     (sem caixa fica ruim...)
+
+% \usetheme{Goettingen}     %FEIO DEMAIS!
+ \usetheme{Ilmenau} %LEGAL (forte candidato)
+% \usetheme{JuanLesPins} %BACANA
+% \usetheme{Luebeck}     %FEIO
+
+% \usetheme{Malmoe}     %FEIO
+% \usetheme{Warsaw} %NAO...
+% \usetheme{Seattle}
+% \usetheme{CambridgeUS}
+% \usetheme{Singapore}
+
+%Insere o numero de frames no slide
+\newcommand*\oldmacro{}
+\let\oldmacro\insertshortauthor% save previous definition
+\renewcommand*\insertshortauthor{%
+  \leftskip=.3cm% before the author could be a plus1fill ...
+  \insertframenumber\,/\,\inserttotalframenumber\hfill\oldmacro}
+
+
+\author[Ivo Calado]{Ivo Calado}
+\date{\today}
+\institute[IFAL]{Instituto Federal de Educação, Ciência e Tecnologia de Alagoas}
+\title{Programação para Web}
+\logo{\includegraphics[width=0.2\linewidth]{imagens/ifal-logo.jpg}}
+\subtitle{\textit{Java EE}}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+% \section{Roteiro}
+% \AtBeginSection[]
+{\frame{
+\frametitle{Roteiro}
+\tableofcontents[hidesubsections]
+}
+}
+
+\section{Introdução}
+\begin{frame}{Observação sobre o conteúdo}
+Parte deste material é baseada na apostila FJ-21 - Java para Desenvolvimento Web desenvolvido pela Caelum (\url{www.caelum.com.br})
+\end{frame}
+
+\subsection{Conteúdo estático X Conteúdo dinâmico}
+\begin{frame}{Revendo as diferenças}
+Existem várias diferenças entre aplicações Web de conteúdo estático e conteúdo dinâmico. Quais seriam elas?
+\pause
+
+\begin{itemize}
+  \item Momento da geração
+  \item Contexto da requisição (conteúdo personalizado)
+  \item Linguagem utilizada
+  \item Armazenamento em cache Web
+\end{itemize}
+\end{frame}
+
+\subsection{Programação Client-Side x Server-Side}
+\begin{frame}{Revendo as diferenças}
+Server-side
+\begin{itemize}
+ \item A programação server-side é utilizada para gerar a informação a ser enviada
+  \item É transparente ao usuário! \pause Ele enxerga apenas o HTML!
+  \item Diversas linguagens de programação podem ser utilizadas (PHP, Java, Python, C++!)
+\end{itemize}
+Client-side
+\begin{itemize}
+ \item Client-side é utilizado para manipular a informação recebida
+  \item O usuário tem acesso a todo o código! 
+  \item Existem basicamente dois tipos de suporte a programação: JavaScript e Applets!
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Questão de seguranaça}
+\begin{block}{Porque uma aplicação servidora deve realizar a mesma checagem realizada por uma aplicação cliente?}
+ \pause
+Como o código cliente está disponível a requisição a ser enviada pode ser manipulada alterando o formato da requisição!
+\end{block}
+ 
+\end{frame}
+
+\subsection{Extendendo a arquitetura Java}
+\begin{frame}{Extendendo a arquitetura Java}
+Até agora vocês viram a plataforma Java executada sobre apenas uma plataforma, porém esta não é a única! \pause Existem três plataformas para desenvolvimento com a linguagem Java
+\pause
+\begin{itemize}
+ \item Java SE: Aplicações Desktop
+ \item Java Me: aplicações móveis (\setcolor{red}{A plataforma Android não implementa essa especificação!})
+ \item Java EE: Aplicações corporativas (\setcolor{blue}{Nosso foco! :)})
+\end{itemize}
+
+\end{frame}
+
+\section{Java EE (Enterprise Edition)}
+\subsection{Introdução}
+\begin{frame}{O que é?}
+\begin{itemize}
+ \item Consiste de uma série de especificações bem detalhadas definidas pela Sun (agora Oracle), dando uma receita de como deve ser implementado um Software \pause
+ \item Deve-se da ênfase ao termo \textbf{especificação} e não \textbf{implementação}! \pause Mas, porque isso?
+ \item Diversos grupos podem fazer a implementação da mesma esperificação (analogia à classes abstratas e concretas!)
+  \item Antigamente conhecida como J2EE
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Java EE é apenas uma especificação de uma linguagem de programação?}
+\pause\setcolor{blue}{NÃO!}
+\begin{itemize}
+ \item Java EE pode ser considerada uma especificação bastante complexa
+  \item Envolve conceitos que vão além de uma linguagem de programação, como: persistência em banco de dados, transação, acesso remoto, web services, gerenciamento de threads, gerenciamento de conexões HTTP, cache de objetos, gerenciamento da sessão web, balanceamento de carga etc
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Especificações Java EE}
+Como discutido, existem diversas especificaçoes que fazem parte do Java EE. Eis algumas:
+\begin{itemize}
+ \item JavaServer Pages (JSP), Java Servlets, Java Server Faces (JSF)
+ \item Enterprise Javabeans Components (EJB) e Java Persistence API (JPA). (objetos distribuídos, clusters, acesso remoto a objetos etc)
+ \item Java API for XML Web Services (JAX-WS)
+  \item Java Autenthication and Authorization Services
+  \item Java Message Services
+  \item Java Naming and Directory Interface
+\end{itemize}
+
+\end{frame}
+
+\subsection{Servidores de aplicações}
+\begin{frame}{O que são?}
+\begin{itemize}
+ \item Servidores de aplicação Java EE são implementações da especificação Java EE ou de parte dela
+  \item Recebem esse nome por serem software que tem papel de \textbf{servir} sua aplicação para auxilia-la com serviços de infraestrutura
+  \item A partir da versão Java EE 6 passou-se a utilizar o termo \textit{\textbf{application server web profile}} para os servidores que não oferecem suporta à todas especificações!
+\end{itemize}
+
+\end{frame}
+\begin{frame}{Exemplos de servidores de aplicações}
+\begin{itemize}
+  \item \textbf{Glassfish:} solução desenvolvida pela Sun/Oracle. Trata-se de uma opção \textit{open source} e gratuita porém não é líder de mercado
+  \item \textbf{JBoss:} é um dos líderes do mercado e tem a vantagem de ser gratuito e open source. Bastante utilizado por aplicações que desejam um alto grau de escalabilidade!
+  \item \textbf{Apache Tomcat:} soluçao focada nas especificações Web, mais especificamente JSP e Servlets
+\end{itemize}
+
+No nosso curso utilizaremos o servidor Tomcat mas todo conhecimento adquirido aqui pode ser aplicado com facilidade para os outros servidores compatíveis, mudando apenas a forma de
+configurá-los.
+
+\end{frame}
+
+\begin{frame}{Instalando o Tomcat}
+\begin{itemize}
+ \item Baixe o Tomcat em \url{http://tomcat.apache.org}
+ \item Mesmo no windows, dê preferência a versão zip, para você entender melhor o processo de inicialização do servidor
+  \item A versão executável é apenas um wrapper para executar a JVM, já que o Tomcat é 100\% Java.
+  \item Entre no diretório de instalação e execute o script \textbf{startup.sh} para iniciar o servidor
+\item Entre no diretório de instalação e execute o script \textbf{shutdown.sh} para parar o servidor
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{O plugin WTP}
+\begin{itemize}
+ \item O WTP, Web Tools Platform, é um conjunto de plugins para o Eclipse que auxilia o desenvolvimento de aplicações Java EE, em particular, de aplicações Web
+ \item Contém desde editores para JSP, CSS, JS e HTML até perspectivas e jeitos de rodar servidores de dentro do Eclipse
+  \item Para instalar o eclipse com WTP basta ir no site do Eclipse e selecionar a opção \textbf{Java EE Developers}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Configurando o Tomcat no WTP}
+\begin{itemize}
+ \item Mude a perspectiva do Eclipse para Java (e não Java EE, por enquanto)
+ \item Abra a View de Servers na perspectiva atual. Aperte Ctrl + 3 e digite Servers
+  \item Clique com o botão direito dentro da aba Servers e vá em New $>$ Server
+  \item Selecione o Apache Tomcat 6.0 e clique em Next
+  \item Na próxima tela, selecione o diretório onde você descompactou o Tomcat e clique em Finish
+  \item Na aba Servers, dê dois cliques no servidor Tomcat que uma tela de configuração se abrirá. Localize a seção Server Locations. Repare que a opção use workspace metadata está marcada. Marque a opção
+Use Tomcat installation
+\end{itemize}
+
+\end{frame}
+
+\section{Desenvolvimento Java Web com Eclipse}
+\subsection{Etapa inicial}
+\begin{frame}{Criação do projeto}
+Para criar um novo projeto Java Web siga as seguintes etapas:
+\begin{itemize}
+ \item Vá em New $>$ Project e selecione Dynamic Web Project e clique Next
+  \item Defina o nome do projeto e a versão do Tomcat a ser utilizada e selecione \textbf{Finish}
+  \item Na aba Servers, clique com o botão direito no Tomcat e vá em Add and Remove e selecione a aplicação para associá-la a um container Web
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Estrutura do projeto}
+\begin{itemize}
+ \item src - código fonte Java (.java)
+  \item build - onde o Eclipse compila as classes (.class)
+  \item WebContent - content directory (páginas, imagens, css etc vão aqui)
+  \item WebContent/WEB-INF/ - pasta oculta com configurações e recursos do projeto
+  \item WebContent/WEB-INF/lib/ - bibliotecas .jar
+  \item WebContent/WEB-INF/classes/ - arquivos compilados são copiados para cá
+\end{itemize}
+
+\end{frame}
+
+
+
+\end{document}
+
