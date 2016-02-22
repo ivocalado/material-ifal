@@ -1,0 +1,214 @@
+\documentclass{article}
+
+\usepackage{epsfig}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{a4wide}
+\usepackage[latin1]{inputenc}
+%\usepackage[portuges]{babel}
+\usepackage[brazil]{babel}
+\usepackage{float}
+
+\title{Programação Web\\ \small{\textbf{Prof. Alan}} \\ \scriptsize{\textbf{alanpedros@yahoo.com.br}}\\
+Check Box Dinâmico\\}
+
+\begin{document}
+
+\maketitle
+
+\scriptsize
+
+\begin{description}
+
+\item 1 - Crie uma \emph{aplicação web} no tomcat chamado \emph{CheckBoxDinamico}, seguindo os
+seguintes procedimentos básicos:
+
+\begin{enumerate}
+
+\item Criar uma pasta chamada \emph{CheckBoxDinamico}, dentro da pasta
+$C:\setminus Tomcat\setminus webapps$
+
+\item Criar uma pasta chamada \emph{WEB-INF}, dentro da pasta
+$C:\setminus Tomcat\setminus webapps\setminus TesteJSP$
+
+\item Criar uma pasta chamada \emph{classes}, dentro da pasta
+$C:\setminus Tomcat\setminus webapps\setminus TesteJSP\setminus
+WEB-INF$
+
+\item Criar o arquivo \emph{web.xml} dentro da pasta
+$C:\setminus Tomcat\setminus webapps\setminus TesteJSP\setminus
+WEB-INF$
+
+\end{enumerate}
+
+
+\item 2 - Crie um projeto no eclipse, chamado
+\emph{CheckBoxDinamico}, seguindo os seguintes procedimentos
+básicos:
+
+\begin{enumerate}
+
+\item Crie uma pasta do tipo \emph{Source Folder}, chamado
+\emph{src};
+
+\item Crie uma pasta \emph{lib}, e ponha a biblioteca
+\emph{C:$\setminus$Tomcat$\setminus$common$\setminus$lib$\setminus$servlet-api.jar}
+dentro da pasta. Em seguida, dentro do eclipse, clique com o botão
+direito do mouse em cima do arquivo \emph{servlet-api.jar}, clique
+em \emph{Build Path}$\longrightarrow$\emph{Add to Build Path};
+
+\item Dentro da pasta \emph{src} do item 1, crie um pacote chamado
+\emph{model};
+
+\item Implemente a classe \emph{Turma} e \emph{Turmas} abaixo:
+
+\begin{verbatim}
+package model;
+
+public class Turma {
+    private int codigo;
+    private String descricao;
+
+    public Turma(int codigo, String descricao) {
+        this.codigo = codigo;
+        this.descricao = descricao;
+    }
+
+    public int getCodigo() {
+        return codigo;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public void setCodigo(int codigo) {
+        this.codigo = codigo;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
+}
+\end{verbatim}
+
+\begin{verbatim}
+package model;
+
+import java.util.Iterator;
+
+import java.util.Vector;
+
+public class Turmas {
+    private Vector turmas;
+
+    public Turmas(){
+        Turma turma01 = new Turma(01,"Informática");
+        Turma turma02 = new Turma(02,"Edificações");
+        this.turmas = new Vector();
+        this.turmas.add(turma01);
+        this.turmas.add(turma02);
+    }
+
+    public Turma[] getTurmas(){
+        Iterator listaDeTurmas = turmas.iterator();
+        Turma[] turmas = new Turma[this.turmas.size()];
+        int i=0;
+        while (listaDeTurmas.hasNext()){
+            turmas[i++]=(Turma)listaDeTurmas.next();
+        }
+        return turmas;
+    }
+
+
+}
+\end{verbatim}
+
+\item Coloque todo o conteúdo da pasta \emph{bin} do seu projeto do
+eclipse, e ponha na pasta classes da sua nova aplicação web
+(CheckBoxDinamico);
+
+\item Implemente o arquivo ``checkboxdinamico.jsp'' abaixo, e salve na pasta $C:\setminus Tomcat\setminus webapps\setminus
+CheckBoxDinamico$:;
+
+\begin{verbatim}
+<%@page import="model.Turma, model.Turmas"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+   "http://www.w3.org/TR/html4/loose.dtd">
+
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Página Inicial</title>
+    </head>
+    <body>
+        <form method="post" action="./checkboxdinamico_.jsp">
+            <table align="center">
+            <tr>
+            <td>Código: </td>
+            <td>Descrição:</td>
+            </tr>
+            <%
+                Turmas turmas = new Turmas();
+                Turma listaDeTurmas[] = turmas.getTurmas();
+                for (int i=0;i<listaDeTurmas.length;i++){
+
+
+            %>
+            <tr>
+                <td><input type="checkbox" name="xyz"  value="<%= listaDeTurmas[i].getCodigo()%>"></td>
+            <td><%=  listaDeTurmas[i].getDescricao()%></td>
+            </tr>
+            <%
+                }
+            %>
+            <tr><td colspan="2"><input type="submit"></td></tr>
+
+            </table>
+        </form>
+    </body>
+</html>
+\end{verbatim}
+
+\item Implemente o arquivo ``checkboxdinamico\_.jsp'' abaixo, e salve na pasta $C:\setminus Tomcat\setminus webapps\setminus CheckBoxDinamico$:
+
+\begin{verbatim}
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Opções Escolhidas do CheckBox Dinâmico</title>
+    </head>
+    <body>
+    <table align="center">
+    <tr><td>Opções Escolhidas</td></tr>
+    <%
+    String checksEscolhidos[] = request.getParameterValues("xyz");
+    if (checksEscolhidos!=null) {
+    for (int i=0;i<checksEscolhidos.length;i++){
+
+    %>
+    <tr><td><%= checksEscolhidos[i]   %></td></tr>
+    <%
+    }
+    }else {
+    %>
+    <tr><td>Não foi escolhida nenhuma opção!</td></tr>
+    <%}%>
+    </table>
+
+   </body>
+</html>
+\end{verbatim}
+
+\end{enumerate}
+
+\item 4 - Chame a página inicial da seguinte forma:
+\textbf{http:$//$localhost:8080$/$CheckBoxDinamico$/$index.jsp} e
+faça os devidos testes.
+
+
+
+\end{description}
+
+\end{document}

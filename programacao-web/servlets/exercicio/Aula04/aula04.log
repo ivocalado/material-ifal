@@ -1,0 +1,174 @@
+This is e-TeX, Version 3.141592-2.1 (MiKTeX 2.4) (preloaded format=latex 2000.11.28)  31 AUG 2007 10:39
+entering extended mode
+**aula04.tex
+(aula04.tex
+LaTeX2e <2001/06/01>
+Babel <v3.7m> and hyphenation patterns for english, french, german, ngerman, du
+mylang, nohyphenation, loaded.
+(C:\texmf\tex\latex\base\article.cls
+Document Class: article 2001/04/21 v1.4e Standard LaTeX document class
+(C:\texmf\tex\latex\base\size10.clo
+File: size10.clo 2001/04/21 v1.4e Standard LaTeX file (size option)
+)
+\c@part=\count79
+\c@section=\count80
+\c@subsection=\count81
+\c@subsubsection=\count82
+\c@paragraph=\count83
+\c@subparagraph=\count84
+\c@figure=\count85
+\c@table=\count86
+\abovecaptionskip=\skip41
+\belowcaptionskip=\skip42
+\bibindent=\dimen102
+) (C:\texmf\tex\latex\graphics\epsfig.sty
+Package: epsfig 1999/02/16 v1.7a (e)psfig emulation (SPQR)
+
+(C:\texmf\tex\latex\graphics\graphicx.sty
+Package: graphicx 1999/02/16 v1.0f Enhanced LaTeX Graphics (DPC,SPQR)
+
+(C:\texmf\tex\latex\graphics\keyval.sty
+Package: keyval 1999/03/16 v1.13 key=value parser (DPC)
+\KV@toks@=\toks14
+)
+(C:\texmf\tex\latex\graphics\graphics.sty
+Package: graphics 2001/07/07 v1.0n Standard LaTeX Graphics (DPC,SPQR)
+ (C:\texmf\tex\latex\graphics\trig.sty
+Package: trig 1999/03/16 v1.09 sin cos tan (DPC)
+) (C:\texmf\tex\latex\00miktex\graphics.cfg
+File: graphics.cfg 2003/03/12 v1.1 MiKTeX 'graphics' configuration
+)
+Package graphics Info: Driver file: dvips.def on input line 80.
+
+(C:\texmf\tex\latex\graphics\dvips.def
+File: dvips.def 1999/02/16 v3.0i Driver-dependant file (DPC,SPQR)
+))
+\Gin@req@height=\dimen103
+\Gin@req@width=\dimen104
+)
+\epsfxsize=\dimen105
+\epsfysize=\dimen106
+)
+(C:\texmf\tex\latex\listings\listings.sty
+Package: listings 2003/06/21 1.1 (Carsten Heinz)
+\lst@mode=\count87
+\lst@gtempboxa=\box26
+\lst@token=\toks15
+\lst@length=\count88
+\lst@currlwidth=\dimen107
+\lst@column=\count89
+\lst@pos=\count90
+\lst@lostspace=\dimen108
+\lst@width=\dimen109
+\lst@newlines=\count91
+\lst@lineno=\count92
+\c@lstlisting=\count93
+\lst@maxwidth=\dimen110
+
+(C:\texmf\tex\latex\listings\lstpatch.sty
+File: lstpatch.sty 2003/08/13 1.1c (Carsten Heinz)
+)
+(C:\texmf\tex\latex\listings\lstmisc.sty
+File: lstmisc.sty 2003/06/21 1.1 (Carsten Heinz)
+\c@lstnumber=\count94
+\lst@skipnumbers=\count95
+\lst@framebox=\box27
+)
+(C:\texmf\tex\latex\listings\listings.cfg
+File: listings.cfg 2003/08/13 1.1a listings configuration
+))
+(C:\texmf\tex\latex\ltxmisc\a4wide.sty
+Package: a4wide 1994/08/30
+ (C:\texmf\tex\latex\ntgclass\a4.sty
+Package: a4 1999/03/03 v1.2f A4 based page layout
+))
+(C:\texmf\tex\latex\base\inputenc.sty
+Package: inputenc 2001/07/10 v0.99a Input encoding file 
+ (C:\texmf\tex\latex\base\latin1.def
+File: latin1.def 2001/07/10 v0.99a Input encoding file 
+))
+(C:\texmf\tex\generic\babel\babel.sty
+Package: babel 2003/11/16 v3.7m The Babel package
+ (C:\texmf\tex\generic\babel\portuges.ldf
+Language: portuges 2003/05/23 v1.2p Portuguese support from the babel system
+
+(C:\texmf\tex\generic\babel\babel.def
+File: babel.def 2003/11/16 v3.7m Babel common definitions
+\babel@savecnt=\count96
+\U@D=\dimen111
+)
+
+Package babel Warning: No hyphenation patterns were loaded for
+(babel)                the language `Portuguese'
+(babel)                I will use the patterns loaded for \language=0 instead.
+
+\l@portuges = a dialect from \language0
+\l@brazil = a dialect from \language\l@portuges 
+Package babel Info: Making " an active character on input line 126.
+)) (C:\texmf\tex\latex\float\float.sty
+Package: float 2001/11/08 v1.3d Float enhancements (AL)
+\c@float@type=\count97
+\float@exts=\toks16
+\float@box=\box28
+\@float@everytoks=\toks17
+\@floatcapt=\box29
+) (aula04.aux)
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 15.
+LaTeX Font Info:    ... okay on input line 15.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 15.
+LaTeX Font Info:    ... okay on input line 15.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 15.
+LaTeX Font Info:    ... okay on input line 15.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 15.
+LaTeX Font Info:    ... okay on input line 15.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 15.
+LaTeX Font Info:    ... okay on input line 15.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 15.
+LaTeX Font Info:    ... okay on input line 15.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <12> on input line 17.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <8> on input line 17.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <6> on input line 17.
+
+
+LaTeX Warning: No \author given.
+
+
+Overfull \hbox (7.36783pt too wide) in paragraph at lines 21--25
+[][]\OT1/cmr/m/n/7 1 - Crie uma pagina html, \OT1/cmr/m/it/7 in-dex.html\OT1/c
+mr/m/n/7 , con-forme abaixo. De-pois salve a pagina na pasta raiz da aplicac~
+ao web PrimeiroServlet
+ []
+
+LaTeX Font Info:    Try loading font information for OML+cmr on input line 27.
+(C:\texmf\tex\latex\base\omlcmr.fd
+File: omlcmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
+)
+LaTeX Font Info:    Font shape `OML/cmr/m/n' in size <7> not available
+(Font)              Font shape `OML/cmm/m/it' tried instead on input line 27.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <7> on input line 55.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <5> on input line 55.
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 67.
+ (C:\texmf\tex\latex\base\omscmr.fd
+File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
+)
+LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <7> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 67.
+
+[1
+
+] [2] (aula04.aux) ) 
+Here is how much of TeX's memory you used:
+ 2209 strings out of 95933
+ 27587 string characters out of 1195656
+ 99782 words of memory out of 1082854
+ 5139 multiletter control sequences out of 35000
+ 7941 words of font info for 28 fonts, out of 500000 for 1000
+ 14 hyphenation exceptions out of 607
+ 32i,6n,42p,219b,762s stack positions out of 1500i,500n,5000p,200000b,32768s
+
+Output written on aula04.dvi (2 pages, 10776 bytes).

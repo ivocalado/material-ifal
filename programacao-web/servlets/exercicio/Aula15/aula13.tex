@@ -1,0 +1,141 @@
+\documentclass{article}
+
+\usepackage{epsfig}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{a4wide}
+\usepackage[latin1]{inputenc}
+%\usepackage[portuges]{babel}
+\usepackage[brazil]{babel}
+\usepackage{float}
+
+\title{Programação V \\ \small{\textbf{Prof. Alan}} \\ \scriptsize{\textbf{alanpedros@yahoo.com.br}}\\
+JavaBean\\}
+
+\begin{document}
+
+\maketitle
+
+\scriptsize
+
+\begin{description}
+
+\item 1 - Crie uma \emph{aplicação web} no tomcat chamado \emph{JSPBean}, seguindo os
+seguintes procedimentos básicos:
+
+\begin{enumerate}
+
+\item Criar uma pasta chamada \emph{JSPBean}, dentro da pasta
+$C:\setminus Tomcat\setminus webapps$
+
+\item Criar uma pasta chamada \emph{WEB-INF}, dentro da pasta
+$C:\setminus Tomcat\setminus webapps\setminus JSPBean$
+
+\item Criar uma pasta chamada \emph{classes}, dentro da pasta
+$C:\setminus Tomcat\setminus webapps\setminus JSPBean\setminus
+WEB-INF$
+
+\end{enumerate}
+
+
+\item 2 - Crie um projeto no eclipse, chamado \emph{ProjetoJavaBean}, seguindo os seguintes procedimentos
+básicos:
+
+\begin{enumerate}
+
+\item Crie uma pasta do tipo \emph{Source Folder}, chamado
+\emph{src};
+
+\item Dentro da pasta \emph{src} do item 1, crie um pacote chamado \emph{bean}.
+
+\item Implemente a classe abaixo abaixo:
+
+\begin{verbatim}
+package bean;
+
+public class Aluno {
+    private String nome;
+    private String endereco;
+    private String telefone;
+
+    public void setEndereco(String endereco) { this.endereco = endereco; }
+    public void setNome(String nome) { this.nome = nome; }
+    public void setTelefone(String telefone) { this.telefone = telefone; }
+
+    public String getDados(){
+        return "Nome: " + this.nome + " Endereço " +
+                this.endereco + " Telefone: " + this.telefone;
+    }
+
+}
+\end{verbatim}
+
+\end{enumerate}
+
+\item 3 - Implemente o arquivo ``index.jsp'' abaixo, e salve na pasta $C:\setminus Tomcat\setminus webapps\setminus JSPBean$:
+
+\begin{verbatim}
+<HTML>
+ <HEAD>
+  <TITLE> Página Inicial </TITLE>
+ </HEAD>
+
+ <BODY>
+  <center>
+  <FORM METHOD=POST ACTION="TratarDados.jsp">
+  <TABLE>
+  <TR>
+    <TD>Nome:</td><td> <INPUT TYPE="text" NAME="nome"></TD>
+  </TR>
+  <TR>
+    <TD>Endereço:</td><td> <INPUT TYPE="text" NAME="endereco"></TD>
+  </TR>
+  <TR>
+    <TD>Telefone:</td><td> <INPUT TYPE="text" NAME="telefone"></TD>
+  </TR>
+  <TR>
+    <TD colspan="2" align="center"><INPUT TYPE="submit"></TD>
+  </TR>
+  </TABLE>
+  </FORM>
+ </BODY>
+</HTML>
+
+\end{verbatim}
+
+\item 4 - Implemente o arquivo ``TratarDados.jsp'' abaixo, e salve na pasta $C:\setminus Tomcat\setminus webapps\setminus JSPBean$:
+
+\begin{verbatim}
+ <jsp:useBean id="aluno" class="bean.Aluno"/>
+ <jsp:setProperty name="aluno" property="nome" value="<%=request.getParameter("nome")%>"/>
+ <jsp:setProperty name="aluno" property="endereco" value="<%=request.getParameter("endereco")%>"/>
+ <jsp:setProperty name="aluno" property="telefone" value="<%=request.getParameter("telefone")%>"/>
+<HTML>
+ <HEAD>
+  <TITLE> Teste JavaBean </TITLE>
+ </HEAD>
+ <BODY>
+  <center>
+  <TABLE>
+  <TR>
+    <TD><jsp:getProperty name="aluno" property="dados"/></TD>
+  </TR>
+  </TABLE>
+ </BODY>
+</HTML>
+\end{verbatim}
+
+\item 5 - Copie tudo que estiver na pasta \emph{lib} do projeto criado no eclipse e
+ponha na pasta $C:\setminus Tomcat\setminus webapps\setminus
+JSPBean\setminus WEB-INF\setminus classes$
+
+\item 6 - Reinicie o Tomcat ( $C:\setminus Tomcat\setminus bin\setminus classes\setminus tomcat5$);
+
+\item 7 - Chame a página inicial da seguinte forma:
+\textbf{http:$//$localhost:8083$/$JSPBean$/$index.jsp}.
+
+
+
+\end{description}
+
+\end{document}

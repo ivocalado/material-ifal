@@ -1,0 +1,187 @@
+\documentclass{article}
+
+\usepackage{epsfig}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{a4wide}
+\usepackage[latin1]{inputenc}
+%\usepackage[portuges]{babel}
+\usepackage[brazil]{babel}
+\usepackage{float}
+
+\title{Programação V \\ \small{\textbf{Prof. Alan}} \\ \scriptsize{\textbf{alanpedros@yahoo.com.br}}\\
+Atributos de Inicialização\\}
+
+\begin{document}
+
+\maketitle
+
+\scriptsize
+
+\begin{description}
+
+\item 1 - Crie uma \emph{aplicação web} no tomcat chamado \emph{TesteAtributosDeInicializacao}, seguindo os
+seguintes procedimentos básicos:
+
+\begin{enumerate}
+
+\item Criar uma pasta chamada \emph{TesteAtributosDeInicializacao}, dentro da pasta
+$C:\setminus Tomcat\setminus webapps$
+
+\item Criar uma pasta chamada \emph{WEB-INF}, dentro da pasta
+$C:\setminus Tomcat\setminus webapps\setminus
+TesteAtributosDeInicializacao$
+
+\item Criar uma pasta chamada \emph{classes}, dentro da pasta
+$C:\setminus Tomcat\setminus webapps\setminus
+TesteAtributosDeInicializacao\setminus WEB-INF$
+
+\item Criar o arquivo \emph{web.xml} dentro da pasta
+$C:\setminus Tomcat\setminus webapps\setminus
+TesteAtributosDeInicializacao\setminus WEB-INF$
+
+\end{enumerate}
+
+
+\item 2 - Crie um projeto no eclipse, chamado
+\emph{AtributosDeInicializacao}, seguindo os seguintes procedimentos
+básicos:
+
+\begin{enumerate}
+
+\item Crie uma pasta do tipo \emph{Source Folder}, chamado
+\emph{src};
+
+\item Crie uma pasta \emph{lib}, e ponha a biblioteca
+\emph{C:$\setminus$Tomcat$\setminus$common$\setminus$lib$\setminus$servlet-api.jar}
+dentro da pasta. Em seguida, dentro do eclipse, clique com o botão
+direito do mouse em cima do arquivo \emph{servlet-api.jar}, clique
+em \emph{Build Path}$\longrightarrow$\emph{Add to Build Path};
+
+\item Dentro da pasta \emph{src} do item 1, crie um pacote chamado \emph{web}.
+
+\item Dentro da pasta \emph{src} do item 1, crie um pacote chamado \emph{listener}.
+
+\item Dentro da pasta \emph{src} do item 1, crie um pacote chamado \emph{model}.
+
+\item Implemente as classes abaixo:
+
+\begin{verbatim}
+-----------------------------------------------------------------------------------------
+package model;
+
+public class Carro {
+    private String nome;
+    public String getNome() {
+        return nome;
+    }
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+}
+\end{verbatim}
+
+\begin{verbatim}
+-----------------------------------------------------------------------------------------
+package listener;
+
+import javax.servlet.ServletContext; import
+javax.servlet.ServletContextEvent; import
+javax.servlet.ServletContextListener;
+
+import model.Carro;
+
+public class ListenerDaAplicacao implements ServletContextListener{
+
+    public void contextInitialized(ServletContextEvent servletContextEvent) {
+        ServletContext servletContext = servletContextEvent.getServletContext();
+        Carro carro = new Carro();
+        carro.setNome("Ferrari");
+        servletContext.setAttribute("carro", carro);
+    }
+
+    public void contextDestroyed(ServletContextEvent servletContextEvent) {
+        // Não faz nada!
+    }
+}
+\end{verbatim}
+
+
+\begin{verbatim}
+-----------------------------------------------------------------------------------------
+package web;
+
+import java.io.IOException; import java.io.PrintWriter;
+
+import javax.servlet.ServletException; import
+javax.servlet.http.HttpServlet; import
+javax.servlet.http.HttpServletRequest; import
+javax.servlet.http.HttpServletResponse;
+
+import model.Carro;
+
+public class ServletTeste extends HttpServlet {
+    public void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws IOException, ServletException {
+        response.setContentType("text/html");
+        Carro carro = (Carro)this.getServletContext().getAttribute("carro");
+        PrintWriter printWriter = response.getWriter();
+        printWriter.println("Carro : " + carro.getNome());
+        printWriter.println("\nParâmetro 01: " + getServletContext().getInitParameter("parametro1"));
+        printWriter.println("\nParâmetro 02: " + getServletConfig().getInitParameter("parametro2"));
+
+    }
+
+}
+-----------------------------------------------------------------------------------------
+\end{verbatim}
+
+
+\end{enumerate}
+
+\item 3 - Crie o arquivo \emph{web.xml} dentro da pasta
+$C:\setminus Tomcat\setminus webapps \setminus
+TesteAtributosDeInicializacao \setminus WEB-INF$
+
+\begin{verbatim}
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+
+
+<context-param>
+    <param-name>parametro1</param-name>
+    <param-value>valor1</param-value>
+</context-param>
+
+<servlet>
+    <servlet-name>ServletUnico</servlet-name>
+    <servlet-class>web.ServletTeste</servlet-class>
+    <init-param>
+        <param-name>parametro2</param-name>
+        <param-value>valor2</param-value>
+    </init-param>
+</servlet>
+
+<servlet-mapping>
+    <servlet-name>ServletUnico</servlet-name>
+    <url-pattern>/index.html</url-pattern>
+</servlet-mapping>
+
+
+<listener>
+    <listener-class>listener.ListenerDaAplicacao</listener-class>
+</listener>
+
+
+</web-app>
+\end{verbatim}
+
+\item 4 - Chame a página inicial da seguinte forma:
+\textbf{http:$//$localhost:8080$/$TesteAtributosDeInicializacao$/$index.html}.
+
+
+
+\end{description}
+
+\end{document}

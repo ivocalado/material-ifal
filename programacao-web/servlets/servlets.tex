@@ -1,0 +1,466 @@
+%\documentclass[t,handout]{beamer}
+\documentclass{beamer}
+
+
+\usepackage[latin1]{inputenc}
+
+\usepackage[portuguese]{babel}
+\usepackage[tight]{subfigure}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{url}
+% \usepackage{inconsolata}
+\newcommand{\setcolor}[2]{\color{#1}{#2}\color{black}}
+
+%Pacote de listagem de cï¿½digo
+\usepackage{listings}
+%\lstset{numbers=left, stepnumber=1, firstnumber=1,
+%numberstyle=\tiny, extendedchars=true, breaklines=true, frame=tb,
+%basicstyle=\footnotesize, stringstyle=\ttfamily,
+%showstringspaces=false }
+
+\lstset{extendedchars=true, breaklines=true, frame=tb,
+basicstyle=\footnotesize, stringstyle=\ttfamily,
+showstringspaces=false,language=HTML }
+
+% \usecolortheme[RGB={130,35,150}]{structure}
+% \usecolortheme[RGB={33,33,94}]{structure}
+\usecolortheme[RGB={153,204,123}]{structure}
+\setbeamertemplate{footline}[frame number]
+\setbeamertemplate{navigation symbols}{}
+
+% \usetheme{Frankfurt} %LEGAL     !!!
+% \usetheme{Madrid}     %LEGAL/L%IMPO/COM CAIXA     (sem barra de desenvolvimento)
+
+% \usetheme{Antibes} %NAO
+% \usetheme{Berlin} %PODE SER...     (BARRA DE DESENVOLVIMANTO)
+% \usetheme{Berkeley}     %FEIO
+% \usetheme{Boadilla} %TUDO BRANCO...
+% \usetheme{Copenhagen}     %NAO
+% \usetheme{Darmstadt} %LEGAL!     !!!
+% \usetheme{Dresden}     %LEGAL/LIMPO/SEM CAIXA     (sem caixa fica ruim...)
+
+% \usetheme{Goettingen}     %FEIO DEMAIS!
+ \usetheme{Ilmenau} %LEGAL (forte candidato)
+% \usetheme{JuanLesPins} %BACANA
+% \usetheme{Luebeck}     %FEIO
+
+% \usetheme{Malmoe}     %FEIO
+% \usetheme{Warsaw} %NAO...
+% \usetheme{Seattle}
+% \usetheme{CambridgeUS}
+% \usetheme{Singapore}
+
+%Insere o numero de frames no slide
+\newcommand*\oldmacro{}
+\let\oldmacro\insertshortauthor% save previous definition
+\renewcommand*\insertshortauthor{%
+  \leftskip=.3cm% before the author could be a plus1fill ...
+  \insertframenumber\,/\,\inserttotalframenumber\hfill\oldmacro}
+
+
+\author[Ivo Calado]{Ivo Calado}
+\date{\today}
+\institute[IFAL]{Instituto Federal de Educação, Ciência e Tecnologia de Alagoas}
+\title{Programação para Web}
+\logo{\includegraphics[width=0.2\linewidth]{imagens/ifal-logo.jpg}}
+\subtitle{\textit{Servlets}}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+% \section{Roteiro}
+% \AtBeginSection[]
+{\frame{
+\frametitle{Roteiro}
+\tableofcontents[hidesubsections]
+}
+}
+
+\section{Introdução}
+\begin{frame}{Observação sobre o conteúdo}
+Parte deste material é baseada na apostila FJ-21 - Java para Desenvolvimento Web desenvolvido pela Caelum (\url{www.caelum.com.br})
+\end{frame}
+
+\subsection{Definições}
+\begin{frame}{O que são?}
+\begin{itemize}
+ \item As Servlets são a primeira forma que veremos de criar páginas dinâmicas com Java
+  \item Criaremos classes que terão a capacidade de gerar conteúdo HTML!!
+  \item O nome ``servlet'' vem da ideia de um pequeno servidor (servidorzinho, em inglês) cujo objetivo é receber chamadas HTTP, processá-las e devolver uma resposta ao cliente
+\end{itemize}
+\end{frame}
+
+\begin{frame}{A classe \textbf{javax.servlet.http.HttpServlet}}
+\begin{itemize}
+ \item Trata-se da classe principal de uma servlet
+  \item Possui um método genérico (\textbf{service}) e diversos métodos como específicos como \textbf{doGet, doPost, doDelete, doPost e outros} representando as diversas operações HTTP
+  \pause \item O nosso papel é implementá-las!
+  \item Cada um desses métodos recebem como parâmetro um objeto \textbf{HttpServletRequest} e um \textbf{HttpServletResponse} representando a requisição e a resposta!
+\end{itemize}
+
+\end{frame}
+
+\section{Praticando}
+\subsection{Nosso primeiro exemplo}
+\begin{frame}[fragile]{O método doGet}
+\begin{lstlisting}
+protected void doGet(HttpServletRequest request, HttpServletResponse response) 
+     throws ServletException, IOException {
+	ServletOutputStream out = response.getOutputStream();
+	out.println("<html>");
+	out.println("<head>");
+	out.println("<title>Minha primeira pagina dinamica</title>");
+	out.println("</head>");
+	out.println("<body>");
+	out.println("<h1>Hello World!!!</h1>");
+	out.println("</body>");
+	out.println("</html>");
+} 
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}{Habilitando a execução da Servlet}
+\begin{itemize}
+ \item Acabamos de definir uma Servlet, mas como iremos acessá-la pelo navegador?
+ \item Qual o endereço podemos acessar para fazermos com que ela execute?
+\pause \item O container não tem como saber essas informações, a não ser que digamos isso para ele
+  \item Para isso, vamos fazer um mapeamento de uma URL específica para uma servlet através do arquivo \textbf{web.xml}, que fica dentro do \textbf{WEB-INF}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]{Web.xml}
+\begin{itemize}
+ \item No arquivo \textbf{web.xml} configuramos todas as propriedades do nosso projeto Java
+  \item A partir da versão 3.0 todas as configurações podem ser realizadas via \textbf{annotations}! Porém veremos isso só mais na frente!
+ 
+\end{itemize}
+
+\begin{lstlisting}
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app ...>
+  <display-name>MeuPrimeiroProjeto3.0</display-name>
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+    <welcome-file>index.htm</welcome-file>
+    <welcome-file>index.jsp</welcome-file>
+    <welcome-file>default.html</welcome-file>
+    <welcome-file>default.htm</welcome-file>
+    <welcome-file>default.jsp</welcome-file>
+  </welcome-file-list>
+</web-app>
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]{web.xml: tags \textbf{servlet} e \textbf{servlet-mapping}}
+\begin{itemize}
+ \item Para configurarmos a execução da Servlet criada pelo Container fazemos uso da tag \textit{servlet}
+  \item A tag \textit{servlet-mapping} serve para criar um alias ou um conjunto de aliases para referenciar a servlet
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]{web.xml: exemplos de servlet e servlet-mapping}
+\begin{lstlisting}
+<servlet>
+  <servlet-name>minhaPrimeiraServlet</servlet-name>
+  <servlet-class>br.edu.ifal.MinhaServlet</servlet-class>
+</servlet>
+
+<servlet-mapping>
+  <servlet-name>minhaPrimeiraServlet</servlet-name>
+  <url-pattern>/minha-pagina</url-pattern>
+  <url-pattern>/minha-segunda-forma-de-acesso</url-pattern>
+  <url-pattern>/end/longo/para/minha/pagina/web</url-pattern>
+</servlet-mapping>
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}{A estrutura de diretórios}
+\begin{itemize}
+ \item Se vocês notarem, o nosso endereço não tem qualquer relação com a estrutura física do projeto
+  \item Trata-se de um referenciamento puramente virtual! 
+\end{itemize}
+ 
+\end{frame}
+
+\begin{frame}{Exercício}
+\begin{itemize}
+ \item Crie sua primeira servlet. Ela deve implementar os métodos doGet e doPost onde no doGet deve ser retornado uma página com uma mensagem ao usuário e no doPost com a data do dia. 
+ \item Deve ser criado uma página HTML estática que faça acesso tanto via GET quanto via POST
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Possíveis erros comuns até agora}
+\begin{itemize}
+ \item Esquecer da barra inicial no URL pattern
+  \item Digitar errado o nome do pacote da sua servlet
+  \item Esquecer de colocar o nome da classe no mapeamento da servlet
+\end{itemize}
+
+\end{frame}
+
+\section{Aprofundando...}
+\begin{frame}[fragile]{Recuperando parâmetros passados}
+\begin{itemize}
+ \item Até agora vimos como requisitar uma página sem passar qualquer parâmetros
+  \item Para recuperar os parâmetros passados em um formulário usamos os métodos \textbf{getParameter}, getParameterMap, getParameterNames, getParameterValues
+\end{itemize}
+\begin{lstlisting}
+Map<String, String[]> mapa = request.getParameterMap();
+PrintWriter out = response.getWriter();
+for(String s : mapa.keySet()) {
+	out.println("Chave: " + s);
+	for(String str : mapa.get(s)) {
+		out.println("Valor: " + str);
+	}
+	out.println();
+
+\end{lstlisting}
+
+\end{frame}
+\begin{frame}{Atividade}
+\begin{itemize}
+ \item Altere o exemplo anterior para inclur um formulário de inscrição de uma pessoa. No lado servidor, recupere os valores passados e salve em um arquivo XML formando uma agenda de contatos.
+\end{itemize}
+\end{frame}
+
+
+\subsection{Capturando exceções}
+\begin{frame}{Tratando exceções dentro da Servlet}
+\begin{itemize}
+ \item O que acontece se alguma exceção for lançada na nossa aplicação? \pause
+ \item a stacktrace da exceção ocorrida será mostrada em uma tela padrão do container
+  \item Qual o problema disso? \pause
+  \item O que seria ideal acontecer? \pause O ideal seria mostrarmos uma página de erro dizendo: ``Um erro ocorreu'' e com informações de como notificar o administrador
+  \item Para fazermos isso, basta configurarmos nossa aplicação dizendo que, caso aconteça uma Exception no \textit{web.xml}!
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]{Configurando exceções no Web.xml}
+\begin{lstlisting}
+<error-page>
+  <exception-type>java.lang.Exception</exception-type>
+  <location>/erro.html</location>
+</error-page>
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]{Tratando códigos de erros}
+\begin{itemize}
+ \item O que acontece se tentarmos acessar uma página inexistente? \pause
+  \item Qual seria a abordagem mais apropriada?
+\end{itemize}
+\begin{lstlisting}
+<error-page>
+  <error-code>404</error-code>
+  <location>/404.html</location>
+</error-page>
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}{Enviando mensagem de erro}
+Pesquisar sobre o processo de envio de mensagens de erro e como isso se relaciona com ponto anterior! Ver método \textbf{response.sendError}
+\end{frame}
+
+
+\begin{frame}{Métodos Init e Destroy}
+\begin{itemize}
+ \item Toda servlet deve possuir um construtor \textit{default}
+  \item Métodos init e destroy são chamados no início e no fim do ciclo de vida da servlet \pause
+  \item Quais seriam um possível uso de tais métodos? 
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]{Recuperando parametros iniciais do servlet}
+\begin{itemize}
+ \item É possível definir parâmetros iniciais na servlet no web.xml e recuperá-lo no método init
+\end{itemize}
+\pause
+\begin{lstlisting}
+	<servlet>
+		<description></description>
+		<display-name>Servlet1</display-name>
+		<servlet-name>Servlet1</servlet-name>
+		<servlet-class>Servlet1</servlet-class>
+		<init-param>
+			<param-name>Nome</param-name>
+			<param-value>Valor</param-value>
+		</init-param>
+	</servlet>
+\end{lstlisting}
+
+\end{frame}
+
+
+\begin{frame}{Redirecionando páginas}
+Existem duas formas de realizar redirecionamento
+\begin{itemize}
+ \item sendRedirect: retorna um código ao browser indicando que ele deve realizar o redirecionamento
+  \item forward: realiza o redirecionamento internamente
+\end{itemize}
+Além disso, existe a possibilidade de utilizar o método \textbf{include}!!.
+
+\end{frame}
+
+\begin{frame}[fragile]{sendRedirect e forward}
+\begin{lstlisting}
+protected void doGet(HttpServletRequest request, HttpServletResponse response) 
+     throws ServletException, IOException {
+	response.sendRedirect("http://www.google.com");
+}
+\end{lstlisting}
+
+\begin{lstlisting}
+protected void doGet(HttpServletRequest request, HttpServletResponse response) 
+throws ServletException, IOException {
+	RequestDispatcher dispatcher = request.getRequestDispatcher("s2");
+	dispatcher.forward(request, response);
+}
+\end{lstlisting}
+
+
+
+\end{frame}
+
+\begin{frame}[fragile]{include}
+\begin{lstlisting}
+protected void doGet(HttpServletRequest request, HttpServletResponse response) 
+throws ServletException, IOException {
+	RequestDispatcher dispatcher = request.getRequestDispatcher("s2");
+	dispatcher.include(request, response);
+}
+\end{lstlisting}
+\begin{block}{Qual a diferença entre forward e include?}
+\pause
+\textbf{forward}: a servlet atual não pode alterar a stream de saída\\
+\textbf{include}: a servlet atual pode alterar (a página redirecionada é ``inclusa'' na resposta original)
+\end{block}
+\pause Como inserir conteúdos padrões estáticos?
+
+\end{frame}
+
+\section{Gerenciamento de Sessão}
+\subsection{O que é?}
+\begin{frame}{O que é?}
+\begin{itemize}
+ \item Uma das características fundamentais do HTTP é não possuir estado. Mas o que viria a ser isso? \pause
+ \item Isso que dizer que o HTTP não guarda lembrança de requisições anteriores
+  \item Qual o problema disso? Qual seria uma situação onde guardar informações de sessões é importante?
+  \item \textbf{Login!}
+  \item Sendo assim, precisamos, implementar em nível de servlet, o controle de sessão!
+\end{itemize}
+
+\end{frame}
+
+\subsection{Quais abordagens existe?}
+\begin{frame}{Quais abordagens existe?}
+Existem basicamente 4 formas de prover sessão
+\begin{itemize}
+ \item Reescrita de URL
+  \item Campos ocultos
+  \item Cookies
+  \item Objetos de sessão
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{1ª abordagem: Reescrita de URL}
+\begin{itemize}
+ \item Consiste em adicionar às URLs de envio, identificadores da sessão a ser acessada
+  \item Todos os forms, links etc que façam menção a URL deve ser alterado
+  \item Parâmetros são enviados na URL
+\end{itemize}
+\end{frame}
+
+\begin{frame}{2ª abordagem: Campos ocultos}
+\begin{itemize}
+ \item Semelhante a abordagem anterior, porém o campo é enviado como um atributo \textit{hidden} no HTML
+  \item Não são visíveis na URL mas são facilmente recuperáveis!
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]{3ª abordagem: Cookies}
+\begin{itemize}
+ \item Cookies são pequenos ``pedaços'' de informação passado em requisições e respostas HTTP
+  \item Embora seja possível criar um Cookie do lado cliente, ele é gerado principalmente pelo servidor
+  \item Tem a estrutura de chave valor!
+\end{itemize}
+\begin{lstlisting}
+Cookie c1 = new Cookie("MeuCookie", "MeuValor");
+response.addCookie(c1);
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]{Definido tempo máximo de vida de um cookie}
+\begin{itemize}
+ \item Nas abordagens anterioes os links e campos ocultos permaneciam disponíveis indefinidamente
+  \item Porém podemos querer definir um tempo limite para que a sessão esteja disponível por um tempo limite de inatividade!
+  \item Cookie possibilita tal recurso a partir da definição da propriedade maxAge
+\end{itemize}
+
+\begin{lstlisting}
+Cookie c1 = new Cookie("MeuCookie", "MeuValor");
+c1.setMaxAge(1000); // Número de segundos que o cookie permanecerá no cliente. Após isso ele é descartado e não será mais enviado
+response.addCookie(c1);
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}{HTTPSession}
+As abordagens anteriores possuem séries restrições:
+
+\begin{itemize}
+ \item Atributos ocultos e reescrita de url deixam visíveis todos os campos
+  \item Apesar de mais difícei, os cookies tb podem ser visualizados!
+  \item Além disso, temos de ter o trabalho de em todas as solicitações adicionar as informações a serem enviadas de modo a manter o estado
+\end{itemize}
+
+A solução é o HTTPSession!
+
+\begin{itemize}
+ \item Trata-se da maneira mais simples e fácil de se trabalhar com gerenciamento de sessão
+  \item É mantido um mapa com todos os valores que a aplicação precisar armazenar
+  \item Possibilita o armazenamento de valores de tipos complexos (não apenas String)
+  \item Um identificador da sessão é automaticamente enviado via cookie pelo servlet
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]{Exemplo}
+\begin{lstlisting}
+HTTPSession session = request.getSession(true);
+session.setAttribute("chave", new String(valor))
+\end{lstlisting}
+
+\pause
+
+Mas e se os cookies estiverem desabilitados? \pause a sessão cairá no mesmo problema clássico dos cookies. A solução é enviar o id de sessão por reescrita de url.
+
+O objeto session gera um parâmetro jsessionid com o número de sessão. 
+
+
+\end{frame}
+
+\begin{frame}{Filtros}
+\begin{itemize}
+ \item Suponha que tenhamos nossa aplicação tenha 100 servlets e desejamos adicionar verificação de autenticação em todos eles. Teremos de verificar o id em todos os servlets?
+\end{itemize}
+
+\end{frame}
+
+
+\end{document}

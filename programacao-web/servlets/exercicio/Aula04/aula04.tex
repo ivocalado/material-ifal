@@ -1,0 +1,125 @@
+\documentclass{article}
+
+\usepackage{epsfig}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{a4wide}
+\usepackage[latin1]{inputenc}
+%\usepackage[portuges]{babel}
+\usepackage[brazil]{babel}
+\usepackage{float}
+
+\title{Programação V \\ \small{\textbf{Prof. Alan}} \\ \scriptsize{\textbf{alanpedros@yahoo.com.br}}\\
+Implementando o primeiro Servlet - Continuação\\}
+
+\begin{document}
+
+\maketitle \scriptsize
+
+\begin{description}
+
+\item 1 - Crie uma página html, \emph{index.html}, conforme abaixo.
+Depois salve a página na pasta raiz da aplicação web PrimeiroServlet
+(\emph{Tomcat/webapps/PrimeiroServlet}). Por ultimo, solicite a
+seguinte url: \emph{http://localhost:8080/PrimeiroServlet/}
+
+\begin{lstlisting}
+<HTML>
+ <HEAD>
+  <TITLE> Primeiro Formulário </TITLE>
+ </HEAD>
+
+ <BODY>
+  <FORM METHOD=POST ACTION="./ObjetoRequest">
+    <TABLE align="center">
+    <TR>
+    <TD>Nome:</TD>
+        <TD><INPUT TYPE="text" NAME="nome"></TD>
+    </TR>
+    <TR>
+    <TD>Telefone:</TD>
+        <TD><INPUT TYPE="text" NAME="telefone"></TD>
+    </TR>
+    <TR>
+    <TD>Endereco:</TD>
+        <TD><INPUT TYPE="text" NAME="endereco"></TD>
+    </TR>
+    </TABLE>
+    <center>
+    <INPUT TYPE="submit" Name="Enviar Dados">
+  </FORM>
+ </BODY>
+</HTML>
+\end{lstlisting}
+
+\item 2 - Crie o Servlet abaixo, e o coloque na pasta \emph{c:$\setminus$Tomcat$\setminus$webapps$\setminus$PrimeiroServlet$\setminus$WEB-INF$\setminus$classes$\setminus$web}
+
+\begin{lstlisting}
+package web;
+
+import java.io.IOException; import java.io.PrintWriter;
+
+import javax.servlet.ServletException; import
+javax.servlet.http.HttpServlet; import
+javax.servlet.http.HttpServletRequest; import
+javax.servlet.http.HttpServletResponse;
+
+public class ObjetoRequest extends HttpServlet {
+    public void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws IOException, ServletException {
+        response.setContentType("text/html");
+        PrintWriter printWriter = response.getWriter();
+        String nome = request.getParameter("nome");
+        String endereco = request.getParameter("endereco");
+        String telefone = request.getParameter("telefone");
+        printWriter.println("Nome: " + nome);
+        printWriter.println("Endereco: " + endereco);
+        printWriter.println("Telefone: " + telefone);
+    }
+
+    public void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws IOException, ServletException {
+        response.setContentType("text/html");
+        PrintWriter printWriter = response.getWriter();
+        printWriter.println("Você não digitou o formulário!");
+    }
+
+}
+\end{lstlisting}
+\newpage
+\item 3 - Redistribua a aplicação para que o novo Servlet possa ser
+enxergado. Ou seja, atualize o arquivo \emph{web.xml}.
+\begin{lstlisting}
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+
+>
+
+<servlet>
+    <servlet-name>IdentificadorInterno</servlet-name>
+    <servlet-class>web.PrimeiroServlet</servlet-class>
+</servlet>
+
+<servlet-mapping>
+    <servlet-name>IdentificadorInterno</servlet-name>
+    <url-pattern>/NomePublico</url-pattern>
+</servlet-mapping>
+
+<servlet>
+    <servlet-name>IdentificadorInterno2</servlet-name>
+    <servlet-class>web.ObjetoRequest</servlet-class>
+</servlet>
+
+<servlet-mapping>
+    <servlet-name>IdentificadorInterno2</servlet-name>
+    <url-pattern>/ObjetoRequest</url-pattern>
+</servlet-mapping>
+
+</web-app>
+\end{lstlisting}
+
+
+\end{description}
+
+\end{document}

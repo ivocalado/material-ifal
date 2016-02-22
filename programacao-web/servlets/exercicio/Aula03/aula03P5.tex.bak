@@ -1,0 +1,188 @@
+\documentclass{article}
+
+\usepackage{epsfig}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{a4wide}
+\usepackage[latin1]{inputenc}
+%\usepackage[portuges]{babel}
+\usepackage[brazil]{babel}
+\usepackage{float}
+
+\title{Programação V \\ \small{\textbf{Prof. Alan}} \\ \scriptsize{\textbf{alanpedros@yahoo.com.br}}\\
+Implementando o primeiro servlet}
+
+\begin{document}
+
+\maketitle \scriptsize
+\section{Implementando o Servlet no eclipse}
+\begin{enumerate}
+
+\item Criar um projeto no eclipse chamado \emph{ProjetoServlet01};
+
+\item Criar uma pasta somente para ser posto os fontes do projeto (\emph{Source
+Folder});
+
+\item Criar uma pasta chamada \emph{lib} para guardar as bibliotecas
+externas;
+
+\item Copiar para a pasta lib (criada no item anterior), a
+biblioteca \emph{servlet-api.jar}, que se encontra na pasta
+\emph{/common/lib} dentro da pasta raiz do \emph{tomcat};
+
+\item Criar dois pacotes (dentro da pasta \emph{src}):
+\begin{itemize}
+
+\item \emph{modelo}: Essa pasta serve para guardar as
+classes/componentes da camada de negócio;
+
+\item \emph{web}: Essa pasta serve para guardar os Servlets.
+
+\end{itemize}
+
+\item Implementar a classe Aluno dentro do pacote \emph{modelo},
+conforme abaixo:
+
+
+\begin{lstlisting}
+package modelo;
+
+public class Aluno {
+    private String nome;
+
+    public Aluno(int codAluno) {
+        if (codAluno == 1) {
+            this.nome = "Manoel";
+        }
+        if (codAluno == 2) {
+            this.nome = "Pedro";
+        }
+    }
+
+    public String getNome() {
+        return nome;
+    }
+}
+\end{lstlisting}
+
+
+\item Implementar o primeiro servlet, chamado
+\emph{PrimeiroServlet}, conforme abaixo:
+
+
+
+\begin{lstlisting}
+package web;
+
+import java.io.IOException; import java.io.PrintWriter;
+
+import javax.servlet.ServletException; import
+javax.servlet.http.HttpServlet; import
+javax.servlet.http.HttpServletRequest; import
+javax.servlet.http.HttpServletResponse;
+
+import modelo.Aluno;
+
+public class PrimeiroServlet extends HttpServlet {
+    public void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws IOException, ServletException {
+        response.setContentType("text/html");
+        PrintWriter printWriter = response.getWriter();
+        printWriter.println("teste");
+    }
+
+    public void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws IOException, ServletException {
+        response.setContentType("text/html");
+        PrintWriter printWriter = response.getWriter();
+        Aluno aluno = new Aluno(1);
+        printWriter.println(aluno.getNome());
+    }
+
+}
+\end{lstlisting}
+
+
+\end{enumerate}
+\section{Criando uma aplicação Web}
+
+\begin{enumerate}
+
+\item Criar uma pasta chamada \emph{PrimeiroServlet}, dentro da pasta
+\emph{webapps}, que fica dentro da pasta raiz do \emph{tomcat};
+
+\item Criar uma pasta \emph{WEB-INF}, dentro da pasta
+\emph{PrimeiroServlet} (referente ao item anterior);
+
+\item Criar uma pasta \emph{classes}, dentro da pasta
+\emph{WEB-INF} (referente ao item anterior);
+
+\item Copiar o conteúdo da pasta \emph{bin}, do projeto criado no
+eclipse, para o pasta \emph{classes}, da aplicação \emph{web}.
+
+\item Criar o arquivo de configuração da aplicação, web.xml,
+e armazená-la deretamente na pasta \emph{WEB-INF}, conforme abaixo:
+
+
+\begin{itemize}
+
+\item Opção 01 : Para a versão instalada no laboratório
+
+\begin{lstlisting}
+
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+
+>
+
+<servlet>
+    <servlet-name>IdentificadorInterno</servlet-name>
+    <servlet-class>web.PrimeiroServlet</servlet-class>
+</servlet>
+
+<servlet-mapping>
+    <servlet-name>IdentificadorInterno</servlet-name>
+    <url-pattern>/NomePublico</url-pattern>
+</servlet-mapping>
+
+</web-app>
+
+
+
+\end{lstlisting}
+
+\item Opção 02 : Para a versão 5.5 do tomcat, versão recomendada.
+
+\begin{lstlisting}
+
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!DOCTYPE web-app
+    PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+    "http://java.sun.com/dtd/web-app_2_3.dtd">
+
+<web-app>
+    <servlet>
+        <servlet-name>IdentificadorInterno</servlet-name>
+        <servlet-class>web.PrimeiroServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>IdentificadorInterno</servlet-name>
+        <url-pattern>/NomePublico</url-pattern>
+    </servlet-mapping>
+</web-app>
+
+
+
+\end{lstlisting}
+
+\end{itemize}
+
+\item Reiniciar o serviço do \emph{tomcat};
+
+\item Executar a URl http://localhost:8080/PrimeiroServlet/NomePublico
+
+\end{enumerate}
+\end{document}

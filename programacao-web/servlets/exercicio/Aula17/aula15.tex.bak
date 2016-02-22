@@ -1,0 +1,261 @@
+\documentclass{article}
+
+\usepackage{epsfig}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{a4wide}
+\usepackage[latin1]{inputenc}
+%\usepackage[portuges]{babel}
+\usepackage[brazil]{babel}
+\usepackage{float}
+
+\title{Programação V \\ \small{\textbf{Prof. Alan}} \\ \scriptsize{\textbf{alanpedros@yahoo.com.br}}\\
+JavaBean 2\\}
+
+\begin{document}
+
+\maketitle
+
+\scriptsize
+
+\begin{description}
+
+\item 1 - Crie uma \emph{aplicação web} no tomcat chamado \emph{JSPBean2}, seguindo os
+seguintes procedimentos básicos:
+
+\begin{enumerate}
+
+\item Criar uma pasta chamada \emph{JSPBean2}, dentro da pasta
+$C:\setminus Tomcat\setminus webapps$
+
+\item Criar uma pasta chamada \emph{WEB-INF}, dentro da pasta
+$C:\setminus Tomcat\setminus webapps\setminus JSPBean2$
+
+\item Criar uma pasta chamada \emph{classes}, dentro da pasta
+$C:\setminus Tomcat\setminus webapps\setminus JSPBean2\setminus
+WEB-INF$
+
+\end{enumerate}
+
+
+\item 2 - Crie um projeto no eclipse, chamado \emph{ProjetoJavaBean2}, em seguida, faça os seguintes procedimentos:
+
+\begin{enumerate}
+
+\item Crie uma pasta do tipo \emph{Source Folder}, chamado
+\emph{src};
+
+\item Dentro da pasta \emph{src} do item 1, crie um pacote chamado \emph{medel}.
+
+\item Dentro da pasta \emph{src} do item 1, crie um pacote chamado \emph{web}.
+
+\item Crie uma pasta \emph{lib}, e ponha a biblioteca
+\emph{C:$\setminus$Tomcat$\setminus$common$\setminus$lib$\setminus$servlet-api.jar}
+dentro da pasta. Em seguida, dentro do eclipse, clique com o botão
+direito do mouse em cima do arquivo \emph{servlet-api.jar}, clique
+em \emph{Build Path}$\longrightarrow$\emph{Add to Build Path};
+
+\item Implemente sa classes abaixo abaixo:
+
+\begin{verbatim}
+package model;
+
+public class Cliente {
+    private String nome;
+    private String endereco;
+    private String telefone;
+    private String cidade;
+    private String uf;
+
+    public Cliente(String nome, String endereco, String telefone,
+            String cidade, String uf) {
+        super();
+        this.nome = nome;
+        this.endereco = endereco;
+        this.telefone = telefone;
+        this.cidade = cidade;
+        this.uf = uf;
+    }
+    public String getCidade() { return cidade; }
+    public String getEndereco() { return endereco; }
+    public String getNome() { return nome; }
+    public String getTelefone() { return telefone; }
+    public String getUf() { return uf; }
+}
+
+\end{verbatim}
+-------------------------------------------------------------------------------------------------------------------------
+\begin{verbatim}
+package model;
+public class BancoDeDados {
+    public static Cliente getCliente(String id){
+        if (id.compareTo("2007.0001")==0){
+            Cliente cliente = new Cliente("Maria","Av. Fernandes Lima, 711",
+                    "82-1234-5678","Maceió","AL");
+            return cliente;
+        }else if(id.compareTo("2007.0002")==0){
+            Cliente cliente = new Cliente("João","Rua: Cônego Machado, 722",
+                    "82-8765-4321","Maceió","AL");
+            return cliente;
+        }else{
+            return null;
+        }
+    }
+}
+\end{verbatim}
+-------------------------------------------------------------------------------------------------------------------------
+\begin{verbatim}
+package web;
+
+import java.io.IOException;
+
+import javax.servlet.RequestDispatcher;
+
+import javax.servlet.ServletException;
+
+import javax.servlet.http.HttpServlet;
+
+import javax.servlet.http.HttpServletRequest;
+
+import javax.servlet.http.HttpServletResponse;
+
+import model.BancoDeDados;
+
+import model.Cliente;
+
+public class RecebeRequisicao extends HttpServlet {
+
+    public void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws IOException, ServletException {
+        response.sendRedirect("acessoNegado.html");
+    }
+
+    public void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws IOException, ServletException {
+        String id = request.getParameter("id");
+        Cliente cliente = BancoDeDados.getCliente(id);
+
+        if (cliente != null) {
+            request.setAttribute("cliente", cliente);
+            RequestDispatcher dispatcher = request
+                    .getRequestDispatcher("/WEB-INF/exibirCliente.jsp");
+            dispatcher.forward(request, response);
+        } else {
+            RequestDispatcher dispatcher = request
+                    .getRequestDispatcher("/WEB-INF/paginaDeErro.jsp");
+            dispatcher.forward(request, response);
+        }
+
+    }
+
+}
+
+\end{verbatim}
+
+\end{enumerate}
+
+\item 3 - Implemente o arquivo ``index.jsp'' abaixo, e salve na pasta $C:\setminus Tomcat\setminus webapps\setminus JSPBean2$:
+
+\begin{verbatim}
+<HTML>
+ <HEAD>
+  <TITLE> Página Inicial </TITLE>
+ </HEAD>
+ <BODY>
+ <CENTER>
+ <FORM METHOD=POST ACTION="./TratarRequisicao"><TABLE>
+ <TR>
+    <TD>Digite a sua identificação: <INPUT TYPE="text" NAME="id"></TD>
+ </TR>
+ <TR>
+    <TD align="center"><INPUT TYPE="submit" VALUE="Fazer busca"></TD>
+ </TR>
+ </TABLE>
+ </FORM>
+ </BODY>
+</HTML>
+\end{verbatim}
+
+\item 4 - Implemente o arquivo ``acessoNegado.jsp'' abaixo, e salve na pasta $C:\setminus Tomcat\setminus webapps\setminus JSPBean2$:
+
+\begin{verbatim}
+<HTML>
+ <HEAD>
+  <TITLE>Acesso Negado</TITLE>
+ </HEAD>
+ <BODY>
+ <CENTER>
+ <TR>
+    <TD>Acesso Negado</TD>
+ </TR>
+ </TABLE>
+ </BODY>
+</HTML>
+\end{verbatim}
+
+\item 5 - Implemente o arquivo ``exibirCliente.jsp'' abaixo, e salve na pasta $C:\setminus Tomcat\setminus webapps\setminus JSPBean2\setminus WEB-INF$:
+\begin{verbatim}
+<jsp:useBean id="cliente" class="model.Cliente" scope="request"/>
+<HTML>
+ <HEAD>
+  <TITLE> Exibindo Cliente </TITLE>
+ </HEAD>
+ <BODY>
+ <center>
+ <TABLE>
+ <TR>
+    <TD>Nome: <jsp:getProperty name="cliente" property="nome" /></TD>
+ </TR>
+ <TR>
+    <TD>Endereço: <jsp:getProperty name="cliente" property="endereco" /></TD>
+ </TR>
+ <TR>
+    <TD>Telefone: <jsp:getProperty name="cliente" property="telefone" /></TD>
+ </TR>
+ <TR>
+    <TD>Cidade: <jsp:getProperty name="cliente" property="cidade" /></TD>
+ </TR>
+ <TR>
+    <TD>UF: <jsp:getProperty name="cliente" property="uf" /></TD>
+ </TR>
+ </TABLE>
+ </BODY>
+</HTML>
+\end{verbatim}
+
+\item 6 - Implemente o arquivo ``paginaDeErro.jsp'' abaixo, e salve na pasta $C:\setminus Tomcat\setminus webapps\setminus JSPBean2\setminus WEB-INF$:
+\begin{verbatim}
+<HTML>
+ <HEAD>
+  <TITLE> Cliente não encontrado </TITLE>
+ </HEAD>
+ <BODY>
+ <CENTER>
+ <TR>
+    <TD align="center">Cliente não encontrado</TD>
+ </TR>
+ </TABLE>
+ </BODY>
+</HTML>
+\end{verbatim}
+
+\item 7 - Copie tudo que estiver na pasta \emph{lib} do projeto criado no eclipse e
+ponha na pasta $C:\setminus Tomcat\setminus webapps\setminus
+JSPBean2\setminus WEB-INF\setminus classes$
+
+\item 8 - Reinicie o Tomcat ( $C:\setminus Tomcat\setminus bin\setminus classes\setminus tomcat5$);
+
+\item 9 - Chame a página inicial ( \textbf{http:$//$localhost:8083$/$JSPBean2$/$} ) e digite
+a identificação ```2007.0001''.
+
+\item 10 - Chame a página inicial ( \textbf{http:$//$localhost:8083$/$JSPBean2$/$} ) e digite
+a identificação ```2007.0002''.
+
+\item 11 - Chame a página inicial ( \textbf{http:$//$localhost:8083$/$JSPBean2$/$} ) e digite
+a identificação ```2007.0003''.
+
+
+
+\end{description}
+
+\end{document}

@@ -1,0 +1,212 @@
+\documentclass{article}
+
+\usepackage{epsfig}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{a4wide}
+\usepackage[latin1]{inputenc}
+%\usepackage[portuges]{babel}
+\usepackage[brazil]{babel}
+\usepackage{float}
+
+\title{Programação V \\ \small{\textbf{Prof. Alan}} \\ \scriptsize{\textbf{alanpedros@yahoo.com.br}}\\
+Primeiros JSP\\}
+
+\begin{document}
+
+\maketitle
+
+\scriptsize
+
+\begin{description}
+
+\item 1 - Crie uma \emph{aplicação web} no tomcat chamado \emph{TesteJSP}, seguindo os
+seguintes procedimentos básicos:
+
+\begin{enumerate}
+
+\item Criar uma pasta chamada \emph{TesteJSP}, dentro da pasta
+$C:\setminus Tomcat\setminus webapps$
+
+\item Criar uma pasta chamada \emph{WEB-INF}, dentro da pasta
+$C:\setminus Tomcat\setminus webapps\setminus TesteJSP$
+
+\item Criar uma pasta chamada \emph{classes}, dentro da pasta
+$C:\setminus Tomcat\setminus webapps\setminus TesteJSP\setminus
+WEB-INF$
+
+\item Criar o arquivo \emph{web.xml} dentro da pasta
+$C:\setminus Tomcat\setminus webapps\setminus TesteJSP\setminus
+WEB-INF$
+
+\end{enumerate}
+
+
+\item 2 - Crie um projeto no eclipse, chamado
+\emph{TesteJSP}, seguindo os seguintes procedimentos básicos:
+
+\begin{enumerate}
+
+\item Crie uma pasta do tipo \emph{Source Folder}, chamado
+\emph{src};
+
+\item Crie uma pasta \emph{lib}, e ponha a biblioteca
+\emph{C:$\setminus$Tomcat$\setminus$common$\setminus$lib$\setminus$servlet-api.jar}
+dentro da pasta. Em seguida, dentro do eclipse, clique com o botão
+direito do mouse em cima do arquivo \emph{servlet-api.jar}, clique
+em \emph{Build Path}$\longrightarrow$\emph{Add to Build Path};
+
+\item Dentro da pasta \emph{src} do item 1, crie um pacote chamado \emph{web}.
+
+\item Implemente o Servlet abaixo:
+
+\begin{verbatim}
+package web;
+
+import java.io.IOException; import java.io.PrintWriter;
+
+import javax.servlet.ServletException; import
+javax.servlet.http.HttpServlet; import
+javax.servlet.http.HttpServletRequest; import
+javax.servlet.http.HttpServletResponse; import
+javax.servlet.http.HttpSession;
+
+public class TratarLoginJSP extends HttpServlet{
+
+    public void doPost(HttpServletRequest request, HttpServletResponse response)
+    throws IOException, ServletException {
+        response.setContentType("text/html");
+        PrintWriter printWriter = response.getWriter();
+        String login = request.getParameter("login");
+        String senha = request.getParameter("senha");
+        if ((login.compareTo("alan") == 0) && (senha.compareTo("1234") == 0)) {
+            HttpSession httpSession = request.getSession();
+            httpSession.setAttribute("login", "alan");
+            httpSession.setAttribute("senha", "1234");
+            response.sendRedirect("loginCorreto.jsp");
+        }else{
+            HttpSession httpSession = request.getSession();
+            httpSession.setAttribute("mensagem","Login ou senha inválida!");
+            response.sendRedirect("index.jsp");
+        }
+    }
+
+}
+
+\end{verbatim}
+
+\item Implemente o arquivo ``index.jsp'' abaixo, e salve na pasta $C:\setminus Tomcat\setminus webapps\setminus TesteJSP$:
+
+\begin{verbatim}
+<%
+String mensagem = (String)session.getAttribute("mensagem"); if
+(mensagem==null){
+    mensagem="";
+}
+%>
+
+<HTML>
+ <HEAD>
+  <TITLE> Pagina Inicial </TITLE>
+ </HEAD>
+ <BODY>
+
+<center>
+ <FORM METHOD=POST ACTION="./TratarLoginJSP">
+    <TABLE>
+    <TR>
+        <TD>Login:</TD>
+        <TD><INPUT TYPE="text" NAME="login"></TD>
+    </TR>
+    <TR>
+        <TD>Senha:</TD>
+        <TD><INPUT TYPE="password" NAME="senha"></TD>
+    </TR>
+    <TR>
+        <TD><INPUT TYPE="submit"></TD>
+        <TD></TD>
+    </TR>
+    <TR>
+        <TD><%=mensagem%></TD>
+        <TD></TD>
+    </TR>
+    </TABLE>
+ </FORM>
+ </BODY>
+</HTML>
+\end{verbatim}
+
+\item Implemente o arquivo ``loginCorreto.jsp'' abaixo, e salve na pasta $C:\setminus Tomcat\setminus webapps\setminus TesteJSP$:
+
+\begin{verbatim}
+<%
+String login = (String)session.getAttribute("login"); String senha =
+(String)session.getAttribute("senha");
+%>
+
+<HTML>
+ <HEAD>
+  <TITLE> Pagina Inicial </TITLE>
+ </HEAD>
+ <BODY>
+
+<center>
+    <TABLE>
+    <TR>
+        <TD>Login:</TD>
+        <TD><%=login%></TD>
+    </TR>
+    <TR>
+        <TD>Senha:</TD>
+        <TD><%=senha%></TD>
+    </TR>
+    <TR>
+        <TD></TD>
+        <TD><%=application.getInitParameter("parametro1")%></TD>
+    </TR>
+    </TABLE>
+ </BODY>
+</HTML>
+
+\end{verbatim}
+
+\end{enumerate}
+
+\item 3 - Crie o arquivo \emph{web.xml} dentro da pasta
+$C:\setminus Tomcat\setminus webapps \setminus TesteJSP \setminus
+WEB-INF$
+
+\begin{verbatim}
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+
+<context-param>
+    <param-name>parametro1</param-name>
+    <param-value>Seja bem vindo!</param-value>
+</context-param>
+
+<servlet>
+    <servlet-name>Servlet01</servlet-name>
+    <servlet-class>web.TratarLoginJSP</servlet-class>
+</servlet>
+
+<servlet-mapping>
+    <servlet-name>Servlet01</servlet-name>
+    <url-pattern>/TratarLoginJSP</url-pattern>
+</servlet-mapping>
+
+
+</web-app>
+\end{verbatim}
+
+\item 4 - Chame a página inicial da seguinte forma:
+\textbf{http:$//$localhost:8080$/$TesteJSP$/$index.jsp}. Na primeira
+tentativa, digite uma senha e login qualquer. Na segunda, Login
+``alan'' e senha ``1234''.
+
+
+
+\end{description}
+
+\end{document}

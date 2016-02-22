@@ -1,0 +1,205 @@
+\documentclass{article}
+
+\usepackage{epsfig}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{a4wide}
+\usepackage[latin1]{inputenc}
+%\usepackage[portuges]{babel}
+\usepackage[brazil]{babel}
+\usepackage{float}
+
+\title{Programação V \\ \small{\textbf{Prof. Alan}} \\ \scriptsize{\textbf{alanpedros@yahoo.com.br}}\\
+Sessão e Cookie\\}
+
+\begin{document}
+
+\maketitle
+
+\scriptsize
+
+\begin{description}
+
+\item 1 - Crie uma \emph{aplicação web} no tomcat chamado \emph{Cookie}, seguindo os
+seguintes procedimentos básicos:
+
+\begin{enumerate}
+
+\item Criar uma pasta chamada \emph{Cookie}, dentro da pasta
+$C:\setminus Tomcat\setminus webapps$
+
+\item Criar uma pasta chamada \emph{WEB-INF}, dentro da pasta
+$C:\setminus Tomcat\setminus webapps\setminus Cookie$
+
+\item Criar uma pasta chamada \emph{classes}, dentro da pasta
+$C:\setminus Tomcat\setminus webapps\setminus Cookie\setminus
+WEB-INF$
+
+\item Criar o arquivo \emph{web.xml} dentro da pasta
+$C:\setminus Tomcat\setminus webapps\setminus Cookie\setminus
+WEB-INF$
+
+\end{enumerate}
+
+
+\item 3 - Crie o arquivo \emph{index.html} conforme abaixo, e ponha
+na pasta: C:$\setminus$Tomcat$\setminus$webapps$\setminus$Cookie
+
+\begin{verbatim}
+<HTML>
+ <HEAD>
+  <TITLE> Página Inicial </TITLE>
+ </HEAD>
+ <BODY>
+    <FORM METHOD="POST" ACTION="./FazerLogin" ALIGN="CENTER">
+        <TABLE align="center">
+            <TR>
+                <TD>
+                    Login:<INPUT TYPE="text" NAME="login">
+                </TD>
+            </TR>
+            <TR>
+                <TD>
+                    Senha:<INPUT TYPE="password" NAME="senha">
+                </TD>
+            </TR>
+            <TR>
+                <TD>
+                    Outros:<INPUT TYPE="text" NAME="outros">
+                </TD>
+            </TR>
+            <TR>
+                <TD><INPUT TYPE="submit" Value="Fazer Login"></TD>
+            </TR>
+            </TABLE>
+    </FORM>
+ </BODY>
+</HTML>
+\end{verbatim}
+
+\item 4 - Crie um projeto no eclipse, chamado
+\emph{ProjetoTesteCookie}, seguindo os seguintes procedimentos
+básicos:
+
+\begin{enumerate}
+
+\item Crie uma pasta do tipo \emph{Source Folder}, chamado
+\emph{src};
+
+\item Crie uma pasta \emph{lib}, e ponha a biblioteca
+\emph{C:$\setminus$Tomcat$\setminus$common$\setminus$lib$\setminus$servlet-api.jar}
+dentro da pasta. Em seguida, dentro do eclipse, clique com o botão
+direito do mouse em cima do arquivo \emph{servlet-api.jar}, clique
+em \emph{Build Path}$\longrightarrow$\emph{Add to Build Path};
+
+\item Dentro da pasta \emph{src} do item 1, crie um pacote chamado \emph{web}.
+
+\item Implemente os dois servlet's abaixo:
+
+\begin{verbatim}
+public class ServletInserirSessao extends HttpServlet {
+    public void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws IOException, ServletException {
+        response.setContentType("text/html");
+        PrintWriter printWriter = response.getWriter();
+        String login = request.getParameter("login");
+        String senha = request.getParameter("senha");
+        String outros = request.getParameter("outros");
+        if ((login.compareTo("alan") == 0) && (senha.compareTo("1234") == 0)) {
+            Cookie cookie = new Cookie("outros",outros);
+            response.addCookie(cookie);
+            HttpSession httpSession = request.getSession();
+            httpSession.setAttribute("login", "alan");
+            httpSession.setAttribute("senha", "1234");
+            httpSession.setAttribute("nome", "Alan Pedro da Silva");
+            response.sendRedirect("paginainicial.html");
+        }
+    }
+}
+\end{verbatim}
+
+\begin{verbatim}
+public class LoginCorreto extends HttpServlet {
+    public void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws IOException, ServletException {
+        response.setContentType("text/html");
+        PrintWriter printWriter = response.getWriter();
+        HttpSession httpSession = request.getSession();
+        try {
+            if (((String) httpSession.getAttribute("login")).compareTo("alan") == 0
+                    && ((String) httpSession.getAttribute("senha"))
+                            .compareTo("1234") == 0) {
+                String saida = "<HTML>";
+                saida += "<HEAD>";
+                saida += "<TITLE> Seja bem vindo  </TITLE>";
+                saida += "</HEAD>";
+                saida += "<BODY>";
+                saida += "<CENTER><H1>Seja bem vindo</H1></CENTER>";
+                Cookie[] cookies = request.getCookies();
+                for (int i = 0; i < cookies.length; i++) {
+                    saida+="Nome: " + cookies[i].getName() + " / Valor: " + cookies[i].getValue();
+                }
+                saida += "</BODY>";
+                saida += "</HTML>";
+                printWriter.print(saida);
+            }
+        } catch (Exception e) {
+            String saida = "<HTML>";
+            saida += "<HEAD>";
+            saida += "<TITLE> Acesso Negado  </TITLE>";
+            saida += "</HEAD>";
+            saida += "<BODY>";
+            saida += "<CENTER><H1> Faça o seu login inicialmente</H1></CENTER>";
+            saida += "</BODY>";
+            saida += "</HTML>";
+            printWriter.print(saida);
+        }
+    }
+
+
+}
+
+\end{verbatim}
+
+
+
+
+
+\end{enumerate}
+
+\item 5 - Crie o arquivo \emph{web.xml} dentro da pasta
+$C:\setminus Tomcat\setminus webapps \setminus Cookie \setminus
+WEB-INF$
+
+\begin{verbatim}
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+<servlet>
+    <servlet-name>InserirSession</servlet-name>
+    <servlet-class>web.ServletInserirSessao</servlet-class>
+</servlet>
+<servlet>
+    <servlet-name>PaginaCorreta</servlet-name>
+    <servlet-class>web.LoginCorreto</servlet-class>
+</servlet>
+<servlet-mapping>
+    <servlet-name>InserirSession</servlet-name>
+    <url-pattern>/FazerLogin</url-pattern>
+</servlet-mapping>
+<servlet-mapping>
+    <servlet-name>PaginaCorreta</servlet-name>
+    <url-pattern>/paginainicial.html</url-pattern>
+</servlet-mapping>
+
+</web-app>
+\end{verbatim}
+
+\item 6 - Chame a página inicial da seguinte forma:
+\textbf{http:$\setminus\setminus$localhost:8085$\setminus$Cookie$\setminus$}.
+login: ``alan'' Senha: ``1234''
+
+
+\end{description}
+
+\end{document}

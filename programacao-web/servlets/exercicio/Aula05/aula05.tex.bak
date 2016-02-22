@@ -1,0 +1,218 @@
+\documentclass{article}
+
+\usepackage{epsfig}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{a4wide}
+\usepackage[latin1]{inputenc}
+%\usepackage[portuges]{babel}
+\usepackage[brazil]{babel}
+\usepackage{float}
+
+\title{Programação V \\ \small{\textbf{Prof. Alan}} \\ \scriptsize{\textbf{alanpedros@yahoo.com.br}}\\
+Implementando um Servlet Redirecionandor\\}
+
+\begin{document}
+
+\maketitle
+
+\scriptsize
+
+\begin{description}
+
+\item 1 - Crie uma página html, \emph{index.html}, conforme abaixo.
+Depois salve a página na pasta raiz da aplicação web
+ServletRedirecionador (\emph{Tomcat/webapps/ServletRedirecionador}).
+Por ultimo, solicite a seguinte url:
+\emph{http://localhost:8080/ServletRedirecionador/}
+
+\begin{lstlisting}
+<HTML>
+ <HEAD>
+  <TITLE> Página Inicial </TITLE>
+ </HEAD>
+ <BODY>
+    <FORM METHOD="POST" ACTION="./FazerLogin" ALIGN="CENTER">
+        <TABLE align="center">
+            <TR>
+                <TD>
+                    Login:<INPUT TYPE="text" NAME="login">
+                </TD>
+            </TR>
+            <TR>
+                <TD>
+                    Senha:<INPUT TYPE="password" NAME="senha">
+                </TD>
+            </TR>
+            <TR>
+                <TD><INPUT TYPE="submit" Value="Fazer Login"></TD>
+            </TR>
+            </TABLE>
+    </FORM>
+ </BODY>
+</HTML>
+\end{lstlisting}
+
+\item 2 - Crie uma página html, \emph{logincorreto.html}, conforme abaixo.
+Depois salve a página na pasta raiz da aplicação web
+ServletRedirecionador (\emph{Tomcat/webapps/ServletRedirecionador}).
+
+\begin{lstlisting}
+<HTML>
+ <HEAD>
+  <TITLE> Seja bem vindo! </TITLE>
+ </HEAD>
+ <BODY>
+  <CENTER><H1>Seja bem vindo!</H1></CENTER>
+ </BODY>
+</HTML>
+\end{lstlisting}
+
+\item 3 - Crie uma página html, \emph{acessonegado.html}, conforme abaixo.
+Depois salve a página na pasta raiz da aplicação web
+ServletRedirecionador (\emph{Tomcat/webapps/ServletRedirecionador}).
+
+\begin{lstlisting}
+<HTML>
+ <HEAD>
+  <TITLE> ACESSO NEGADO </TITLE>
+ </HEAD>
+ <BODY>
+  <CENTER><H1>ACESSO NEGADO</H1></CENTER>
+ </BODY>
+</HTML>
+\end{lstlisting}
+
+\item 4 - Crie os Servlet's abaixo, e o coloque na pasta \emph{c:$\setminus$Tomcat$\setminus$webapps$\setminus$PrimeiroServlet$\setminus$WEB-INF$\setminus$classes$\setminus$web}
+
+\begin{lstlisting}
+package web;
+
+import java.io.IOException; import java.io.PrintWriter;
+
+import javax.servlet.RequestDispatcher; import
+javax.servlet.ServletException; import
+javax.servlet.http.HttpServlet; import
+javax.servlet.http.HttpServletRequest; import
+javax.servlet.http.HttpServletResponse;
+
+public class ServletRedirecionador extends HttpServlet {
+    public void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws IOException, ServletException {
+        response.setContentType("text/html");
+        PrintWriter printWriter = response.getWriter();
+        String login = request.getParameter("login");
+        String senha = request.getParameter("senha");
+        printWriter.println("Login: " + login);
+        printWriter.println("Senha: " + senha);
+        if ( (login.compareTo("alan")==0) && (senha.compareTo("1234")==0)) {
+            response.sendRedirect("logincorreto.html");
+        }else{
+            response.sendRedirect("acessonegado.html");
+        }
+
+    }
+
+    public void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws IOException, ServletException {
+        response.setContentType("text/html");
+        PrintWriter printWriter = response.getWriter();
+        printWriter.println("Acesso Negado!");
+    }
+
+}
+
+\end{lstlisting}
+
+\begin{lstlisting}
+package web;
+
+import java.io.IOException; import java.io.PrintWriter;
+
+import javax.servlet.RequestDispatcher; import
+javax.servlet.ServletException; import
+javax.servlet.http.HttpServlet; import
+javax.servlet.http.HttpServletRequest; import
+javax.servlet.http.HttpServletResponse;
+
+public class ServletRedirecionador2 extends HttpServlet {
+    public void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws IOException, ServletException {
+        response.setContentType("text/html");
+        PrintWriter printWriter = response.getWriter();
+        String login = request.getParameter("login");
+        String senha = request.getParameter("senha");
+        printWriter.println("Login: " + login);
+        printWriter.println("Senha: " + senha);
+        if ( (login.compareTo("alan")==0) && (senha.compareTo("1234")==0)) {
+            RequestDispatcher dispatcher = request.getRequestDispatcher("logincorreto.html");
+            dispatcher.forward(request, response);
+        }else{
+            RequestDispatcher dispatcher = request.getRequestDispatcher("acessonegado.html");
+            dispatcher.forward(request, response);
+        }
+
+    }
+
+    public void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws IOException, ServletException {
+        response.setContentType("text/html");
+        PrintWriter printWriter = response.getWriter();
+        printWriter.println("Acesso Negado!");
+    }
+
+}
+
+\end{lstlisting}
+
+
+
+
+\newpage
+\item 5 - Redistribua a aplicação para que os Servlet's possa ser
+enxergado. Ou seja, atualize o arquivo \emph{web.xml}.
+\begin{lstlisting}
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+
+>
+
+<servlet>
+    <servlet-name>IdentificadorInterno</servlet-name>
+    <servlet-class>web.ServletRedirecionador</servlet-class>
+</servlet>
+
+<servlet-mapping>
+    <servlet-name>IdentificadorInterno</servlet-name>
+    <url-pattern>/FazerLogin</url-pattern>
+</servlet-mapping>
+
+<servlet>
+    <servlet-name>IdentificadorInterno2</servlet-name>
+    <servlet-class>web.ServletRedirecionador2</servlet-class>
+</servlet>
+
+<servlet-mapping>
+    <servlet-name>IdentificadorInterno2</servlet-name>
+    <url-pattern>/FazerLogin2</url-pattern>
+</servlet-mapping>
+
+
+</web-app>
+\end{lstlisting}
+
+\item 6 - Solicite a seguinte url:
+\emph{http://localhost:8080/ServletRedirecionador/}. E digite o
+login ``alan'' e senha ``1234''.
+
+\item 7 - Altere o arquivo ``index.html''. No atributo
+ACTION="./FazerLogin", substitua por ACTION="./FazerLogin2".
+
+\item 8 - Solicite a seguinte url:
+\emph{http://localhost:8080/ServletRedirecionador/}. E digite o
+login ``alan'' e senha ``1234''.
+
+\end{description}
+
+\end{document}

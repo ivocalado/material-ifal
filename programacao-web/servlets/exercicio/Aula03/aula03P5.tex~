@@ -1,0 +1,105 @@
+\documentclass{article}
+
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{a4wide}
+\usepackage[latin1]{inputenc}
+%\usepackage[portuges]{babel}
+\usepackage[brazil]{babel}
+\usepackage{float}
+
+\title{ 
+  \begin{center}
+  \includegraphics[scale=0.20]{./imagens/ifal-logo.jpg}
+  \end{center}
+  \normalsize 
+  \textbf{Instituto Federal de Alagoas - IFAL \\ Campus Palmeira do Índios \\  Programação Web \\ Prof. Ivo Calado \\}  
+}
+
+\begin{document}
+
+\maketitle \scriptsize
+\section{Implementando o Servlet no eclipse}
+\begin{enumerate}
+
+\item Criar um projeto Web dinâmico no eclipse chamado \emph{ProjetoServlet01};
+
+\item Criar dois pacotes:
+\begin{itemize}
+
+\item \emph{modelo}: Essa pasta serve para guardar as
+classes/componentes da camada de negócio;
+
+\item \emph{web}: Essa pasta serve para guardar os Servlets.
+
+\end{itemize}
+
+\item Implementar a classe Aluno dentro do pacote \emph{modelo},
+conforme abaixo:
+
+
+\begin{lstlisting}
+package modelo;
+
+public class Aluno {
+    private String nome;
+
+    public Aluno(int codAluno) {
+        if (codAluno == 1) {
+            this.nome = "Manoel";
+        }
+        if (codAluno == 2) {
+            this.nome = "Pedro";
+        }
+    }
+
+    public String getNome() {
+        return nome;
+    }
+}
+\end{lstlisting}
+
+
+\item Implementar o primeiro servlet, chamado
+\emph{PrimeiroServlet}, conforme abaixo:
+
+
+
+\begin{lstlisting}
+package web;
+
+import java.io.IOException; import java.io.PrintWriter;
+
+import javax.servlet.ServletException; import
+javax.servlet.http.HttpServlet; import
+javax.servlet.http.HttpServletRequest; import
+javax.servlet.http.HttpServletResponse;
+
+import modelo.Aluno;
+
+public class PrimeiroServlet extends HttpServlet {
+    public void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws IOException, ServletException {
+        response.setContentType("text/html");
+        ServletOutputStream out = response.getOutputStream();
+        out.println("teste");
+    }
+
+    public void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws IOException, ServletException {
+        response.setContentType("text/html");
+        ServletOutputStream out = response.getOutputStream();
+        Aluno aluno = new Aluno(1);
+        out.println(aluno.getNome());
+    }
+
+}
+\end{lstlisting}
+
+
+\item Reiniciar o serviço do \emph{tomcat};
+
+\item Executar a URl http://localhost:8080/ProjetoServlet01/PrimeiroServlet
+
+\end{enumerate}
+\end{document}

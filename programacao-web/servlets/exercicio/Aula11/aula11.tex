@@ -1,0 +1,152 @@
+\documentclass{article}
+
+\usepackage{epsfig}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{a4wide}
+\usepackage[latin1]{inputenc}
+%\usepackage[portuges]{babel}
+\usepackage[brazil]{babel}
+\usepackage{float}
+
+\title{Programação V \\ \small{\textbf{Prof. Alan}} \\ \scriptsize{\textbf{alanpedros@yahoo.com.br}}\\
+JSP\\}
+
+\begin{document}
+
+\maketitle
+
+\scriptsize
+
+\begin{description}
+
+\item 1 - Crie uma \emph{aplicação web} no tomcat chamado \emph{JSPII}, seguindo os
+seguintes procedimentos básicos:
+
+\begin{enumerate}
+
+\item Criar uma pasta chamada \emph{JSPII}, dentro da pasta
+$C:\setminus Tomcat\setminus webapps$
+
+\item Criar uma pasta chamada \emph{WEB-INF}, dentro da pasta
+$C:\setminus Tomcat\setminus webapps\setminus JSPII$
+
+\item Criar uma pasta chamada \emph{classes}, dentro da pasta
+$C:\setminus Tomcat\setminus webapps\setminus JSPII\setminus
+WEB-INF$
+
+\end{enumerate}
+
+
+\item 2 - Crie um projeto no eclipse, chamado \emph{ProjetoJSPII}, seguindo os seguintes procedimentos
+básicos:
+
+\begin{enumerate}
+
+\item Crie uma pasta do tipo \emph{Source Folder}, chamado
+\emph{src};
+
+\item Crie uma pasta \emph{lib}, e ponha a biblioteca
+\emph{C:$\setminus$Tomcat$\setminus$common$\setminus$lib$\setminus$servlet-api.jar}
+dentro da pasta. Em seguida, dentro do eclipse, clique com o botão
+direito do mouse em cima do arquivo \emph{servlet-api.jar}, clique
+em \emph{Build Path}$\longrightarrow$\emph{Add to Build Path};
+
+\item Dentro da pasta \emph{src} do item 1, crie um pacote chamado \emph{model}.
+
+\item Implemente as classes abaixo abaixo:
+
+\begin{verbatim}
+package model;
+
+public class Aluno {
+    private String nome;
+    private String endereco;
+
+    public Aluno(String nome, String endereco) {
+        this.nome = nome;
+        this.endereco = endereco;
+    }
+
+    public String getEndereco() {
+        return endereco;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+}
+\end{verbatim}
+
+\begin{verbatim}
+package model;
+
+public class Turma {
+    private String[] nomes = {"José", "Pedro", "Maria","Josefa"};
+    private String[] enderecos = {"Rua: 01 Bairro: A","Rua: 02 Bairro: B",
+                                "Rua: 03 Bairro: C","Rua: 04 Bairro: D"};
+
+    public Aluno[] getAlunos(){
+        Aluno alunos[] = new Aluno[4];
+        for (int i=0;i<4;i++){
+            alunos[i] = new Aluno(nomes[i],enderecos[i]);
+        }
+        return alunos;
+    }
+
+    public static void main(String[] args) {
+        Turma turma = new Turma();
+        Aluno[] alunos = turma.getAlunos();
+        for (int i = 0; i < alunos.length; i++) {
+            System.out.println(alunos[i].getNome());
+        }
+    }
+
+}
+\end{verbatim}
+
+\end{enumerate}
+
+\item 3 - Implemente o arquivo ``index.jsp'' abaixo, e salve na pasta $C:\setminus Tomcat\setminus webapps\setminus JSPII$:
+
+\begin{verbatim}
+<%@ page import="model.Turma, model.Aluno"%>
+<HTML>
+ <HEAD>
+  <TITLE> Geração Dinâmica de Tabelas </TITLE>
+ </HEAD>
+ <BODY>
+<center>
+    <TABLE>
+
+        <%
+        Turma turma = new Turma();
+        Aluno[] alunos = turma.getAlunos();
+        for (int i = 0; i < alunos.length; i++) {
+        %>
+    <TR>
+        <TD><%=alunos[i].getNome()%></TD>
+        <TD><%=alunos[i].getEndereco()%></TD>
+    </TR>
+        <%
+        }
+        %>
+    </TABLE>
+ </BODY>
+</HTML>
+\end{verbatim}
+
+\item 5 - Copie tudo que estiver na pasta \emph{bin} do projeto criado no eclipse e
+ponha na pasta $C:\setminus Tomcat\setminus webapps\setminus
+JSPII\setminus WEB-INF\setminus classes$
+
+\item 6 - Reinicie o Tomcat ( $C:\setminus Tomcat\setminus bin\setminus classes\setminus tomcat5$);
+
+\item 7 - Chame a página inicial da seguinte forma:
+\textbf{http:$//$localhost:8085$/$JSPII$/$index.jsp}.
+
+
+
+\end{description}
+
+\end{document}

@@ -1,0 +1,98 @@
+\documentclass{article}
+
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{a4wide}
+\usepackage[latin1]{inputenc}
+%\usepackage[portuges]{babel}
+\usepackage[brazil]{babel}
+\usepackage{float}
+
+\title{ 
+  \begin{center}
+  \includegraphics[scale=0.20]{./imagens/ifal-logo.jpg}
+  \end{center}
+  \normalsize 
+  \textbf{Instituto Federal de Alagoas - IFAL \\ Campus Palmeira do Índios \\  Programação Web \\ Prof. Ivo Calado \\}  
+}
+
+\begin{document}
+
+\maketitle \scriptsize
+\begin{description}
+
+\item 1 - Crie uma página html, \emph{index.html}, conforme abaixo.
+Depois salve a página na pasta raiz da aplicação web PrimeiroServlet
+(\emph{Tomcat/webapps/PrimeiroServlet}). Por ultimo, solicite a
+seguinte url: \emph{http://localhost:8080/PrimeiroServlet/}
+
+\begin{lstlisting}
+<HTML>
+ <HEAD>
+  <TITLE> Primeiro Formulário </TITLE>
+ </HEAD>
+
+ <BODY>
+  <FORM METHOD=POST ACTION="./ObjetoRequest">
+    <TABLE align="center">
+    <TR>
+    <TD>Nome:</TD>
+        <TD><INPUT TYPE="text" NAME="nome"></TD>
+    </TR>
+    <TR>
+    <TD>Telefone:</TD>
+        <TD><INPUT TYPE="text" NAME="telefone"></TD>
+    </TR>
+    <TR>
+    <TD>Endereco:</TD>
+        <TD><INPUT TYPE="text" NAME="endereco"></TD>
+    </TR>
+    </TABLE>
+    <center>
+    <INPUT TYPE="submit" Name="Enviar Dados">
+  </FORM>
+ </BODY>
+</HTML>
+\end{lstlisting}
+
+\item 2 - Crie o Servlet abaixo na aplicação preexistente. Execute, verificando possíveis erros.
+
+\begin{lstlisting}
+package web;
+
+import java.io.IOException; import java.io.PrintWriter;
+
+import javax.servlet.ServletException; import
+javax.servlet.http.HttpServlet; import
+javax.servlet.http.HttpServletRequest; import
+javax.servlet.http.HttpServletResponse;
+
+public class ObjetoRequest extends HttpServlet {
+    public void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws IOException, ServletException {
+        response.setContentType("text/html");
+        PrintWriter printWriter = response.getWriter();
+        String nome = request.getParameter("nome");
+        String endereco = request.getParameter("endereco");
+        String telefone = request.getParameter("telefone");
+        printWriter.println("Nome: " + nome);
+        printWriter.println("Endereco: " + endereco);
+        printWriter.println("Telefone: " + telefone);
+    }
+
+    public void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws IOException, ServletException {
+        response.setContentType("text/html");
+        PrintWriter printWriter = response.getWriter();
+        printWriter.println("Você não digitou o formulário!");
+    }
+
+}
+\end{lstlisting}
+\item 3 - Redistribua a aplicação para que o novo Servlet possa ser
+enxergado a parir de dois caminhos distintos. Ou seja, atualize o arquivo \emph{web.xml}. Execute e tente acessar o servlet a partir das duas URLs.
+
+
+
+\end{description}
+\end{document}

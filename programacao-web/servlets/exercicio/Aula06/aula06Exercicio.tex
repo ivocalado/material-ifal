@@ -1,0 +1,71 @@
+\documentclass{article}
+
+\usepackage{epsfig}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{a4wide}
+\usepackage[latin1]{inputenc}
+%\usepackage[portuges]{babel}
+\usepackage[brazil]{babel}
+\usepackage{float}
+
+\title{Programação V \\ \small{\textbf{Prof. Alan}} \\ \scriptsize{\textbf{alanpedros@yahoo.com.br}}\\
+Exercício\\}
+
+\begin{document}
+
+\maketitle
+
+\scriptsize
+
+\begin{description}
+
+\item 1 - O que é uma \emph{aplicação web} no contexto do tomcat?
+Diga quais os procedimentos necessários para criação de uma
+aplicação?
+
+\item 2 - É possível desenvolver uma aplicação web somente através
+de Servlet's? Quais as implicações?
+
+\item 3 - Explique quais são os procedimentos necessários para desenvolver um
+Servlet?
+
+\item 4 - Explique em que momento é chamado o método \emph{doPost} e
+\emph{doGet} de um Servlet?
+
+\item 5 - Dado que um Servlet foi requisitado por um formulário de
+página html, como o tomcat envia os dados do formulário para o
+Servlet e como o Servlet pode pegar esses dados?
+
+\item 6 - Explique a diferença entre as duas abordagens abaixo de
+redirecionamento utilizado por um Servlet? Quais as diferenças entre
+elas?
+\begin{enumerate}
+
+\item $$response.sendRedirect(``logincorreto.html");$$
+
+\item $$RequestDispatcher dispatcher = request.getRequestDispatcher(``logincorreto.html");$$
+$$dispatcher.forward(request, response);$$
+
+\end{enumerate}
+
+\item 7 - O que significa uma Sessão no contexto de uma aplicação
+web?
+
+\item 8 - Quando uma requisição de um determinado cliente é feita
+para um determinado Servlet, o tomcat instância o Servlet e envia
+essa requisição para o método \emph{doPost} ou o método \emph{doGet}
+desse Servlet. A partir desse momento, essa mesma instância do
+Servlet atenderá a futuras requisições de outros clientes. Como é
+possível um Servlet individualizar uma resposta de uma requisição
+utilizando uma estratégia baseada em variáveis de sessão? Dê um
+exemplo utilizando trechos de código.
+
+
+
+$$$$
+
+
+\end{description}
+
+\end{document}
