@@ -1,0 +1,393 @@
+%\documentclass[t,handout]{beamer}
+\documentclass{beamer}
+
+
+\usepackage[latin1]{inputenc}
+
+\usepackage[portuguese]{babel}
+\usepackage[tight]{subfigure}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{url}
+
+%Pacote de listagem de cï¿½digo
+\usepackage{listings}
+%\lstset{numbers=left, stepnumber=1, firstnumber=1,
+%numberstyle=\tiny, extendedchars=true, breaklines=true, frame=tb,
+%basicstyle=\footnotesize, stringstyle=\ttfamily,
+%showstringspaces=false }
+
+\lstset{extendedchars=true, breaklines=true, frame=tb,
+basicstyle=\footnotesize, stringstyle=\ttfamily,
+showstringspaces=false,language=HTML }
+
+% \usecolortheme[RGB={130,35,150}]{structure}
+% \usecolortheme[RGB={33,33,94}]{structure}
+\usecolortheme[RGB={153,204,123}]{structure}
+\setbeamertemplate{footline}[frame number]
+\setbeamertemplate{navigation symbols}{}
+
+% \usetheme{Frankfurt} %LEGAL     !!!
+% \usetheme{Madrid}     %LEGAL/L%IMPO/COM CAIXA     (sem barra de desenvolvimento)
+
+% \usetheme{Antibes} %NAO
+% \usetheme{Berlin} %PODE SER...     (BARRA DE DESENVOLVIMANTO)
+% \usetheme{Berkeley}     %FEIO
+% \usetheme{Boadilla} %TUDO BRANCO...
+% \usetheme{Copenhagen}     %NAO
+% \usetheme{Darmstadt} %LEGAL!     !!!
+% \usetheme{Dresden}     %LEGAL/LIMPO/SEM CAIXA     (sem caixa fica ruim...)
+
+% \usetheme{Goettingen}     %FEIO DEMAIS!
+ \usetheme{Ilmenau} %LEGAL (forte candidato)
+% \usetheme{JuanLesPins} %BACANA
+% \usetheme{Luebeck}     %FEIO
+
+% \usetheme{Malmoe}     %FEIO
+% \usetheme{Warsaw} %NAO...
+% \usetheme{Seattle}
+% \usetheme{CambridgeUS}
+% \usetheme{Singapore}
+
+\author[Ivo]{Ivo Calado}
+\date{\today}
+\institute[IFAL]{Instituto Federal de Educação, Ciência e Tecnologia de Alagoas}
+\title{Administração de redes}
+\logo{\includegraphics[width=0.2\linewidth]{imagens/ifal-logo.jpg}}
+\subtitle{\textit{Samba\\}(Aula 3)}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+% \section{Roteiro}
+% \AtBeginSection[]
+{\frame{
+\frametitle{Roteiro}
+\tableofcontents[hidesubsections]
+}
+}
+
+
+\section{Introdução}
+\subsection{Cenário}
+\begin{frame}{Problemática}
+
+ Suponha que desejamos configurar uma rede com as seguintes características
+\begin{itemize}
+  \item Estações Linux
+  \item Estações Windows
+  \item Servidores de impressão
+  \item Servidores de autenticação
+  \item Compartilhamento de recursos
+  \end{itemize}
+Como deveríamos proceder?
+\pause
+
+\textbf{Por que o NFS e NIS juntos não atendem a \linebreak todos os requisitos?}
+
+\end{frame}
+
+\begin{frame}{Limitações da solução NIS+NFS}
+ \begin{itemize}
+  \item O NFS e NIS oferecem apenas uma solução limitada a ambiente Linux para compartilhamento de recursos e autenticação
+\pause
+  \item É necessário uma solução que integre terminais nos ambientes Windows e Linux
+\pause
+  \item O Samba é a solução ideal para os requisitos apresentados
+ \end{itemize}
+
+\end{frame}
+
+
+
+\subsection{O protocolo SAMBA}
+\begin{frame}{Definição}
+\begin{block}{O que é?}
+ É um servidor e um conjunto de ferramentas que possibilita que máquinas Linux e Windows se comuniquem entre si, compatilhando o acesso a recursos
+\end{block}
+
+\pause
+ \begin{itemize}
+  \item Recursos podem ser arquivos, diretórios ou até mesmo impressoras 
+  \item Diferentemente de soluções como o NIS/NFS, o SAMBA possibilita a interligação de redes heterogêneas
+  \item Muito mais...
+ \end{itemize}
+
+\end{frame}
+
+
+\begin{frame}{Por que seria preferível utilizar SAMBA no lugar do Windows Server?}
+\pause
+\begin{itemize}
+  \item Menores custos de manutenção (por ser executado em um ambiente mais estável =$>$ Linux)
+  \item Oferece melhor performance que o Windows Server (fator de 2 para 1 no WinServer 2K)
+  \item Sem custos de licença por ser um \textit{software} livre
+\end{itemize}
+  
+\end{frame}
+
+\subsection{Protocolos e padrões}
+\begin{frame}{Qual a relação entre NetBEUI e NetBIOS?}
+\begin{block}{NetBIOS -- \textit{Network Basic Input/Outuput Systems}}
+  Trata-se de uma abordagem para estruturação de comandos de entrada e saída para ambiente de rede
+\end{block}
+
+\pause
+ \begin{block}{NetBEUI -- \textit{NetBIOS Extended User Interface}}
+   É uma implementação do protocolo de comunicação desenvolvida pela Microsoft para tráfego de mensagens baseadas no padrão NetBIOS
+ \end{block}
+
+\end{frame}
+
+\begin{frame}{Qual a relação entre SMB e CIFS?}
+
+\begin{block}{SMB -- \textit{Server Message Block protocol}}
+  \begin{itemize}
+    \item Implementação em ambiente Unix do protocolo NetBEUI
+    \item Possui como sucessor o protocolo CIFS (\textit{Common Internet File System})
+  \end{itemize}
+
+\end{block}
+
+\begin{itemize}
+ \item Pode ser habilitado no Kernel do Linux em \textbf{File Systems -$>$ Network File Systems -$>$ CIFS suport (advanced network filesystems, SMBFS successor)}
+\end{itemize}
+ 
+\end{frame}
+
+\section{História}
+\subsection{Princípios}
+\begin{frame}{Como surgiu?}
+ \begin{itemize}
+  \item Foi desenvolvido 1991 por Andrew Tridgell pois precisava montar um volume Unix em sua máquina DOS
+  \item Inicialmente era baseado em NFS mas um dos seus aplicativos precisava de suporte ao padrão NetBIOS
+  \item Para descobrir como funcionava o protocolo NetBEUI escreveu um \textit{sniffer} de pacotes
+  \item Em meados de 1992 escreveu o primeiro código que fazia a máquina Unix aparecer como uma máquina Windows!
+ \end{itemize}
+
+\end{frame}
+
+\begin{frame}{Curiosidade I}
+\begin{block}{Qual a origem do nome SAMBA?}
+\pause
+ \begin{itemize}
+  \item Não foi possível utilizar o nome ``SMB Server'' (problema de patente)
+  \item O autor utilizou o comando ``\textbf{$grep -i 's.*m.*b' /usr/dict/words$}'' para exibir um conjunto de palavras do dicionário, obtendo entre elas a palavra \textbf{samba}
+ \end{itemize}
+
+
+\end{block}
+
+\end{frame}
+
+\begin{frame}{Curiosidade II}
+  Qual o objetivo de se utilizar um \textit{sniffer} de pacotes para analisar um protocolo?
+    \pause
+      \begin{itemize}
+	\item Mecanismo de engenharia reversa para determinar o funcionamento do pacotes	
+	\item Tem como foco inspecionar protocolos ``fechados''
+	\item Monitora a troca de pacotes na rede identificando a ordem e a sequência de bits de cada pacote transmitido
+	\item A ideia é identificar a sequencia de pacotes que serão transmitidos para cada comando e poder ``remontar'' o protocolo
+      \end{itemize}
+\end{frame}
+
+
+
+
+\section{Características}
+\subsection{Recursos}
+\begin{frame}[allowframebreaks]{Recursos}
+Uma das características fundamentais do SAMBA é sua grande flexibilidade, oferendo inúmeras opções de configuração como:
+ \begin{itemize}
+  \item Compartilhamento de arquivos entre máquinas Win e Linux ou de máquinas Linux (sendo o servidor Samba) com outro SO que tenha um cliente NetBEUI
+  \item Montar um servidor de compatilhamento de impressão Linux
+  \item Controle de acesso aos recursos compatilhados no servidor através de diversos métodos
+  \item Controle de acesso leitura/gravação por compartilhamento 
+  \item Controle de acesso leitura/gravação por usuário compartilhado
+  \item Possibilidade de definir contas \textit{guest}
+  \item Possibilidade do uso de diferentes base de dados de autenticação como: ``/etc/passwd'', arquivo de dados criptografado, LDAP, PAM etc
+  \item Controle de cache e opções \textit{tunnig} por compartilhamento 
+  \item Permite ocutar o conteúdo de determinados diretórios que não devem ser visualizados de maneira direta pelos usuários
+  \item Suporte a configuração de codificação de caracteres entre máquinas servidores e clientes
+  \item Suporte completo ao WINS
+  \item Permite montar unidades mapeadas de sistemas Windows ou outros servidores Linux como um diretório Linux
+  \item Permite a criação de ambientes de auditoria de modo a monitorar a utilização de recursos, inclusive em tempo real
+ \end{itemize}
+
+\end{frame}
+
+\section{Instalação}
+\subsection{}
+\begin{frame}{Pacotes necessários}
+Para configuração do servidor e cliente SAMBA, os seguintes pacotes são necessários:
+
+\begin{itemize}
+  \item \textbf{samba}: servidor samba
+  \item \textbf{smbclient}: cliente samba
+  \item \textbf{smbfs}: utilitários do sistema de arquivos smbfs
+\end{itemize}
+Se for necessário apenas o mapeamento de compartilhamentos deve-se instalar apenas os dois últimos pacotes
+
+\begin{block}{Instalação}
+ \textit{apt-get install samba smbclient smbfs}
+\end{block}
+\end{frame}
+
+\begin{frame}{Inicialização do \textit{daemon}}
+  \begin{block}{Como inicializar o serviço samba?}
+   A inicialização do serviço samba, no Ubuntu, é realizada a partir do comando \textbf{service}, indicando o serviço \textbf{smbd}:
+  \begin{itemize}
+    \item service smbd \textbf{start}
+    \item service smbd \textbf{stop}
+    \item service smbd \textbf{restart}
+  \end{itemize}
+
+  \end{block}
+Dependendo da distribuição a forma de inicialização pode variar (Ex.: /etc/init.d/samba *, no \textbf{Gentoo})
+\end{frame}
+
+\section{Configuração}
+\subsection{smb.conf}
+\begin{frame}
+  \begin{itemize}
+    \item Configuração baseada no arquivo smb.conf (normalmente armazenado em \textbf{/etc/samba/smb.conf})
+    \item Armazena toda a configuração relacionada a nomes, grupos de trabalho, tipo de servidor, log, compartilhamentos de arquivos e impressão
+  \end{itemize}
+\pause
+\begin{block}{Como é estruturado o arquivo smb.conf}
+ O arquivo smb.conf é estruturado em \textit{seções} e \textit{parâmetros}, onde cada seção especifica uma configuração específica. As seções são definidas entre colchetes (``[]'') e os parâmetros por conjunto de chaves-valor
+\end{block}
+\pause
+\begin{itemize}
+ \item Os valores podem ser \textbf{0} ou \textbf{1}, \textbf{yes} ou \textbf{no}, \linebreak \textbf{true} ou \textbf{false}
+\end{itemize}
+
+
+\end{frame}
+
+\begin{frame}{Seções especiais do arquivo smb.conf}
+
+Algumas seções do arquivo smb.conf já são predefinidas. São elas:
+\pause
+  \begin{itemize}
+  \item \textbf{$[$global$]$}: Define configurações que afetam o servidor samba como um todo, fazendo efeito em todos os compartilhamento. Podem ser sobrescritas por outro compartilhamento
+
+  \item \textbf{$[$homes$]$}: Especifica opções padrões para compartilhamento de diretório de usuário
+  \item \textbf{$[$printers$]$}: Define configurações gerais para controle de impressoras
+  \item \textbf{$[$profile$]$}: Define um perfil quando o servidor é usado como PDC
+  \end{itemize}
+\end{frame}
+
+\subsection{Seções do smb.conf}
+\begin{frame}{Seção [global]}
+ \begin{itemize}
+  \item Ações configuradas nesse servidor tem efeito em todo o servidor
+  \item Se o parâmetro especificado for novamente definido em um compartilhamento, vale o valor do compartilhamento
+ \end{itemize}
+\begin{example}
+ Se a opção \textit{guest user = nobody} for definido na seção \textit{[global]} e após isso, essa mesma opção for utilizada no compartilhamento \textbf{foo} com outro valor, então o usuário utilizado para acesso público será o \textbf{nobody} exceto para o compartilhamento \textbf{foo}
+\end{example}
+
+
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Opções de configuração}
+Diversas opções estão disponíveis para configuração do servidor samba na seção [global], tais como:
+
+\begin{itemize}
+ \item \textbf{netbios name} -- Nome primário do servidor samba
+  \item \textbf{workgroup} -- Nome do grupo de trabalho
+  \item \textbf{server string} -- Identificador enviado pelo servidores
+  \item \textbf{name resolve order} -- Define a ordem de resolução de nomes. Tem impacto na quantidade de tráfego na rede
+  \item \textbf{guest account} -- Conta local de acesso sem senha
+  \item \textbf{invalid users} -- Usuários sem acesso. Por segurança o acesso pelo usuário \textbf{root} deve ser banido
+  \item \textbf{valid users} -- Especifica quais usuários tem acesso
+  \item \textbf{announce as} -- Define como o servidor Samba irá aparecer para as demais máquinas da rede (valores: \textbf{NT Server, NT Workstation ou Win95})
+\end{itemize}
+
+ 
+\end{frame}
+
+\begin{frame}{Seção [homes]}
+  \begin{itemize}
+    \item Compartilhamento especial para o diretório home do usuário
+    \item Usa como diretório de compartilhamento o definido em /etc/passwd, se não for definido nada em contrário
+  \end{itemize}
+
+ 
+\end{frame}
+
+\begin{frame}{Exemplo de configuração do diretório home}
+ \begin{example}{}
+  [homes]\\
+  comment = Diretório home de usuários\\
+  writable = yes\\
+  public = no\\
+  invalid users = root nobody @adm\\
+  follow symlinks = no\\
+  create mode = 0640\\
+  directory mode = 0750
+ \end{example}
+
+\begin{block}{}
+ Adicionar o usuário a base de informações através do comando \textbf{smbpasswd -a <usuário>}
+\end{block}
+
+\end{frame}
+
+\begin{frame}{Seção [printers]}
+ \begin{itemize}
+  \item Tem por objetivo disponibilizar as impressoras existentes no sistema, definidas em /etc/printcap
+  \item Configuração é identica ao de um compartilhamento de pasta, mas a opção \textbf{printable = yes} DEVE estar definida
+ \end{itemize}
+
+\end{frame}
+
+\begin{frame}{Exemplo de compartilhamento de impressoras}
+ \begin{example}{}
+   [printers]\\
+   comment = All Printers\\
+   browseable = no\\
+   path = /var/spool/samba\\
+   printable = yes\\
+   guest ok = no\\
+   read only = yes\\
+   create mask = 0700\\
+ \end{example}
+
+\end{frame}
+
+\subsection{Personalizando compartilhamentos}
+
+\begin{frame}{Criando novos compartilhamentos}
+\begin{itemize}
+ \item Além das seções preexistentes, é possível configurar novos compartilhamentos
+
+\item As mesmas opções dos compartilhamentos padrões podem ser utilizados para novos compartilhamentos
+ 
+\end{itemize}
+
+ 
+\end{frame}
+
+
+
+\section{Atividade}
+\subsection{}
+% 
+% \section{Atividade}
+\begin{frame}{Atividade}
+\begin{itemize}
+ \item Configurar o servidor Samba de modo a disponibilizar os diretórios de usuários via rede
+ \item Fazer uso de máquinas virtuais (1 cliente e 1 servidor)
+\end{itemize}
+
+
+\end{frame}
+ 
+
+
+\end{document}

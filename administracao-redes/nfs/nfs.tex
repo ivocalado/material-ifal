@@ -1,0 +1,408 @@
+\documentclass{beamer}
+\usetheme{Warsaw}
+% \setsetcolortheme{red}
+\usepackage[portuguese]{babel} %english
+\usepackage[latin1]{inputenc}
+\usepackage{times}
+\usepackage{multimedia}
+
+\title{\textit{Network File System -- NFS}}
+\author{Ivo Augusto Andrade Rocha Calado}
+\institute {Instituto Federal de Educação, Ciência e Tecnologia de Alagoas}
+\begin{document}
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+\frametitle{Roteiro}
+  \tableofcontents[hidesubsections]
+\end{frame}
+
+\section{Introdução}
+\subsection{Cenário}
+\frame{\frametitle{Cenário}
+
+Considere o seguinte cenário:
+
+\begin{itemize}
+  \item Compartilhar um conjunto de arquivos remotamente
+  \item Montar diretórios de usuários
+  \item Criar uma estrutura de clientes leves
+\end{itemize}
+
+
+}
+\subsection{Compartilhamento remoto de arquivos}
+\frame{\frametitle{Questões envolvidas}
+    Quais as questões envolvidas em um acesso remoto?
+    \pause
+    \begin{itemize}
+      \item Estado do arquivo 
+	\begin{itemize}
+	  \item Como tratar um \textit{crash} em um cliente? 
+	\end{itemize}
+\pause
+      \item Concorrência	
+	\begin{itemize}
+	  \item O que fazer quando dois clientes desejam acessar o mesmo arquivo remoto?
+	\end{itemize}
+\pause
+      \item Performance
+	\begin{itemize}
+	  \item Que abordagens devem ser consideradas para minimizar o \textit{overhead} na rede? (atualizar a cada requisição? por blocos? etc.)
+	\end{itemize}
+
+\pause
+      \item Segurança
+	\begin{itemize}
+	  \item Como fazer com que as regras de controle de acesso sejam corretamente adotadas?
+	\end{itemize}
+
+%       
+    \end{itemize}
+}
+\subsection{Definição}
+\frame{\frametitle{Definição do NFS}
+\begin{block}{O que é o NFS?}
+  Acrônimo de \textit{Network file systems, trata-se de um sistema de arquivos voltado para tornar o acesso remoto de arquivos transparente ao usuário.}
+\end{block}
+
+\pause
+\begin{itemize}
+  \item Protocolo independente de plataforma voltado principalmente para inteligação de computadores em redes Linux x Linux
+\end{itemize}
+
+
+}
+\subsection{História e versão do protocolo}
+\frame{\frametitle{Um pouco de história...}
+\begin{itemize}
+ \item Lançado inicialmente em 1984, pela Sun Microsystems
+ \item Idealizado como uma solução para armazenamento remoto para clientes leves (\textit{thin / diskless clients}) 
+ \item Definido em diversas RFCs (1094, 1813 e 3530)
+\end{itemize}
+}
+
+\begin{frame}[allowframebreaks]
+\frametitle{Versionamento}
+\begin{itemize}
+  \item Versão 2
+  \begin{itemize}
+    \item Disponibilizada em 1989 
+    \item Todo bloco modificado era \textit{commitado} =$>$ Problemas de performance
+  \end{itemize}
+% \pause
+  \item Versão 3
+    \begin{itemize}
+      \item Lançado em 1995
+      \item Suporta escrita assíncrona para aumento de performance
+    \end{itemize}
+% \pause
+  \item Versão 4
+    \begin{itemize}
+      \item Lançado em 2000
+      \item Desenvolvida pela IETF
+      \item Ainda experimental no kernel do Linux
+      \item \textit{Stateful}
+      \item Suporte a replicação e migração
+      \item Suporte a ACL (\textit{Access Control Lists})
+      \item Suporte a clientes Linux e Windows
+    \end{itemize}
+
+\end{itemize}
+  
+\end{frame}
+
+
+\subsection{Benefícios}
+
+\frame{\frametitle{Benefícios do NFS}
+\begin{itemize}
+ \item Arquivos centralizados
+ \begin{itemize}
+  \item Os arquivos estão localizados no servidor
+  \item Uma cópia do arquivo está disponível a vários usuário simultaneamente
+  \end{itemize}
+
+ \item Softwares comuns
+  \begin{itemize}
+   \item Softwares podem ser compartilhados
+   \item Diminui espaço gastos em discos e facilita a gerência
+  \end{itemize}
+
+ \item Transparência
+  \begin{itemize}
+   \item Localização dos arquivos é transparente para os usuários e aplicações
+  \end{itemize}
+
+\end{itemize}
+
+}
+
+\section{Características}
+\subsection{Arquitetura}
+\frame{\frametitle{Arquitetura}
+\begin{itemize}
+ \item Arquitetura cliente-servidor
+ \item \textbf{Servidor:} responsável por exportar um conjunto de diretórios pela rede
+  \item \textbf{Cliente:} monta os diretórios remotos, tornando transparente às aplicações tal mecanismo
+\end{itemize}
+
+}
+\subsection{Protocolo de transporte}
+\frame{\frametitle{Protocolo de transporte}
+\begin{itemize}
+  \item NFSv2 usava originalmente o UDP
+  \begin{itemize}
+    \item NFS usa seus próprios mecanismos de sequenciamento de pacotes e checagem de erros
+    \item Nos primórdios UDP apresentava boa performance para LANs
+    \item Com a utilização em redes maiores, controle de congestionamento fez-se necessário
+  \end{itemize}
+  \item NFSv3 passou a oferecer a escolha de qual protocolo utilizar (TCP ou UDP)
+    \begin{itemize}
+      \item TCP oferecia facilidades para atravessar NAT e Firewall \pause
+      \item Controle de congestionamento!
+    \end{itemize}
+
+
+\end{itemize}
+}
+
+\frame{\frametitle{Estado da conexão}
+\begin{itemize}
+  \item Cliente explicitamente monta o sistema de arquivo remoto
+    \item NFSv2 e NFSv3 mantém ``cookies'' recebidos durante o estabelecimento da conexão
+\pause
+  \begin{itemize}
+   \item Mas o que seriam \textit{Cookies?}
+  \end{itemize}
+
+\end{itemize}
+\pause
+    \begin{block}{Definição de cookies}
+De maneira análoga aos cookies do HTTP, trata-se de um mecanismo que mantém ``estado'' apenas no lado cliente da conexão. Especificamente, armazena as informações de acesso ao diretório remoto 
+    \end{block}
+
+
+}
+\frame{\frametitle{Estado da conexão}
+\begin{itemize}
+  \item Na abordagem anterior, se o servidor cair o cliente pode usar o cookie novamente \pause
+  \item Com o NFSv4, ambos os lados estão cientes da conexão
+  \begin{itemize}
+    \item Melhor tratamento de sincronias e concorrência
+    \item Quando o servidor torna a ficar disponível, clientes e servidores negociam estado antes que novas operações sejam aceitas
+    \item \textit{O servidor irá a sincronização por um período limitado, porque?} \pause
+    \begin{itemize}
+      \item Garantir que se um cliente cair o servidor não fique travado
+    \end{itemize}
+
+  \end{itemize}
+
+
+\end{itemize}
+
+}
+\subsection{Qual a diferença em relação ao Samba}
+
+\frame{
+\frametitle{Qual a diferença entre NFS e Samba?}
+\pause
+\begin{itemize}
+  \item Samba voltado para Win x Linux e NFS para Linux x Linux (embora haja exceções)
+  \item NFS mais fácil de configurar e torna o processo mais transparente para as aplicações
+  \item Samba mais complexo mas apresenta segurança mais granular (domínios, grupos de trabalho etc)
+  \item Performance do NFS melhor
+  \item etc
+\end{itemize}
+}
+
+
+% \section{Introdução}
+\section{Configuração}
+\subsection{Servidor}
+\frame{\frametitle{Estrutura da implementação do NFS}
+  \begin{itemize}
+    \item Parte da implementação reside no kernel e parte como ferramenta de \textit{user-space}
+    \item Alguns \textit{kernels} já apresentam o nfs habilitado
+    \begin{itemize}
+      \item Execute ``cat /proc/filesystem'' para verificar se o NFS está disponível como \textit{builtin}
+      \item Tente montar o módulo nfsd
+    \end{itemize}
+
+  \end{itemize}
+
+}
+\frame{\frametitle{Habilitando o NFS no kernel}
+\begin{itemize}
+  \item Implementação do NFS deve ser habilitado no kernel
+  \item \textit{File systems =$>$ Network File systems}
+\end{itemize}
+
+\begin{figure}[htp!]
+ \centering
+ \includegraphics[scale=0.5]{./imagens/kernelconfiguration.png}
+ % kernelconfiguration.png: 665x250 pixel, 121dpi, 13.96x5.25 cm, bb=0 0 396 149
+\end{figure}
+
+
+}
+
+\frame{\frametitle{Instalando ferramentas de user-space}
+\begin{itemize}
+  \item Instalar pacote nfs-kernel-server e suas dependências (Ubuntu)
+\end{itemize}
+  \begin{block}{Instalando o nfs-kernel-server}
+    apt-get install nfs-kernel-server nfs-common portmap
+  \end{block}
+}
+
+\frame{\frametitle{Estrutura do pacote}
+  \begin{itemize}
+    \item \textbf{exportfs}: atualiza a lista de dir compatilhados
+    \item \textbf{/etc/init.d/nfs*}: inicializa o servidor NFS
+    \item \textbf{mount.nfs} e \textbf{umount.nfs}: monta e desmonta diretórios
+    \item \textbf{nfsstat}: mostra estatísticas de compartilhamento (ajuda a identificar gargalos) \pause
+    \item \textbf{/etc/exports}
+  \end{itemize}
+
+}
+
+\begin{frame}[allowframebreaks]
+\frametitle{\textit{/etc/exports}}
+  
+\begin{itemize}
+ \item Usado para definir quais diretórios serão disponibilizados
+ \item Lido pelo servidor NFS na inicialização do servidor
+ \end{itemize}
+% \pause
+    \begin{block}{Qual o formato do arquivo?}
+nome\_do\_compartilhamento destinos(opções)
+    \end{block}
+
+
+\begin{itemize}
+ \item /home/nfs/ 10.1.1.100(rw,sync)
+ \begin{itemize}
+  \item Permissão de leitura e escrita para o \textit{host} 10.1.1.100
+ \end{itemize}
+
+ \item /home/nfs/ 10.1.1.0/24(ro,sync)
+\begin{itemize}
+  \item Permissão de leitura para a rede 10.0.0.0/24
+ \end{itemize}
+
+ \item home/nfs/ 10.1.1.100(rw,sync) 10.1.1.10(ro,sync)
+\begin{itemize}
+  \item Permissão de leitura e escrita para o \textit{host} 10.1.1.100 e leitura para 10.0.0.10
+ \end{itemize}
+
+ \item /home/nfs/ *(ro,sync)
+\begin{itemize}
+  \item Permissão de leitura para todos os \textit{hosts}
+ \end{itemize}
+
+ \item /home/nfs/ *.linuxconfig.org(ro,sync)
+\begin{itemize}
+  \item Permissão de leitura para todos os \textit{hosts} dentro do domínio linuxconfig.org
+ \end{itemize}
+
+ \item /home/nfs/ foobar(rw,sync)
+\begin{itemize}
+  \item Permissão de leitura para a máquina foobar
+ \end{itemize}
+
+\end{itemize}
+
+\end{frame}
+
+\frame{\frametitle{Principais opções de compartilhamento}
+\begin{itemize}
+  \item \textbf{rw}: Leitura e escrita
+  \item \textbf{sync} e \textbf{async}: Define se as requisições de salvamento serão síncronas ou assíncronas
+  \begin{itemize}
+    \item sync mais seguro porém mais lento
+    \item async mais rápido mas menos seguro
+  \end{itemize}
+  \item \textbf{root\_squash} e \textbf{no\_root\_squash}: define se o usuário root (UID 0) terá acesso de escrita (questão de segurança)
+  \item Abordagem padrão de autenticação baseada no UID do usuário (AUTH\_SYS)
+  \begin{itemize}
+    \item mapeamento é feito com base em UID do usuário
+    \item usuários diferentes em diferentes máquinas terão mesmos privilégios se seus UID forem os mesmos
+  \end{itemize}
+
+
+\end{itemize}
+}
+
+\frame{\frametitle{Exportando diretórios}
+\begin{itemize}
+ \item Existem duas formas de exportar um novo diretório:
+ \begin{enumerate}
+  \item Reiniciar o servidor NFS
+  \begin{itemize}
+   \item /etc/init.d/nfs-kernel-server restart (Debian-like)
+   \item /etc/init.d/nfs restart (Red hat, Gentoo etc)
+  \end{itemize}
+  \item Utilizar o comando \textbf{exportfs -ra}
+ \end{enumerate}
+
+
+\end{itemize}
+
+
+}
+
+\subsection{Cliente}
+
+\frame{\frametitle{Habilitando o kernel e instalando ferramentas de user-space}
+\begin{itemize}
+  \item Habilitar no kernel o NFS assim como feito no servidore
+  \item Instalar pacote nfs-commom e suas dependências (Ubuntu)
+\end{itemize}
+  \begin{block}{Instalando o nfs-kernel-server}
+    apt-get install nfs-kernel-server nfs-common portmap
+  \end{block}
+}
+
+\frame{\frametitle{Montando sistema de arquivo remoto}
+\begin{enumerate}
+ \item mount 10.1.1.200:/home/nfs /home/nfs\_local 
+ \item mount -t nfs 10.1.1.200:/home/nfs /home/nfs\_local 
+\end{enumerate}
+
+}
+
+\frame{\frametitle{Configurando automontagem}
+
+\begin{itemize}
+ \item A configuração de um ponto de montagem pode ser a mesma de um diretório comum
+ \pause
+ \item Adição de uma entrada em /etc/fstab
+ \pause
+ \begin{itemize}
+  \item 10.1.1.200:/home/nfs /home/nfs\_local/ nfs defaults 0 0 
+ \end{itemize}
+
+\end{itemize}
+
+}
+
+\section{Atividade}
+\frame{\frametitle{Atividade}
+\begin{itemize}
+ \item Instalar e configurar o NFS
+ \item Exportar um diretório para apenas algumas máquinas do laboratório
+\end{itemize}
+
+}
+
+
+\subsection{Referências}
+\begin{frame}[allowframebreaks]
+\frametitle{Referências}
+\nocite{*}
+\bibliography{ref} 
+\end{frame}
+\end{document}
