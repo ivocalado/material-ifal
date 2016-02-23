@@ -1,0 +1,383 @@
+%\documentclass[t,handout]{beamer}
+
+% \documentclass{beamer}
+% 
+% \usepackage{beamerthemeshadow}
+% \usepackage{amsfonts}
+% \usepackage{amssymb}
+% \usepackage{amsmath}
+% \usepackage{amsthm}
+% \usepackage[portuguese]{babel}
+% \usepackage[latin1]{inputenc}
+% \usepackage{graphicx}
+% \usepackage{latexsym}
+% \usepackage{geometry}
+% \usepackage{rotating}
+% \usepackage{color}
+% \usepackage{pgf}
+% \usepackage{xcolor}
+% \usepackage{textcomp}
+
+
+\documentclass{beamer}
+
+
+\usepackage[latin1]{inputenc}
+
+\usepackage[portuguese]{babel}
+\usepackage[tight]{subfigure}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{url}
+% \usepackage{inconsolata}
+\newcommand{\setcolor}[2]{\color{#1}{#2}\color{black}}
+\usepackage{mathtools}
+%Pacote de listagem de cï¿½digo
+\usepackage{listings}
+
+\usepackage{mathtools}
+
+\newcommand{\quadd}{\quad \quad}
+\newcommand{\quaddd}{\quad \quad \quad}
+
+\lstset{extendedchars=true, breaklines=true, frame=tb,
+basicstyle=\footnotesize, stringstyle=\ttfamily,
+showstringspaces=false,language=HTML }
+
+\usecolortheme[RGB={153,204,123}]{structure}
+\setbeamertemplate{footline}[frame number]
+\setbeamertemplate{navigation symbols}{}
+
+ \usetheme{Ilmenau} %LEGAL (forte candidato)
+\newcommand*\oldmacro{}
+\let\oldmacro\insertshortauthor% save previous definition
+\renewcommand*\insertshortauthor{%
+  \leftskip=.3cm% before the author could be a plus1fill ...
+  \insertframenumber\,/\,\inserttotalframenumber\hfill\oldmacro}
+
+
+\author[Ivo Calado]{Ivo Calado}
+\date{\today}
+\institute[IFAL]{Instituto Federal de Educação, Ciência e Tecnologia de Alagoas}
+\title[Cálculo Numérico]{Interpolação}
+\logo{\includegraphics[width=0.2\linewidth]{imagens/ifal-logo.jpg}}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+% \section{Roteiro}
+% \AtBeginSection[]
+{\frame{
+\frametitle{Roteiro}
+\tableofcontents[hidesubsections]
+}
+}
+
+\begin{frame}{Observação}
+ Este material é baseado no material produzido pelo professor \textbf{Jonas Joacir Radtke} da \textbf{UTFPR}
+\end{frame}
+\section{Introdução}
+\begin{frame}
+A seguinte tabela relaciona o calor específico da água e a respectiva temperatura: 
+       \begin{center}
+         \begin{tabular}{|c|c|c|c|c|}
+         \hline
+	 Temperatura (ºC) & 20,0 & 25,0 & 30,0 & 35,0\\ \hline
+	 Calor específico & 0,99907 & 0,99852 & 0,99826 & 0,99818\\ \hline	 
+         \end{tabular}
+      \end{center}
+      
+      \begin{center}
+         \begin{tabular}{|c|c|c|c|}
+         \hline
+	 Temperatura (ºC) & 40,0 & 45,0 & 40,0 \\ \hline
+	 Calor específico & 0,99828 & 0,99849 & 0,99878 \\ \hline	 
+         \end{tabular}
+      \end{center}
+      
+      Suponhamos que se queira calcular: 
+      \begin{itemize}
+       \item [i)] o calor específico da água a 32,5ºC
+       \item [ii)] a temperatura para a qual o calor específico é 0,99837
+      \end{itemize}
+
+\end{frame}
+
+\begin{frame}
+ Interpolar uma função $f(x)$ consiste em aproximar essa função por uma outra função $g(x)$, escolhida entre uma classe de funções definida \textit{a priori} e que satisfaça algumas propriedades. A função $g(x)$ é então usada em substituição à função $f(x)$
+ 
+ A necessidade de realizar o procedimento de interpolação surge em situações como: 
+ 
+ \begin{itemize}
+  \item [i)] quando são conhecidos somentos os valores numéricos da função para um conjunto de pontos e é necessário calcular o valor da função em um ponto não tabelado
+  
+  \item [ii)] quando a função em estudo tem uma expressão tal que operações como a diferenciação e a integração são difíceis (ou mesmo impossíveis) de serem realizadas
+ \end{itemize}
+
+\end{frame}
+
+\frame{
+   Interpolar esta função $f(x)$ definida em $x_0$, $x_1$, $...$, $x_n$, $(n+1)$ pontos distintos de um intervalo $[a,b]$ consiste em aproximar esta função por um polinômio $P(x)$ de grau menor ou igual a $n$, tal que este coincida com a função nestes pontos, isto é,
+   $$P(x_i) = f(x_i) = y_i,\quaddd i = 0,\,1,\,...,\,n$$
+
+   \begin{block}{Teorema: Existência e Unicidade}
+      Seja $f(x)$ definida em $x_0$, $x_1$, $...$, $x_n$, $(n+1)$ pontos distintos de um intervalo $[a,b]$, então existe um único polinômio $P(x)$ de grau menor ou igual a $n$ tal que
+      $$P(x_i) = f(x_i) = y_i,\quaddd i = 0,\,1,\,...,\,n$$
+   \end{block}
+
+   \textbf{Prova:} Considere o polinômio de grau $n$, $P(x) = a_0x^0 + a_1x^1 + \ldots + a_{n-1}x^{n-1} + a_nx^n$ tal que
+   $$P(x_i) = f(x_i) = y_i,\quaddd i = 0,\,1,\,...,\,n$$
+}
+%===============================================================================
+\frame{
+   Desta forma temos:
+   $$\left\{ \begin{array}{ccccccccccc}
+   a_0x_0^0 &+& a_1x_0 &+&\ldots&+& a_{n-1}x_0^{n-1} &+& a_nx_0^n=& y_0\\
+   a_0x_1^0 &+& a_1x_1 &+&\ldots&+& a_{n-1}x_1^{n-1} &+& a_nx_1^n=& y_1\\
+   a_0x_2^0 &+& a_1x_2 &+&\ldots&+& a_{n-1}x_2^{n-1} &+& a_nx_2^n=& y_2\\
+   \vdots & & \vdots & & & & \vdots & & \vdots \\
+   a_0x_n^0 &+& a_1x_n &+&\ldots&+& a_{n-1}x_n^{n-1} &+& a_nx_n^n=& y_n\\
+   \end{array} \right.$$
+
+   Podemos observar que temos um sistema de equações lineares $A\,\vec{x} = \vec{b}$, onde
+   $$A = \left[ \begin{array}{ccccc}
+   x_0^0 & x_0^1 & \ldots & x_0^{n-1} & x_0^n\\
+   x_1^0 & x_1^1 & \ldots & x_1^{n-1} & x_1^n\\
+   \vdots & \vdots & \ddots & \vdots & \vdots\\
+   x_n^0 & x_n^1 & \ldots & x_n^{n-1} & x_n^n\\
+   \end{array} \right] \quad
+   \vec{x} = \left[ \begin{array}{c}
+   a_0 \\
+   a_1 \\
+   \vdots \\
+   a_{n-1} \\
+   a_n \\
+   \end{array} \right] \quad
+   \vec{b} = \left[ \begin{array}{c}
+   y_0 \\
+   y_1 \\
+   \vdots \\
+   y_{n-1} \\
+   y_n
+   \end{array} \right]
+   $$
+
+   O $\det{A}$, chamado de \textbf{determinante de Vandermonde}, é dado por $\det{A} = \prod_{i < j} (x_i - x_j)$
+}
+%===============================================================================
+\frame{
+   Como os pontos $x_i$, $i = 0,\, 1,\, ...,\, n$, são distintos, segue que $\det(A) \neq 0$, o que significa que o sistema linear possui uma única solução e, portanto, os coeficientes $a_0$, $a_1$, ..., $a_n$ do polinômio são únicos calculados pela resolução deste sistema. Em resumo, o polinômio $P(x)$ existe e é único.
+
+   \begin{block}{Definição}
+      Denominamos \textbf{polinômio interpolador} de uma função $f(x)$ definida em $x_0$, $x_1$, ..., $x_n$ $(n+1)$ pontos distintos de um intervalo $[a,b]$, ao polinômio $P(x)$ de grau menor ou igual a $n$, que coincide com a função nos pontos $x_i$, $i = 0,\,1,\,...,\,n$, isto é,
+      $$P(x_i) = f(x_i) = y_i,\quaddd i = 0,\,1,\,...,\,n$$
+   \end{block}
+
+   Embora o polinômio interpolador $P(x)$ coincida com a função nos pontos de interpolação $x_0$, $x_1$, ..., $x_n$, espera-se que $P(\overline{x}) \approx f(\overline{x})$ para $\overline{x} \neq x_i$, $i = 0,\,1,\,...,\,n$, ou seja, estimamos $f(x)$ pelo polinômio interpolador e cometemos um erro $E(\overline{x})$ nesta aproximação.
+}
+
+\frame{
+   \begin{block}{Exemplo}
+      Considere a função $f(x)$ definida nos pontos, conforme tabela abaixo. Determine o polinômio interpolador e estime $f(0,8)$.
+      \begin{center}
+         \begin{tabular}{|ccc|ccc|ccc|ccc|}
+         \hline
+         & $x_i$ & & & $-1$ & & & $0$ & & & $2$ & \\
+         \hline
+         & $f(x_i)$ & & & $4$ & & & $1$ & & & $-1$ & \\
+         \hline
+         \end{tabular}
+      \end{center}
+   \end{block}
+
+   \textbf{Solução:} Com $3$ pontos distintos temos um polinômio interpolador de ordem $2$, ou seja,
+   $$P(x) = a_0 + a_1x + a_2x^2$$
+
+   Logo:
+   $$\left\{ \begin{array}{ccccccccccc}
+   a_0 + a_1\cdot(-1)^1 + a_2\cdot(-1)^2 = 4\\
+   a_0 + a_1\cdot(0)^1 + a_2\cdot(0)^2 = 1\\
+   a_0 + a_1\cdot(2)^1 + a_2\cdot(2)^2 = -1\\
+   \end{array} \right.$$
+}
+%===============================================================================
+\frame{
+   Na forma matricial:
+   $$A = \left[ \begin{array}{ccc}
+   1 & -1 & 1\\
+   1 & 0 & 0\\
+   1 & 2 & 4
+   \end{array} \right] \quad
+   \vec{x} = \left[ \begin{array}{c}
+   a_0 \\
+   a_1 \\
+   a_2 \\
+   \end{array} \right] \quad
+   \vec{b} = \left[ \begin{array}{c}
+   4 \\
+   1 \\
+   -1 \\
+   \end{array} \right]
+   $$
+
+   Resolvendo este sistema obtemos:
+   $$\vec{x} = \left[ \begin{array}{c}
+   1 \\
+   \frac{-7}{3} \\
+   \frac{2}{3} \\
+   \end{array} \right]$$
+
+   Substituindo no polinômio interpolador temos:
+   $$P(x) = 1 - \dfrac{7}{3}x + \dfrac{2}{3}x^2$$
+
+   Para estimar $f(0,8)$ substituimos $x=0,8$ em $P(x)$, logo,
+   $$f(0,8) \approx P(0,8) = 1 - \dfrac{7}{3}\cdot(0,8) + \dfrac{2}{3}\cdot(0,8)^2 = -0,44$$
+}
+%===============================================================================
+\frame{
+   \begin{block}{Exercício 01}
+      Seja $f(x) = 2\,e^x + 3$ definida no intervalo $[0,1]$.
+      \begin{itemize}
+         \item[(a)] Aproxime $f(0,35)$ utilizando interpolação linear com $x_0 = 0$ e $x_1 = 0,5$.
+         \item[(b)] Aproxime $f(0,85)$ utilizando interpolação linear com $x_0 = 0,5$ e $x_1 = 1$.
+         \item[(c)] Aproxime $f(0,35)$ e $f(0,85)$ utilizando um polinômio de grau $2$, com os pontos $x_0 = 0$, $x_1 = 0,5$ e $x_2 = 1$.
+         \item[(d)] Em qual dos casos obtemos melhor aproximação no ponto desejado? Justifique suas afirmações.
+      \end{itemize}
+   \end{block}
+
+   \begin{block}{Exercício 02}
+      Mostre que existe um único polinômio de grau $\leq 2$ tal que $P(1) = 3$, $P(2) = 5$ e $P(3) = 12$.
+
+      Usando o polinômio interpolador avalie $P(1,5)$.
+   \end{block}
+}
+%===============================================================================
+\frame{
+   \begin{block}{Exercício 03}
+      Considere a função $f(x) = \frac{1}{(x + 1)}$ tabelada nos pontos conforme tabela abaixo. Determine o polinômio interpolador e estime $f(1,3)$.
+      \begin{center}
+         \begin{tabular}{|ccc|ccc|ccc|ccc|}
+         \hline
+         & $x_i$ & & & $0$ & & & $1$ & & & $2$ & \\
+         \hline
+         & $f(x_i)$ & & & $1$ & & & $1/2$ & & & $1/3$ & \\
+         \hline
+         \end{tabular}
+      \end{center}
+   \end{block}
+
+   \begin{block}{Exercício 04}
+      Considere uma função $f(x)$ tabelada nos pontos conforme tabela abaixo. Determine o polinômio interpolador e estime $f(0,6)$.
+      \begin{center}
+         \begin{tabular}{|ccc|ccc|ccc|ccc|ccc|}
+         \hline
+         & $x_i$ & & & $0,5$ & & & $0,7$ & & & $0,9$ & & & $1,1$ & \\
+         \hline
+         & $f(x_i)$ & & & $5,8$ & & & $7,9$ & & & $10,1$ & & & $12,3$ & \\
+         \hline
+         \end{tabular}
+      \end{center}
+   \end{block}
+
+}
+
+\section{Forma de Lagrange}
+\frame{
+Sejam $x_0$, $x_1$, ..., $x_n$, $(n+1)$ pontos distintos e $y_i = f(x_i), i = 0, \cdots, n$, a forma de Lagrange para o polinômio interpolador é dado por: 
+
+$$p_n(x) = \sum_{k=0}\limits^ny_kL_k(x)$$
+
+onde, 
+
+$$L_k(x) = \dfrac{\prod_{j=0, j\neq k}\limits^n(x - x_j)}{\prod_{j=0, j\neq k}\limits^n(x_k - x_j)}$$
+
+}
+
+\frame{
+   \begin{block}{Exemplo}
+      Considere a função $f(x)$ definida nos pontos, conforme tabela abaixo. Determine o polinômio interpolador.
+      \begin{center}
+         \begin{tabular}{|ccc|ccc|ccc|ccc|}
+         \hline
+         & $x_i$ & & & $-1$ & & & $0$ & & & $2$ & \\
+         \hline
+         & $f(x_i)$ & & & $4$ & & & $1$ & & & $-1$ & \\
+         \hline
+         \end{tabular}
+      \end{center}
+   \end{block}
+   
+   \textbf{Solução:} pela forma de Lagrange, temos que: 
+   
+   $$p_2(x) = y_0L_0(x) + y_1L_1(x) + y_2L_2(x)$$, onde:
+   
+   $$L_0(x) = \dfrac{(x-x_1)(x-x_2)}{(x_0-x_1)(x_0-x_2)} = \dfrac{(x-0)(x-2)}{(-1-0)(-1-2)} = \dfrac{x^2-2x}{3}$$
+   
+}
+
+\frame{
+   $$L_1(x) = \dfrac{(x-x_0)(x-x_2)}{(x_1-x_0)(x_1-x_2)} = \dfrac{(x+1)(x-2)}{(0+1)(0-2)} = \dfrac{x^2 - x - 2}{-2}$$
+   
+   $$L_2(x) = \dfrac{(x-x_0)(x-x_1)}{(x_2-x_0)(x_2-x_1)} = \dfrac{(x+1)(x-0)}{(2+1)(2-0)} = \dfrac{x^2+x}{6}$$
+
+   Assim, na forma de Lagrange, 
+   
+   $$p_2(x) = 4\left( \dfrac{x^2-2x}{3} \right) + 1\left( \dfrac{x^2-x-2}{-2} \right) + (-1)\left( \dfrac{x^2+x}{6} \right)$$
+
+   Agrupando os termos semelhantes, obtemos que $p_2(x) = 1 - \dfrac{7}{3}x + \dfrac{2}{3}x^2$
+}
+
+\frame{
+   \begin{block}{Exercício 01}
+      Implementar um programa computacional para determinar o polinômio interpolador de um conjunto de pares ordenados a partir das forma polinomial e da forma de Lagrange.
+   \end{block}
+
+}
+
+\section{Limitante para o Erro}
+\frame{
+Quando a função $f(x)$ está disponível, e $f^{(n+1)}(x)$ for contínua em $I=[x_0, x_n]$, podemos escrever a seguinte relação:
+
+$$|E_n(x)| = |f(x) - p_n(x)| \leq |(x-x_0)(x-x_1)\cdots(x-x_n)| \dfrac{M_{n+1}}{(n+1)!}$$
+
+onde, 
+    $$M_{n+1} = \max_{1 \leq i \leq n} |f^{(n+1)}(x)|$$
+}
+
+\frame{
+   \begin{block}{Exemplo}
+      Seja $f(x) = e^x + x -1$ tabelada abaixo. Obter $f(0,7)$ e fazer uma análise do erro cometido.
+      \begin{center}
+         \begin{tabular}{|ccc|ccc|ccc|ccc|}
+         \hline
+         & $x_i$ & & & $0,0$ & & & $0,5$ & & & $1,0$ & \\
+         \hline
+         & $f(x_i)$ & & & $0,0$ & & & $1,1487$ & & & $2,7183$ &\\
+         \hline
+         \end{tabular}
+      \end{center}
+      
+     \begin{center}
+         \begin{tabular}{|ccc|ccc|ccc|ccc|ccc|ccc|}
+         \hline
+         & $x_i$ & & &$1,5$ & & & $2,0$ & \\
+         \hline
+         & $f(x_i)$ & & & $4,9811$ & & & $8,389$ & \\
+         \hline
+         \end{tabular}
+      \end{center}
+
+   \end{block}
+   
+   \pause
+   
+   \begin{block}{}
+    Verificar como é possível estimar o valor absoluto do erro $|E_n(x)|$ quando a função $f(x)$ só é conhecida a partir da tabela de valores.
+    
+   \end{block}
+}
+
+\end{document}

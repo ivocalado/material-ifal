@@ -1,0 +1,415 @@
+%\documentclass[t,handout]{beamer}
+
+% \documentclass{beamer}
+% 
+% \usepackage{beamerthemeshadow}
+% \usepackage{amsfonts}
+% \usepackage{amssymb}
+% \usepackage{amsmath}
+% \usepackage{amsthm}
+% \usepackage[portuguese]{babel}
+% \usepackage[latin1]{inputenc}
+% \usepackage{graphicx}
+% \usepackage{latexsym}
+% \usepackage{geometry}
+% \usepackage{rotating}
+% \usepackage{color}
+% \usepackage{pgf}
+% \usepackage{xcolor}
+% \usepackage{textcomp}
+
+
+\documentclass{beamer}
+
+
+\usepackage[latin1]{inputenc}
+
+\usepackage[portuguese]{babel}
+\usepackage[tight]{subfigure}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{url}
+% \usepackage{inconsolata}
+\newcommand{\setcolor}[2]{\color{#1}{#2}\color{black}}
+\usepackage{mathtools}
+%Pacote de listagem de cï¿½digo
+\usepackage{listings}
+
+\usepackage{mathtools}
+
+\newcommand{\quadd}{\quad \quad}
+\newcommand{\quaddd}{\quad \quad \quad}
+
+\lstset{extendedchars=true, breaklines=true, frame=tb,
+basicstyle=\footnotesize, stringstyle=\ttfamily,
+showstringspaces=false,language=HTML }
+
+\usecolortheme[RGB={153,204,123}]{structure}
+\setbeamertemplate{footline}[frame number]
+\setbeamertemplate{navigation symbols}{}
+
+ \usetheme{Ilmenau} %LEGAL (forte candidato)
+\newcommand*\oldmacro{}
+\let\oldmacro\insertshortauthor% save previous definition
+\renewcommand*\insertshortauthor{%
+  \leftskip=.3cm% before the author could be a plus1fill ...
+  \insertframenumber\,/\,\inserttotalframenumber\hfill\oldmacro}
+
+
+\author[Ivo Calado]{Ivo Calado}
+\date{\today}
+\institute[IFAL]{Instituto Federal de Educação, Ciência e Tecnologia de Alagoas}
+\title[Cálculo Numérico]{Resolução de sistemas lineares}
+\logo{\includegraphics[width=0.2\linewidth]{imagens/ifal-logo.jpg}}
+\subtitle{\textit{Métodos Iterativos\\}}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+% \section{Roteiro}
+% \AtBeginSection[]
+{\frame{
+\frametitle{Roteiro}
+\tableofcontents[hidesubsections]
+}
+}
+
+\begin{frame}{Observação}
+ Este material é baseado no material produzido pelo professor \textbf{Jonas Joacir Radtke} da \textbf{UTPR}
+\end{frame}
+
+\frame{
+   A solução $\overline{x}$ de um sistema de equações lineares $A\,\vec{x} = \vec{b}$ pode ser obtido resolvendo, de forma iterativa, o sistema equivalente da forma
+   $$\vec{x} = F\,\vec{x} + \vec{d}$$
+   onde $F$ é uma matriz $n \times n$, $\vec{x}$ e $\vec{d}$ vetores de $n \times 1$.
+
+   Observamos que $\varphi(\vec{x}) = F\,\vec{x} + \vec{d}$ é uma função de iteração dada na forma matricial.
+
+   \begin{block}{Esquema Iterativo}
+      Partindo de $\vec{x}^{(0)}$ (vetor da aproximação inicial) e então construímos consecutivamente os vetores de aproximação $\vec{x}^{(k+1)}$ pela fórmula:
+      $$\vec{x}^{(k+1)} = F\,\vec{x}^{(k)} + \vec{d} = \varphi(\vec{x}^{(k)})$$
+
+      O processo é interrompido ao satisfazer os critérios de parada adotados ou quando atingir o número máximo de passos iterativos.
+   \end{block}
+}
+%===============================================================================
+\frame{
+   \frametitle{Critérios de Parada}
+   \begin{block}{Critérios de Parada}
+      Diversos critérios podem ser adotados, dentre eles destacamos:
+      \begin{itemize}
+         \item[(i)] Critério baseado na distância entre $\vec{x}^{(k)}$ e $\vec{x}^{(k-1)}$:
+         $$d^{(k)} = \max_{1 \leq i \leq n} \big| x_i^{(k)} - x_i^{(k-1)} \big| < \varepsilon_1$$
+         \item[(ii)] Critério baseaedo na distância relativa entre $\vec{x}^{(k)}$ e $\vec{x}^{(k-1)}$:
+         $$d_r^{(k)} = \frac{\max_{1 \leq i \leq n} \big| x_i^{(k)} - x_i^{(k-1)} \big|}{\displaystyle\max_{1 \leq i \leq n}|x_i^{(k)}|} < \varepsilon_2$$
+%          \item[(iii)] Critério baseado no resíduo $\vec{r}^{(k)} = b - A\,\vec{x}^{(k)}$:
+%          $$r^{(k)} = \max_{1 \leq i \leq n} \big|r_i^{k}\big| < \varepsilon_3$$
+      \end{itemize}
+   \end{block}
+}
+
+%===============================================================================
+\section{Método de Jacobi}
+%===============================================================================
+\frame{
+   \frametitle{Método de Jacobi}
+   A forma como método de Jacobi transforma o sistema $A\,\vec{x} = \vec{b}$ em $\vec{x} = F\,\vec{x} + \vec{d}$ é a seguinte:
+
+   Tomando o sistema original:
+   $$\left\{ \begin{array}{lllllllll}
+   a_{11}x_1 & + & a_{12}x_2 & + & \ldots & + & a_{1n} x_n & = & b_1 \\
+   a_{21}x_1 & + & a_{22}x_2 & + & \ldots & + & a_{2n} x_n & = & b_2 \\
+   \vdots & & \vdots & & \ddots & & \vdots & & \vdots \\
+   a_{n1}x_1 & + & a_{n2}x_2 & + & \ldots & + & a_{nn}x_n & = & b_n \\
+   \end{array} \right.$$
+   e supondo que $a_{ii} \neq 0$, $i = 1,2,...,n$, isolamos o vetor $\vec{x}$ mediante a separação pela diagonal, como segue:
+}
+
+\frame{
+  \frametitle{Método de Jacobi}
+   $$\left\{ \begin{array}{cllllllllll}
+   x_1 &=& \frac{1}{a_{11}} \left(b_1 - a_{12}x_2 - a_{13}x_3 - \ldots - a_{1n}x_n \right)\\
+   x_2 &=& \frac{1}{a_{22}} \left(b_2 - a_{21}x_1 - a_{23}x_3 - \ldots - a_{2n}x_n \right)\\
+   \vdots & & \;\;\vdots \quad\; \vdots \quaddd \vdots \quaddd \vdots \quadd\; \vdots \quadd\; \vdots \\
+   x_n &=& \frac{1}{a_{nn}} \left(b_n - a_{n1}x_1 - a_{n2}x_2 - \ldots - a_{n,n-1}x_{n-1} \right)\\
+   \end{array} \right.$$
+}
+%===============================================================================
+\frame{
+   Desta forma temos $\vec{x} = F\,\vec{x} + \vec{d}$, onde
+   $$F = \left( \begin{array}{ccccc}
+   0 & \frac{-a_{12}}{a_{11}} & \frac{-a_{13}}{a_{11}} & \ldots & \frac{-a_{1n}}{a_{11}} \\ \\
+   \frac{-a_{21}}{a_{22}} & 0 & \frac{-a_{23}}{a_{22}} & \ldots & \frac{-a_{2n}}{a_{22}} \\ \\
+   \vdots & \vdots & \vdots & \ddots & \vdots \\ \\
+   \frac{-a_{n1}}{a_{nn}} & \frac{-a_{n2}}{a_{nn}} & \frac{-a_{n3}}{a_{nn}} & \ldots & 0
+   \end{array} \right)$$
+}
+
+\frame{
+   $$\vec{d} = \left( \begin{array}{c}
+   \frac{b_1}{a_{11}} \\ \\
+   \frac{b_2}{a_{22}} \\ \\
+   \vdots \\ \\
+   \frac{b_n}{a_{nn}}
+   \end{array} \right)$$
+
+}
+%===============================================================================
+\frame{
+   O método de Jacobi consiste em dado $\vec{x}^{(0)}$, aproximação inicial, obter $\vec{x}^{(1)}$, $\vec{x}^{(2)}$, ..., $\vec{x}^{(k)}$, através da relação recursiva
+
+   $$\vec{x}^{(k+1)} = F\,\vec{x}^{(k)} + \vec{d}$$
+
+   $$\left\{ \begin{array}{cllllllllll}
+   x_1^{(k+1)} &=& \displaystyle\frac{1}{a_{11}} \left(b_1 - a_{12}x_2^{(k)} - a_{13}x_3^{(k)} - \ldots - a_{1n}x_n^{(k)} \right)\\ \\
+   x_2^{(k+1)} &=& \displaystyle\frac{1}{a_{22}} \left(b_2 - a_{21}x_1^{(k)} - a_{23}x_3^{(k)} - \ldots - a_{2n}x_n^{(k)} \right)\\ \\
+   \vdots & & \;\;\vdots \quad\; \vdots \quaddd \vdots \quaddd \vdots \quadd\; \vdots \quadd\; \vdots \\ \\
+   x_n^{(k+1)} &=& \displaystyle\frac{1}{a_{nn}} \left(b_n - a_{n1}x_1^{(k)} - a_{n2}x_2^{(k)} - \ldots - a_{n,n-1}x_{n-1}^{(k)} \right)
+   \end{array} \right.$$
+}
+
+\frame{
+   \begin{block}{Exemplo}
+      Resolva o seguinte sistema linear pelo método de Jacobi com $\vec{x}{(0)} = (0,7;\;-1,6;\;0,6)^T$ e $d_r^{(k)} < \varepsilon_2 = 0,05$.
+      $$\left\{ \begin{array}{lllllll}
+      10x_1 &+& 2x_2 &+& x_3 &=& 7 \\
+      x_1  &+& 5x_2 &+& x_3 &=& -8 \\
+      2x_1 &+& 3x_2 &+& 10x_3 &=& 6 \\
+   \end{array} \right.$$
+   \end{block}
+
+   \textbf{Solução:} O processo iterativo é
+   $$\left\{ \begin{array}{cll}
+   x_1^{(k+1)} &=& \displaystyle\frac{1}{10} \left(7 - 2x_2^{(k)} - x_3^{(k)} \right)\\ \\
+   x_2^{(k+1)} &=& \displaystyle\frac{1}{5} \left(-8 - x_1^{(k)} - x_3^{(k)} \right)\\ \\
+   x_3^{(k+1)} &=& \displaystyle\frac{1}{10} \left(6 - 2x_1^{(k)} - 3x_2^{(k)} \right)
+   \end{array} \right.$$
+}
+%===============================================================================
+\frame{\small{
+   Para $k = 0$ temos
+   $$\left\{ \begin{array}{l}
+   x_1^{(1)} = \displaystyle\frac{1}{10} \left(7 - 2x_2^{(0)} - x_3^{(0)} \right) = \displaystyle\frac{1}{10} \Big(7 - 2 \cdot (-1,6) - 0,6 \Big) = 0,96\\ \\
+   x_2^{(1)} = \displaystyle\frac{1}{5} \left(-8 - x_1^{(k)} - x_3^{(k)} \right) = \displaystyle\frac{1}{5} \Big(-8 - 0,7 - 0,6 \Big) = -1,86\\ \\
+   x_3^{(1)} = \displaystyle\frac{1}{10} \left(6 - 2x_1^{(k)} - 3x_2^{(k)} \right) = \displaystyle\frac{1}{10} \Big(6 - 2 \cdot 0,7 - 3 \cdot (-1,6) \Big) = 0,94
+   \end{array} \right.$$
+
+   Calculando $d_r^{(1)}$ temos
+   $$\begin{array}{lcccc}
+        \left|x_1^{(1)} - x_1^{(0)}\right| = 0,26 \\ \\
+        \left|x_2^{(1)} - x_2^{(0)}\right| = 0,26 & & \Rightarrow & & d^{(1)} = \frac{\displaystyle{0,34}}{\displaystyle\max_{1 \leq i \leq n}|x_i^{(1)}|} = 0,1828 > \varepsilon_2 \\
+        \left|x_3^{(1)} - x_3^{(0)}\right| = 0,34 \\ \\
+     \end{array} $$
+}}
+%===============================================================================
+\frame{
+   Para $k = 1$:
+   $$\left\{ \begin{array}{lcccc}
+   x_1^{(2)} = 0,978\\
+   x_2^{(2)} = -1,98 & & \Rightarrow & & d_r^{(2)} = \frac{\displaystyle{0,12}}{\displaystyle{1,98}} = 0,0606 > \varepsilon_2 \\
+   x_3^{(2)} = 0,966
+   \end{array} \right.$$
+
+   Para $k = 2$:
+   $$\left\{ \begin{array}{lcccc}
+   x_1^{(3)} = 0,9994\\
+   x_2^{(3)} = -1,9888 & & \Rightarrow & & d_r^{(3)} = \frac{\displaystyle{0,0324}}{\displaystyle{1,9888}} = 0,0163 < \varepsilon_2 \\
+   x_3^{(3)} = 0,9984
+   \end{array} \right.$$
+
+   Então a solução aproximada $\overline{x}$ do sistema linear obtida pelo método de Jacobi, é
+   $$\overline{x} = \vec{x}^{(3)} = \left( \begin{array}{r}
+   0,9994 \\
+   -1,9888 \\
+   0,9984
+   \end{array} \right)$$
+}
+%===============================================================================
+\frame{
+   \frametitle{Critério de Convergência}
+   \begin{block}{Critério das Linhas}
+      Uma condição \textbf{suficiente} (mas não necessária) para garantir a convergência do método de Jacobi aplicado ao sistema linear $A\,\vec{x} = \vec{b}$, com $a_{ii} \neq 0$, $\forall i$, é a seguinte:
+      
+      Seja $\alpha_k = \sum\limits_{j=1,\;j\neq k}^{n} \dfrac{|a_{kj}|}{|a_{kk}|}$. Se $\alpha = \displaystyle\max_{1 < k < n} \alpha_k < 1$, então o método de Gauss-Jacobi gera uma sequência ${x^{(k)}}$ convergente para a solução do sistema dado, independentemente da escolha da aproximação inicial, $x^{(0)}$
+      
+      
+   \end{block}
+
+}
+%===============================================================================
+\frame{
+   Analisando a matriz A do sistema linear do exemplo anterior,
+   $$\left( \begin{array}{rrr}
+      10 & 2 & 1 \\
+      1  & 5 & 1 \\
+      2 & 3 & 10
+   \end{array} \right)$$
+   temos
+   $$\alpha_1 = \frac{2 + 1}{10} = \frac{3}{10} = 0,3 < 1$$
+   $$\alpha_2 = \frac{1 + 1}{5} = \frac{2}{5} = 0,4 < 1$$
+   $$\alpha_3 = \frac{2 + 3}{10} = \frac{5}{10} = 0,5 < 1$$
+   então,
+   $$\alpha = \displaystyle\max_{1 \leq k \leq n} \alpha_k  = 0,5 < 1$$
+
+   Logo, temos garantia da convergência do método de Jacobi.
+}
+
+\frame{
+   \begin{block}{Exemplo}
+      A matriz A do sistema linear
+      $$\left\{ \begin{array}{lllllll}
+      x_1 &+& 3x_2 &+& x_3 &=& -2 \\
+      5x_1  &+& 2x_2 &+& 2x_3 &=& 3 \\
+      & & 6x_2 &+& 8x_3 &=& -6 \\
+      \end{array} \right.$$
+      não satisfaz o critério das linhas pois $\alpha_1 = \frac{3+1}{1} = 4 > 1$.
+
+      Contudo, se permutarmos a primeira equação com a segunda, temos o seguinte sistema linear
+      $$\left\{ \begin{array}{lllllll}
+      5x_1  &+& 2x_2 &+& 2x_3 &=& 3 \\
+      x_1 &+& 3x_2 &+& x_3 &=& -2 \\
+      & & 6x_2 &+& 8x_3 &=& -6 \\
+      \end{array} \right.$$
+      que é equivalente ao sistema original e a matriz deste novo sistema satisfaz o critério das linhas.
+   \end{block}
+}
+%===============================================================================
+\frame{
+   \begin{block}{Exercício 1}
+      Determinar a solução dos seguintes sistemas lineares pelo método de Jacobi com no máximo 10 iterações, $\vec{x}^{(0)} = \vec{0}$ e $\varepsilon_2 = 10^{-2}$.
+      \begin{itemize}
+         \item[(a)] $\left\{ \begin{array}{rrrrrrrl}
+            x_1 &-& 0,25x_2 &-& 0,25x_3 & & &= 0 \\
+            -0,25x_1 &+& x_2 & & &-& 0,25x_4 &= 0 \\
+            -0,25x_1 & & &+& x_3 &-& 0,25x_4 &= 0,25 \\
+            &-& 0,25x_2 & & &+& x_4 &= 0,25
+            \end{array} \right. $
+         \item[(b)] $\left\{ \begin{array}{rrrrrrrrr}
+            x_1 &+& x_2 &+& x_3 &-& 4x_4 &=& -1 \\
+            2x_1 &-& 8x_2 &+& x_3 &-& x_4 &=& -6 \\
+            4x_1 &+& x_2 &+& x_3 &+& x_4 &=& 7 \\
+            x_1 &+& 2x_2 &-& 5x_3 &+& x_4 &=& -1
+            \end{array} \right. $
+         \item[(c)] $\left\{ \begin{array}{rrrrrrrrr}
+            -2x_1 &+& 2x_2 &-& 3x_3 &+& 10x_4 &=& 33 \\
+            5x_1 &-& x_2 &+& 2x_3 &-& x_4 &=& 5 \\
+            & & 3x_2 &-& 7x_3 &+& 2x_4 &=& -7 \\
+            x_1 &+& 9x_2 &-& 3x_3 &+& 4x_4 &=& 26 \\
+            \end{array} \right. $
+      \end{itemize}
+   \end{block}
+}
+
+%===============================================================================
+\section{Método de Gauss-Seidel}
+%===============================================================================
+\frame{
+   \frametitle{Método de Gauss-Seidel}
+%    Da mesma forma que o método de Jacobi, no método de Gauss-Seidel o sistema linear $A\,\vec{x} = \vec{b}$ é escrito na forma equivalente $\vec{x} = F\,\vec{x} + \vec{d}$ por separação da diagonal.
+%
+   O processo iterativo consiste em, sendo $\vec{x}^{(0)}$ uma aproximação inicial, calcular $\vec{x}^{(1)}$, $\vec{x}^{(2)}$, ..., $\vec{x}^{(k)}$, por
+   $$\left\{ \begin{array}{clllllllll}
+   x_1^{(k+1)} &= \displaystyle\frac{1}{a_{11}} \left(b_1 - a_{12}x_2^{(k)} - a_{13}x_3^{(k)} - \ldots - a_{1n}x_n^{(k)} \right)\\ \\
+   x_2^{(k+1)} &= \displaystyle\frac{1}{a_{22}} \left(b_2 - a_{21}x_1^{(k+1)} - a_{23}x_3^{(k)} - \ldots - a_{2n}x_n^{(k)} \right)\\ \\
+   x_3^{(k+1)} &= \displaystyle\frac{1}{a_{33}} \left(b_3 - a_{31}x_1^{(k+1)} - a_{32}x_3^{(k+1)} - \ldots - a_{2n}x_n^{(k)} \right)\\ \\
+   \vdots & \quadd \vdots \quad\;\; \vdots \quadd\;\; \vdots \quaddd\quad\;\; \vdots \quaddd \quaddd \quad\vdots \\ \\
+   x_n^{(k+1)} &= \displaystyle\frac{1}{a_{nn}} \left(b_n - a_{n1}x_1^{(k+1)} - a_{n2}x_2^{(k+1)} - \ldots - a_{n,n-1}x_{n-1}^{(k+1)} \right)
+   \end{array} \right.$$
+}
+%===============================================================================
+\frame{
+   \begin{block}{Exemplo}
+      Resolver o seguinte sistema linear pelo método de Gauss-Seidel com $\vec{x}^{(0)} = (0,\;0,\;0)^T$ e $d_r^{(k)} < \varepsilon_2 = 5 \cdot 10^{-2}$.
+      $$\left\{ \begin{array}{rrrrrrrrr}
+      5x_1 &+& x_2 &+& x_3 &=& 5 \\
+      3x_1 &+& 4x_2 &+& x_3 &=& 6 \\
+      3x_1 &+& 3x_2 &+& 6x_3 &=& 0
+      \end{array} \right. $$
+   \end{block}
+
+   \textbf{Solução:} O processo iterativo é:
+   $$\left\{ \begin{array}{cllllllllll}
+   x_1^{(k+1)} &=& \displaystyle\frac{1}{5} \left(5 - x_2^{(k)} - x_3^{(k)} \right)\\ \\
+   x_2^{(k+1)} &=& \displaystyle\frac{1}{4} \left(6 - 3x_1^{(k+1)} - x_3^{(k)} \right)\\ \\
+   x_3^{(k+1)} &=& \displaystyle\frac{1}{6} \left(0 - 3x_1^{(k+1)} - 3x_3^{(k+1)} \right)
+   \end{array} \right.$$
+}
+
+%===============================================================================
+\frame{
+   Para $k = 0$:
+   $$\left\{ \begin{array}{cllllllllll}
+   x_1^{(1)} &=& \displaystyle\frac{1}{5} \left(5 - 0 - 0 \right) = 1 \\ \\
+   x_2^{(1)} &=& \displaystyle\frac{1}{4} \left(6 - 3 \cdot 1 - 0 \right) = 0,75 \\ \\
+   x_3^{(1)} &=& \displaystyle\frac{1}{6} \left(0 - 3 \cdot 1 - 3 \cdot 0,75 \right) = -0,875
+   \end{array} \right.$$
+
+   Calculando $d_r^{(1)}$ temos
+   $$\begin{array}{lcccc}
+      \left|x_1^{(1)} - x_1^{(0)}\right| = 1 \\ \\
+      \left|x_2^{(1)} - x_2^{(0)}\right| = 0,75 & & \Rightarrow & d^{(1)} = \frac{\displaystyle{1}}{\displaystyle\max_{1 \leq i \leq n}|x_i^{(1)}|} = 1 > \varepsilon_2 \\
+      \left|x_3^{(1)} - x_3^{(0)}\right| = 0,875 \\ \\
+   \end{array} $$
+}
+%===============================================================================
+\frame{
+   Para $k = 1$:
+   $$\left\{ \begin{array}{cllllllllll}
+   x_1^{(2)} &=& \displaystyle\frac{1}{5} \left(5 - 0,75 + 0,875 \right) = 1,025 \\ \\
+   x_2^{(2)} &=& \displaystyle\frac{1}{4} \left(6 - 3 \cdot 1,025 + 0,875 \right) = 0,95 \\ \\
+   x_3^{(2)} &=& \displaystyle\frac{1}{6} \left(0 - 3 \cdot 1,025 - 3 \cdot 0,95 \right) = -0,9875
+   \end{array} \right.$$
+
+   Calculando $d_r^{(2)}$ temos
+   $$\begin{array}{lcccc}
+      \left|x_1^{(2)} - x_1^{(1)}\right| = 0,025 \\ \\
+      \left|x_2^{(2)} - x_2^{(1)}\right| = 0,2 & \Rightarrow & d^{(2)} = \frac{\displaystyle{0,2}}{\displaystyle\max_{1 \leq i \leq n}|x_i^{(2)}|} = 0,1951 > \varepsilon_2 \\
+      \left|x_3^{(2)} - x_3^{(1)}\right| = 0,1125 \\ \\
+   \end{array} $$
+}
+%===============================================================================
+\frame{
+   Para $k = 2$:
+   $$\left\{ \begin{array}{cllllllllll}
+   x_1^{(3)} &=& \displaystyle\frac{1}{5} \left(5 - 0,95 + 0,9875 \right) = 1,0075 \\ \\
+   x_2^{(3)} &=& \displaystyle\frac{1}{4} \left(6 - 3 \cdot 1,0075 + 0,9875 \right) = 0,9912 \\ \\
+   x_3^{(3)} &=& \displaystyle\frac{1}{6} \left(0 - 3 \cdot 1,0075 - 3 \cdot 0,9912 \right) = -0,9993
+   \end{array} \right.$$
+
+   Calculando $d_r^{(4)}$ temos
+   $$\begin{array}{lcccc}
+      \left|x_1^{(3)} - x_1^{(2)}\right| = 0,0175 \\ \\
+      \left|x_2^{(3)} - x_2^{(2)}\right| = 0,0412 & \Rightarrow & d^{(3)} = \frac{\displaystyle{0,0412}}{\displaystyle\max_{1 \leq i \leq n}|x_i^{(3)}|} = 0,0409 < \varepsilon_2 \\
+      \left|x_3^{(3)} - x_3^{(2)}\right| = 0,0118 \\ \\
+   \end{array} $$
+}
+%===============================================================================
+\frame{
+   \begin{block}{Exercício 1}
+      Determinar a solução dos sistemas lineares pelo método de Gauss-Seidel com no máximo 10 iterações, $\vec{x}^{(0)} = \vec{0}$ e $\varepsilon_2 = 10^{-2}$.
+      \begin{itemize}
+         \item[(a)] $\left\{ \begin{array}{rrrrrrrl}
+            x_1 &-& 0,25x_2 &-& 0,25x_3 & & &= 0 \\
+            -0,25x_1 &+& x_2 & & &-& 0,25x_4 &= 0 \\
+            -0,25x_1 & & &+& x_3 &-& 0,25x_4 &= 0,25 \\
+            &-& 0,25x_2 & & &+& x_4 &= 0,25
+            \end{array} \right. $
+         \item[(b)] $\left\{ \begin{array}{rrrrrrrrr}
+            x_1 &+& x_2 &+& x_3 &-& 4x_4 &=& -1 \\
+            2x_1 &-& 8x_2 &+& x_3 &-& x_4 &=& -6 \\
+            4x_1 &+& x_2 &+& x_3 &+& x_4 &=& 7 \\
+            x_1 &+& 2x_2 &-& 5x_3 &+& x_4 &=& -1
+            \end{array} \right. $
+         \item[(c)] $\left\{ \begin{array}{rrrrrrrrr}
+            -2x_1 &+& 2x_2 &-& 3x_3 &+& 10x_4 &=& 33 \\
+            5x_1 &-& x_2 &+& 2x_3 &-& x_4 &=& 5 \\
+            & & 3x_2 &-& 7x_3 &+& 2x_4 &=& -7 \\
+            x_1 &+& 9x_2 &-& 3x_3 &+& 4x_4 &=& 26 \\
+            \end{array} \right. $
+      \end{itemize}
+   \end{block}
+}
+\end{document}

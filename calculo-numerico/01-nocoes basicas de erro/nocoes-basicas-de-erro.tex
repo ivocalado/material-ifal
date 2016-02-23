@@ -1,0 +1,596 @@
+%\documentclass[t,handout]{beamer}
+
+% \documentclass{beamer}
+% 
+% \usepackage{beamerthemeshadow}
+% \usepackage{amsfonts}
+% \usepackage{amssymb}
+% \usepackage{amsmath}
+% \usepackage{amsthm}
+% \usepackage[portuguese]{babel}
+% \usepackage[latin1]{inputenc}
+% \usepackage{graphicx}
+% \usepackage{latexsym}
+% \usepackage{geometry}
+% \usepackage{rotating}
+% \usepackage{color}
+% \usepackage{pgf}
+% \usepackage{xcolor}
+% \usepackage{textcomp}
+
+
+\documentclass{beamer}
+
+
+\usepackage[latin1]{inputenc}
+
+\usepackage[portuguese]{babel}
+\usepackage[tight]{subfigure}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{url}
+% \usepackage{inconsolata}
+\newcommand{\setcolor}[2]{\color{#1}{#2}\color{black}}
+\usepackage{mathtools}
+%Pacote de listagem de cï¿½digo
+\usepackage{listings}
+
+\lstset{extendedchars=true, breaklines=true, frame=tb,
+basicstyle=\footnotesize, stringstyle=\ttfamily,
+showstringspaces=false,language=HTML }
+
+\usecolortheme[RGB={153,204,123}]{structure}
+\setbeamertemplate{footline}[frame number]
+\setbeamertemplate{navigation symbols}{}
+
+ \usetheme{Ilmenau} %LEGAL (forte candidato)
+\newcommand*\oldmacro{}
+\let\oldmacro\insertshortauthor% save previous definition
+\renewcommand*\insertshortauthor{%
+  \leftskip=.3cm% before the author could be a plus1fill ...
+  \insertframenumber\,/\,\inserttotalframenumber\hfill\oldmacro}
+
+
+\author[Ivo Calado]{Ivo Calado}
+\date{\today}
+\institute[IFAL]{Instituto Federal de Educação, Ciência e Tecnologia de Alagoas}
+\title[Cálculo Numérico]{Cálculo Numérico}
+\logo{\includegraphics[width=0.2\linewidth]{imagens/ifal-logo.jpg}}
+\subtitle{\textit{Introdução ao Cálculo Numérico e Erros\\}}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+% \section{Roteiro}
+% \AtBeginSection[]
+{\frame{
+\frametitle{Roteiro}
+\tableofcontents[hidesubsections]
+}
+}
+
+
+\section{Introdução}
+\subsection{Introdução}
+\begin{frame}{Fases na resolução de problemas físicos}
+\begin{itemize}
+ \item O processo de resolução de problemas físicos, em geral, é composto por 5 fases
+\end{itemize}
+
+\begin{figure}
+ \centering
+ \includegraphics[scale=0.5]{./imagens/img01.jpg}
+ % img01.jpg: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{figure}
+\begin{itemize}
+ \item A disciplina de Cálculo Numérico tem como enfoque a \textbf{Resolução} do modelo matemático construído
+\end{itemize}
+
+
+\end{frame}
+
+\begin{frame}{Etapas do processo de resolução e objetivos da disciplina}
+\begin{itemize}
+ \item Definir se o problema tem solução
+ \item Caso possua solução, definir se a solução é única ou não
+ \item Definir uma solução aproximada do problema, \textbf{exclusivamente} através de métodos númericos concebidos na área de \textbf{Análise Numérica}
+\end{itemize}
+
+\pause
+\begin{block}{Afinal, qual o objetivo da disciplina?}
+Propiciar ao estudante o conhecimento de processos numéricos convebidos pela análise numérica
+\end{block}
+
+
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Exemplo prático da utilização de Cálculo Numérico}
+Como obter uma solução para o seguinte problema?
+\begin{center}
+$$x^2 - 5x + 6 = 0$$
+\end{center}
+\begin{center}
+$$x = \dfrac{-b \pm \sqrt{\Delta}}{2a} \,\,.: \Delta = b^2 - 4ac$$
+\end{center}
+
+Mas como obter uma solução para o seguinte problema?
+\begin{center}
+$$x^6 - 20x^5 - 110x^4 + 50x^3 - 5x^2 + 70x - 100 = 0$$
+\end{center}
+\end{frame}
+
+\begin{frame}{Problema numérico x Problema não-numérico}
+\begin{itemize}
+ \item Problema numérico é aquele cujos dados de entrada e saída são conjuntos numéricos finitos
+\end{itemize}
+\begin{center}
+ 
+$x^6 - 20x^5 - 110x^4 + 50x^3 - 5x^2 + 70x - 100 = 0$
+\end{center}
+\begin{itemize}
+ \item Problema não-numérico é aquele onde tanto os dados de entrada quanto os de saída não se apresentam como uma quantidade finita de números reais
+\end{itemize}
+
+\begin{center}
+$$
+\left\{
+\begin{array}{ccccc}
+ \dfrac{d^2y}{dx^2} & = & x^2 & + & y^2, x \in (0,5)\\
+ y(0) & = & 0 & &\\
+ y(5) & = & 1 & &\\
+\end{array}
+\right.
+$$
+
+\end{center}
+
+\end{frame}
+
+\begin{frame}{O que é um método numérico?}
+\begin{block}{O que é um método numérico?}
+\textit{É um conjunto de procedimentos utilizados para resolver um problema numérico}
+\end{block}
+
+A escolha do método mais eficiente para resolver um problema numérico deve envolver os seguintes aspectos:
+
+\begin{itemize}
+ \item precisão desejada para os resultados
+ \item capacidade do método em conduzir aos resultados desejados (velocidade de convergência)
+ \item esforço computacional despendido (tempo de processamento, economia de memória necessária para a resolução)
+\end{itemize}
+
+
+\end{frame}
+
+\begin{frame}{Iteração ou Aproximação Sucessiva}
+\begin{itemize}
+ \item Uma das ideias fundamentais do Cálculo Numérico é a de iteração ou aproximação sucessiva
+ \item Grande parte dos métodos numéricos tem como característica a iteratividade
+ \item Um método iterativo se caracteriza por envolver os seguintes itens:
+ \begin{itemize}
+  \item Tentativa inicial
+  \item Equação de recorrência
+  \item Teste de parada
+ \end{itemize}
+
+\end{itemize}
+
+\end{frame}
+
+
+
+\section{Sistemas de numeração}
+\subsection{Sistemas de numeração}
+\begin{frame}{Como enumeramos?}
+\small{
+\begin{itemize}
+ \item Todo o processo de contagem é baseado em sistemas de numeração
+ \item São caracterizados por serem posicionais (i.e., são formados por somas de potências)
+\end{itemize}
+}
+\pause
+
+\begin{block}{Decimal}
+ (20,36)$_{10}$ = 2 X 10$^1$ + 0 X 10$^0$ + 3 x 10$^{-1}$ + 6 x 10$^{-2}$
+\end{block}
+
+\begin{block}{Binário}
+ (101,11)$_{2}$ = 1 X 2$^2$ + 0 X 2$^1$ + 1 X 2$^0$ + 1 X 2$^{-1}$ + 1 X 2$^{-1}$
+\end{block}
+\pause
+\begin{block}{Hexadecimal}
+ (ABC,D)$_{16}$ = A(10) X 16$^2$ + B(11) X 16$^1$ + C(12) X 16$^0$ + D(13) X 16$^{-1}$
+\end{block}
+
+\end{frame}
+
+\begin{frame}{Representação em binário e decimal}
+ \begin{itemize}
+  \item Todo sistema de numeração posicional de base $\beta$ admite apenas digitos 0, 1, ..., $\beta - 1$
+  \item Números racionais e irracionais ocorrem em ambas as representações e muitas vezes um número com uma sequência finita de casas em uma representação possui uma representação infinita na outra.
+ \end{itemize}
+ 
+ \begin{block}{}
+  $\frac{1}{10}$ = (0,1)$_{10}$ = (0,0001100110011...)$_2$ = $\frac{1}{16}$ + $\frac{1}{32}$ + $\frac{0}{64}$ + $\frac{0}{128}$ + $\frac{1}{256}$ + ...
+ \end{block}
+
+\end{frame}
+
+\begin{frame}{Conversão entre representações}
+ Para converter um número real $x$ de decimal para binário deve-se converter separadamente as partes inteira ($ip(x)$) e fracionária ($fp(x)$) de $x$:
+ 
+ \begin{enumerate}
+  \item Converte-se $ip(x)$ dividindo-se sucessivamente o número por 2 e obtendo o último quociente e os restos das sucessivas divisões
+  \item Converte-se $fp(x)$ multiplicando-se sucessivamente o número por 2. O número à esquerda da virgula será um dos dígitos da representação binária. Se o dígito for 1, subtrai esse valor e continua com o processo.
+ \end{enumerate}
+
+\end{frame}
+
+
+
+\begin{frame}{Bits, Bytes e palavras}
+\begin{block}{Definições}
+ 
+\begin{itemize}
+ \item Bit: menor unidade de informação em um computador (0 e 1)
+ \item Byte: conjunto formado por 8 bits
+ \item Palavra: conjunto formado por 1 ou mais bytes
+\end{itemize}
+\end{block}
+
+\begin{itemize}
+ \item A leitura e o salvamento de dados são feito em termos de palavras e não de bytes!
+ \item Tamanho típicos de palavras atualmente são 32 bits e 64 bits
+\end{itemize}
+
+A memória de um computador está organizado como um conjunto de palavras. 
+ 
+\end{frame}
+
+\subsection{Representação de números inteiros em um computador}
+
+\begin{frame}{Representação de números inteiros}
+ \begin{itemize}
+  \item Atualmente os números inteiros são armazenados em palavras de 32 bits
+  \item Considerando-se apenas números positivos, tem-se 2$^{32}$ números possíveis de serem representados
+  \item Para representar números negativos fazemos uso do bit mais significativo para indicar o sinal
+ \end{itemize}
+ 
+ \begin{block}{Exemplo, considerando uma palavra de 8 bits}
+  10 = 00001010\\
+  -10 = 10001010
+ \end{block}
+ \begin{itemize}
+  \item Reduz-se o intervalo de representação de números
+  \item O zero passa a ter duas representações: +0 e -0
+  \item Faz-se necessário um hardware para processar a subtração
+ \end{itemize}
+\end{frame}
+
+\begin{frame}{Representação via complemento-de-2}
+\begin{itemize}
+ \item Utiliza-se apenas o hardware da somas
+ \item a subtração passa a ser definida como a soma de um número positivo com um negativo
+\end{itemize}
+\begin{block}{}
+ 10 - (+10)  =$>$  10 + (-10)
+\end{block}
+
+
+\end{frame}
+
+
+
+
+
+\subsection{Representação de números reais em um computador}
+\begin{frame}{Tipos}
+ \begin{enumerate}
+  \item Representação \textit{racional}
+  \item Representação em \textit{ponto-fixo}
+  \item Representação em \textit{ponto-flutuante}
+ \end{enumerate}
+
+\end{frame}
+
+\begin{frame}{Representação racional}
+ \begin{itemize}
+  \item Utiliza a representação racional de dois inteiros (numerador e denominador)
+  \item Pode-se representar de maneira exata as frações
+  \item Presente nos sistemas MAPLE, MATHEMATICA e DERIVE
+  \item Não há implementação em \textit{hardware} disponível, apenas em \textit{software}. Como consequência, aumenta-se o tempo de proessamento
+ \end{itemize}
+\end{frame}
+
+\begin{frame}{Representação em ponto fixo}
+ \begin{itemize}
+  \item O ponto binário ocupa uma posição fixa. Uma parte dos bits representa a parte inteira e a outre parte representa a parte decimal
+  \item A palavra do computador é dividida em três campos
+ \end{itemize}
+ 
+  \begin{enumerate}
+  \item \textit{s}, sinal do número
+  \item \textit{e}, digitos a esquerda do ponto binário
+  \item \textit{d}, digitos a direita do ponto binário
+ \end{enumerate}
+
+ \begin{block}{Exemplo de representação do número 11,75 numa palavra de 32 bits}
+  $|1|00000000001011|1100000000000000|$
+ \end{block}
+\end{frame}
+
+\begin{frame}{Problemas na representação de ponto-fixo}
+ \begin{itemize}
+  \item Duas representações do zero
+  \item Intervalo bastante pequeno para representar números
+ \end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]{Representação em ponto-flutuante}
+ \begin{itemize}
+  \item Os números são representados em notação científica
+ \end{itemize}
+ 
+  \begin{block}{Representação binária de um número em ponto-flutuante}
+    $x=\pm M \times 2^{\pm E}$
+ \end{block}
+\begin{block}{}
+ $F=(\beta,\,|M|,\,|E|)$
+\end{block}
+\begin{itemize}
+ \item $\beta$ representa a base trabalhada
+ \item $M$ representa a mantissa (23 bits float, 52 bits double)
+ \item $E$ representa o expoente (8 bits float, 11 bits double)
+
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Convertendo número decimal em ponto-flutuante}
+ \begin{enumerate}
+  \item Transformar o número em notação científica de base 2 (1,$x$ * 2$^y$)
+  \item Calcular a mantissa baseado na parte fracionária
+  \item Definir o sinal do número (0 $=>$ positivo, 1 $=>$ negativo)
+  \item Definir o expoente (E + 127 para o float) ou (E + 1023 para o double)
+  \item Montar a representação binária
+ \end{enumerate}
+
+\end{frame}
+
+\begin{frame}{Convertendo número em ponto flutuante em decimal}
+ \begin{enumerate}
+  \item Extrair os campos
+  \item Calcular o expoente real (exp - 127)
+  \item Calcular o valor decimal da mantissa
+  \item Montar a representação binária
+ \end{enumerate}
+
+\end{frame}
+
+\begin{frame}{Exercício I}
+ Desenvolver um programa em C++ que possibilite a conversão de numeros entre os sistemas binário-decimal. Inicialmente, o usuário deverá escolher o tipo de conversão que poderá ser um dos seguintes:
+ 
+ \begin{itemize}
+  \item Decimal para binário
+  \item Binário para decimal
+ \end{itemize}
+ 
+ O sistema deve levar em consideração a possibilidade do número passado ser fracionário.
+
+\end{frame}
+
+\begin{frame}{Exercício II}
+
+Converter:
+\begin{itemize}
+ \item 2,4
+ \item 0,25
+ \item -2,64
+ \item 4,66
+ \item -1562,234
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Exemplo}
+ \begin{block}{}
+   Considere, por exemplo, uma máquina que opera no sistema:
+%       $\beta = 10; \quadd t = 3; \quadd e \in [-5,5]$
+$\hspace{2cm}  F = f(\beta, t, m, M) = f(10, 3, -5, 5)$ 
+
+      Nesse sistema os números serão representados na seguinte forma:
+      $$0.d_1\,d_2\,d_3 \cdot 10^e, \hspace{1cm} 0 \leq d_j \leq 9,\hspace{1cm} d_1 \neq 0, \hspace{1cm} E \in [-5,5]$$
+
+      O menor número, em valor absoluto, representado nessa máquina é:
+       $$m = 0,100 \cdot 10^{-5} = 10^{-6}$$
+      e o maior número, em valor absoluto, é:
+       $$M = 0,999 \cdot 10^5 = 99900$$
+ \end{block}
+
+\end{frame}
+
+\begin{frame}{}
+    \begin{block}{}
+      Considere o conjunto dos números reais $\mathbb{R}$ e o seguinte conjunto:
+       $$G = \{ x \in \mathbb{R} | m \leq |x| \leq M\}$$
+
+       Dado um número real $x$, várias situações poderão ocorrer: \pause
+      \begin{description}
+          \item[Caso 1) $x \in G$:] O número será representado exatamente, truncado ou arredondado. Exemplo: $x = 235,8 = 0,2358 \cdot 10^3$ será representado por $0,235 \cdot 10^3$ ou $0,236 \cdot 10^3$. \pause
+          \item[Caso 2) $|x| < m$:] Exemplo: $x = 0,345 \cdot 10^{-7}$. O número não pode ser representado nesta máquina porque o expoente é menor que $-5$, ocorrendo \textit{underflow}. \pause
+          \item[Caso 3) $|x| > M$:] Exemplo: $x = 0,872 \cdot 10^9$. O número não pode ser representado nesta máquina porque o expoente é maior que $5$, ocorrendo \textit{overflow}.
+      \end{description}
+   \end{block}
+\end{frame}
+
+\section{Arredondamento / Truncamento}
+\begin{frame}{Erros de arredondamento}
+   Um problema que pode surgir ao se representar valores decimais na forma binária está ligado ao fato de não haver tal representação finita. Este tipo de problema dá origem aos chamados \textbf{Erros de Arredondamento}. \pause
+
+   \begin{block}{Exemplo}
+      $$0,1_{10} = 0,000110011001100..._{2}$$
+   \end{block} \pause
+
+   O valor decimal $0,1$ tem como representação binária um número com infinitos dígitos, logo, ao se representar $0,1_{10}$ no sistema binário com 16 bits comete-se um erro, pois
+   \begin{center}
+      \begin{tabular}{||c||c|c|c|c|c|c|c|c|c|c||c||c|c|c|c||}
+      \hline
+      0 & 1 & 1 & 0 & 0 & 1 & 1 & 0 & 0 & 1 & 1 & 1 & 0 & 0 & 1 & 1 \\
+      \hline
+      \end{tabular}
+   \end{center}
+   que na forma decimal é igual a $0,099976_{10}$.
+\end{frame}
+
+\begin{frame}{Erros de truncamento}
+    \small{
+   Os \textbf{Erros de Truncamento} são provenientes da utilização de processos que deveriam ser infinitos ou muito grandes para a determinação de um valor e que, por razões práticas, são truncados. \pause
+
+   \begin{block}{Exemplo}
+       O cálculo da função $sen(X)$ em um programa computacional pode ser obtido pela seguinte série infinita:
+       $$sen(x) = x - \frac{x^3}{3!} + \frac{x^5}{5!} - \frac{x^7}{7!} + \ldots$$
+   \end{block} \pause
+
+   A solução adotada é a de interromper os cálculos quando uma determinada precisão é atingida. \pause
+
+   De maneira geral, pode-se dizer que o erro de truncamento pode ser diminuído até chegar a ficar da ordem do erro de arredondamento; a partir deste ponto, não faz sentido diminuir-se mais, pois o erro de arredondamento será dominante.
+ }
+\end{frame}
+
+\begin{frame}{Erros Absolutos e relativos}
+\begin{itemize}
+ \item Define-se \textit{erro absoluto} como a diferença entre o valor exato de um número x e seu valor aproximado \={x}: EA$_x$ = x - \={x}
+ \item Em geral, apenas o valor de \={x} é conhecido, tornando impossível obter o valor exato do erro absoluto. \pause Nestes casos, obtem-se um limitante superior ou uma estimativa para o módulo do erro absoluto
+\end{itemize}
+\begin{block}{Exemplo}
+  Sabendo-se que $\pi \in (3,14; 3,15)$ tomaremos para $\pi$ um valor dentro deste intervalo e teremos $|EA_\pi| = |\pi - \bar{\pi}| < 0,01$ 
+\end{block}
+
+\end{frame}
+
+\begin{frame}{Erro relativo}
+ \begin{block}{Exemplo 2}
+  \begin{itemize}
+   \item Considere x representado por \={x} = 2112,9 com $|EA_x| < 0,1$ (x $\in$ (2112,8; 2113))
+   \item Considere y representado por \={x} = 5,3 com $|EA_y| < 0,1$ (y $\in$ (5,2; 5,4))
+  \end{itemize}
+  
+  Tanto para x quanto para y os valores são representados com o mesmo erro absoluto. Porém, um é tão preciso quanto o outro?
+  \pause
+ \end{block}
+ \begin{block}{}
+  \textit{O erro de 1 cm na medição entre dois planetas é o mesmo que o erro de 1 cm na medição entre letras vizinhas num texto?}
+ \end{block}
+
+
+
+\end{frame}
+
+\begin{frame}{Erro relativo}
+\begin{block}{Definição}
+O erro relativo ER$_x$ é definido por:
+ \centering
+ 
+ ER$_x$ = $\dfrac{|EA_x|}{|\bar{x}|} = \dfrac{x - \bar{x}}{\bar{x}}$
+%  \raggedright
+ 
+\end{block}
+
+Quais seriam os erros relativos dos exemplos anteriores?
+
+\begin{block}{}
+ ER$_x$ = $\dfrac{|EA_x|}{|\bar{x}|} < \dfrac{0,1}{2112,9} \approx 4,7 * 10^{-5}$
+
+ 
+\end{block}
+
+\begin{block}{}
+ ER$_x$ = $\dfrac{|EA_x|}{|\bar{x}|} < \dfrac{0,1}{5,3} \approx 0,02$
+
+ 
+\end{block}
+
+\end{frame}
+
+\begin{frame}{Consequências do truncamento/arredondamento}
+\small{
+    Será mostrado abaixo, através de um exemplo, como os erros de arredondamento e, ou, truncamento podem influenciar o desenvolvimento de um cálculo. }\pause
+
+   \begin{block}{}
+      Supondo-se que as operações abaixo sejam processadas em uma máquina com 4 dígitos significativos e fazendo-se
+      $$x_1 = 0,3491 \cdot 10^4$$
+      $$x_2 = 0,2345 \cdot 10^0$$
+      tem-se
+      $$(x_2 + x_1) - x_1 = (0,2345 \cdot 10^0 + 0,3491 \cdot 10^4) - 0,3491 \cdot 10^4$$
+      $$\hspace{1.2cm}\; = 0,3491 \cdot 10^4 - 0,3491 \cdot 10^4 = 0,0000$$
+   \end{block}
+\end{frame}
+
+
+
+
+\begin{frame}{Continuação...}
+    \begin{block}{}
+      $$x_2 + (x_1 - x_1) = 0,2345 \cdot 10^0 + (0,3491 \cdot 10^4 - 0,3491 \cdot 10^4)$$
+      $$ \hspace{-1.2cm}= 0,2345 \cdot 10^0 + 0,0000 $$
+      $$ \hspace{-2.7cm}= 0,2345 \cdot 10^0 \,$$
+   \end{block} \pause
+\small{
+   Os dois resultados são diferentes, quando não deveriam ser, pois a adição é uma operação distributiva. A causa desta diferença foi o arredondamento feito na adição $(x_2 + x_1)$, cujo resultado tem 8 dígitos. Como a máquina só armazena 4 dígitos, os menos significativos foram desprezados. \pause
+
+%    $ $
+
+   Ao se utilizar máquinas de calcular deve-se estar atento a essas particularidades causadas pelo erro de arredondamento, não só na adição mas também nas outras operações.
+   }
+\end{frame}
+
+\begin{frame}{Exemplo 2}
+ Considerando um sistema de aritmética de ponto flutuante de 4 digitos, na base 10, e com acumulador de precisão dupla.
+ Dados x = 0,937 * 10$^4$ e y = 0,1272 * 10$^2$, obter x + y com truncamento e arrendondamento \pause
+ 
+ Alinha-se os pontos decimais dos valores acima
+ 
+ \centering 
+ x + x = 0,937 * 10$^4$ e y = 0,001272 * 10$^4$ = 0,938272 * 10$^4$
+ 
+\raggedright
+Então,
+
+\centering 
+    x + y = (0,937 + 0,001271) * 10$^4$
+ 
+\end{frame}
+
+\begin{frame}{Exemplo 3}
+ Considerando um sitema de aritmética de ponto flutuante de 4 digitos, na base 10, e com acumulador de precisão dupla.
+ Sejam x e y anteriores, obter xy \pause
+ 
+ \centering
+ 
+ xy = (0,937 * 10$^4$) * (0,1272 * 10$^2$) =  (0,937 * 0,1272) * 10$^6$ = 
+  = 0,1191864 * 10$^6$
+ 
+\end{frame}
+
+\begin{frame}{}
+\begin{block}{Exercício 1}
+Calcular o valor de $sen(\pi/6)$ pela série
+
+$sen(x) = \sum\limits_{i=0}^{n} \frac{(-1)^{i} \cdot x^{2i+1}}{(2i+1)!} = x - \frac{x^3}{3!} + \frac{x^5}{5!} - \frac{x^7}{7!} + \ldots$
+utilizando $n=\{1,\,2,\,\ldots,\,5\}$. Apresente em uma tabela os valores de $sen(x)$ exato e aproximados com os respectivos valores de $n$.
+ 
+\end{block}
+
+\begin{block}{Exercício 2}
+  Implementar um programa computacional para calcular o valor de $sen(\pi/6)$ pela série, imprimir os valores de $n = 1,\,2,\,\ldots,\, 20$, do valor aproximado de $sen(\pi/6)$, do valor exato $sen(\pi/6) = 0.5$ e do erro (valor exato - valor aproximado), utilizando ao menos $10$ algarismos significativos. 
+\end{block}
+
+\end{frame}
+
+
+
+
+\end{document}

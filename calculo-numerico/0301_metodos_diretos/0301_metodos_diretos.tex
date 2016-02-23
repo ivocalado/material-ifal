@@ -1,0 +1,658 @@
+%\documentclass[t,handout]{beamer}
+
+% \documentclass{beamer}
+% 
+% \usepackage{beamerthemeshadow}
+% \usepackage{amsfonts}
+% \usepackage{amssymb}
+% \usepackage{amsmath}
+% \usepackage{amsthm}
+% \usepackage[portuguese]{babel}
+% \usepackage[latin1]{inputenc}
+% \usepackage{graphicx}
+% \usepackage{latexsym}
+% \usepackage{geometry}
+% \usepackage{rotating}
+% \usepackage{color}
+% \usepackage{pgf}
+% \usepackage{xcolor}
+% \usepackage{textcomp}
+
+
+\documentclass{beamer}
+
+
+\usepackage[latin1]{inputenc}
+
+\usepackage[portuguese]{babel}
+\usepackage[tight]{subfigure}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{url}
+% \usepackage{inconsolata}
+\newcommand{\setcolor}[2]{\color{#1}{#2}\color{black}}
+\usepackage{mathtools}
+%Pacote de listagem de cï¿½digo
+\usepackage{listings}
+
+\usepackage{mathtools}
+
+\newcommand{\quadd}{\quad \quad}
+\newcommand{\quaddd}{\quad \quad \quad}
+
+\lstset{extendedchars=true, breaklines=true, frame=tb,
+basicstyle=\footnotesize, stringstyle=\ttfamily,
+showstringspaces=false,language=HTML }
+
+\usecolortheme[RGB={153,204,123}]{structure}
+\setbeamertemplate{footline}[frame number]
+\setbeamertemplate{navigation symbols}{}
+
+ \usetheme{Ilmenau} %LEGAL (forte candidato)
+\newcommand*\oldmacro{}
+\let\oldmacro\insertshortauthor% save previous definition
+\renewcommand*\insertshortauthor{%
+  \leftskip=.3cm% before the author could be a plus1fill ...
+  \insertframenumber\,/\,\inserttotalframenumber\hfill\oldmacro}
+
+
+\author[Ivo Calado]{Ivo Calado}
+\date{\today}
+\institute[IFAL]{Instituto Federal de Educação, Ciência e Tecnologia de Alagoas}
+\title[Cálculo Numérico]{Resolução de sistemas lineares}
+\logo{\includegraphics[width=0.2\linewidth]{imagens/ifal-logo.jpg}}
+\subtitle{\textit{Métodos Diretos\\}}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+% \section{Roteiro}
+% \AtBeginSection[]
+{\frame{
+\frametitle{Roteiro}
+\tableofcontents[hidesubsections]
+}
+}
+
+\begin{frame}{Observação}
+ Este material é baseado no material produzido pelo professor \textbf{Jonas Joacir Radtke} da \textbf{UTPR}
+\end{frame}
+
+\section{Introdução a Sistemas Lineares}
+\begin{frame}{Sistemas lineares}
+    Um problema de grande interesse prático que aparece, por exemplo, em cálculo de estruturas e redes elétricas e solução de equações diferenciais, é o da resolução numérica de um sistema linear $S_n$ de $n$ equações com $n$ incógnitas:
+   $$S_n = \left\{ \begin{array}{lllllllll}
+   a_{11}x_1 & + & a_{12}x_2 & + & \ldots & + & a_{1n} x_n & = & b_1 \\
+   a_{21}x_1 & + & a_{22}x_2 & + & \ldots & + & a_{2n} x_n & = & b_2 \\
+   \vdots & & \vdots & & \ddots & & \vdots & & \vdots \\
+   a_{n1}x_1 & + & a_{n2}x_2 & + & \ldots & + & a_{nn}x_n & = & b_n \\
+   \end{array} \right.$$
+
+   Sob a forma matricial $S_n$ pode ser escrito como
+   $$A\vec{x} = \vec{b}$$
+   onde $A$ é uma matriz quadrada de ordem $n$, $\vec{x}$ e $\vec{b}$ são vetores com $n$ componentes.
+\end{frame}
+
+\begin{frame}{Sistemas lineares}
+    O componente $a_{ij}$ da matriz $A$ é chamado de \textbf{coeficiente} da incógnita $x_j$ e os $b_i$ saõ chamados de \textbf{termos independentes}. A matriz $A$ é chamada \textbf{matriz dos coeficientes} e a matriz:
+   $$B = \left( \begin{array}{ccccc}
+   a_{11} & a_{12} & \ldots & a_{1n} & b_1 \\
+   a_{21} & a_{22} & \ldots & a_{2n} & b_2 \\
+   \vdots & \vdots & \ddots & \vdots & \vdots \\
+   a_{n1} & a_{n2} & \ldots & a_{nn} & b_{n}
+   \end{array} \right) = \Big[A : \vec{b}\Big]$$
+   é chamada de \textbf{matriz aumentada} ou \textbf{matriz completa} do sistema.
+
+   $ $
+
+   Chamaremos de $\vec{x}^*$ o vetor solução e de $\overline{x}$, uma solução aproximada do sistema linear $S_n$.
+\end{frame}
+
+\begin{frame}{Classificação Quanto ao Número de Soluções}
+   \begin{block}{Teorema}
+      \begin{itemize}
+         \item[(i)] Um sistema de $n$ equações e $n$ incógnitas admite solução se, e somente se o posto da matriz ampliada é igual ao posto da matriz dos coeficientes.
+         \item[(ii)] Se as duas matrizes têm o mesmo posto $p$ e $p=n$, a solução será única.
+         \item[(iii)] Se as duas matrizes têm o mesmo posto $p$ e $p < n$, podemos escolher $n - p$ incógnitas, e as outras $p$ incógnitas serão dadas em função destas.
+      \end{itemize}
+   \end{block}
+
+   No caso $(iii)$ dizemos que o grau de liberdade é $n-p$.
+
+   Denotamos por $p_a$ o posto da matriz ampliada e $p_c$ o posto da matriz dos coeficientes.
+\end{frame}
+
+\begin{frame}{Aplicação na Engenharia}
+   \begin{block}{Problema}
+      Uma placa quadrada de material homogêneo é mantida com a borda $AB$ a temperatura de $10^oC$, a borda $BC$ a $20^oC$, a borda $CD$ a $30^oC$ e a borda $AD$ a $40^oC$, conforme ilustrado na figura abaixo. Após atingido o equilibrio térmico, qual será a temperatura aproximada em cada ponto da placa?
+      \begin{figure}[ht]
+         \centering{\includegraphics[scale=0.25]{imagens/problema-01.png}}
+      \end{figure}
+   \end{block}
+\end{frame}
+
+\begin{frame}{Aplicação na Engenharia}
+
+   \begin{block}{Solução:}
+      Intuitivamente podemos supor que a temperatura de um dado ponto da placa, após o equilibrio térmico, será dada pela média das temperaturas dos pontos vizinhos. Logo podemos escrever que
+      $$T_{22} = \frac{T_{12} + T_{23} + T_{32} + T_{21}}{4} = \frac{1}{4}(T_{23} + T_{32} + 50)$$
+      $$T_{23} = \frac{T_{13} + T_{24} + T_{33} + T_{22}}{4} = \frac{1}{4}(T_{33} + T_{22} + 30)$$
+      $$T_{32} = \frac{T_{22} + T_{33} + T_{42} + T_{31}}{4} = \frac{1}{4}(T_{22} + T_{33} + 70)$$
+      $$T_{33} = \frac{T_{23} + T_{34} + T_{43} + T_{32}}{4} = \frac{1}{4}(T_{23} + T_{32} + 50)$$
+   \end{block} 
+\end{frame}
+
+\begin{frame}{Aplicação na Engenharia}
+ \begin{block}{}
+      Reescrevendo as equações anteriores temos o seguinte sistema algébrico linear
+      $$\left\{ \begin{array}{rcrcrcrcr}
+      4T_{22} & - & T_{23} & - & T_{32} & + & 0T_{33} & = & 50 \\
+      -T_{22} & + & 4T_{23} & + & 0T_{32} & - & T_{33} & = & 30 \\
+      -T_{22} & + & 0T_{23} & + & 4T_{32} & - & T_{33} & = & 70 \\
+      0T_{22} & - & T_{23} & - & T_{32} & + & 4T_{33} & = & 50
+      \end{array}\right.$$
+      \pause cuja a matriz ampliada é dada por
+      $$\left[ \begin{array}{rrrrr}
+      4 & -1 & -1 & 0 & 50 \\
+      -1 & 4 & 0 & -1 & 30 \\
+      -1 & 0 & 4 & -1 & 70 \\
+      0 & -1 & -1 & 4 & 50 \\
+      \end{array} \right] $$
+   \end{block}
+\end{frame}
+
+\section{Sistemas Triangulares}
+\begin{frame}{Sistemas Triangulares}
+   \small{ Seja um sistema de equações algébricas dado por $A\vec{x} = \vec{b}$
+   onde a matriz $A = (a_{ij})$ é \textbf{triangular superior}, ou seja, $a_{i,j} = 0$ se $j < i$, $j = 1,2,...,n$, que na forma expandida fornece}
+   $$\left\{ \begin{array}{lllllllll}
+   a_{11}x_1 & + & a_{12}x_2 & + & \ldots & + & a_{1n} x_n & = & b_1 \\
+             &   & a_{22}x_2 & + & \ldots & + & a_{2n} x_n & = & b_2 \\
+             &   & & & \ddots & & \vdots & & \vdots \\
+   & & & & & & a_{nn}x_n & = & b_n \\
+   \end{array} \right.$$
+   ou onde a matriz $A = (a_{ij})$ é \textbf{triangular inferior}, ou seja, $a_{ij} = 0$ se $j > i$, $j = 1,2,...,n$, que na forma expandida fornece
+   $$\left\{ \begin{array}{lllllllll}
+   a_{11}x_1 & & & & & & & = & b_1 \\
+   a_{21}x_1 & + & a_{22}x_2 & & & & & = & b_2 \\
+   \vdots & & \vdots & & \ddots & & & & \vdots \\
+   a_{n1}x_1 & + & a_{n2}x_2 & + & \ldots & + & a_{nn}x_n & = & b_n \\
+   \end{array} \right.$$
+\end{frame}
+
+\begin{frame}
+    Observe que os sistemas triangulares determinados, isto é, quando $a_{ii}$, $i = 1, 2, ..., n$, são facilmente resolvidos por substituição retroativa ou progressiva.
+   \begin{block}{Algorítmo}
+      Seja a matriz $A$ triangular superior de ordem $n$:
+      \begin{itemize}
+         \item[(1)] $x_n = \displaystyle\frac{b_n}{a_{nn}}$
+         \item[(2)] $i = n-1$
+         \item[(3)] $x_i = \displaystyle\frac{\left(b_i - \displaystyle\sum_{j=i+1}^n a_{ij} x_j\right)}{a_{ii}}$
+         \item[(4)] $i = i - 1$
+         \item[(5)] Se $i \geq 1$, voltar ao passo (3)
+         \item[(6)] FIM
+      \end{itemize}
+   \end{block}
+\end{frame}
+
+\begin{frame}
+    \begin{block}{Algorítmo}
+      Seja a matriz $A$ triangular inferior de ordem $n$:
+      \begin{itemize}
+         \item[(1)] $x_1 = \displaystyle\frac{b_1}{a_{11}}$
+         \item[(2)] $i = 2$
+         \item[(3)] $x_i = \displaystyle\frac{\left(b_i - \displaystyle\sum_{j=1}^{i-1} a_{ij} x_j\right)}{a_{ii}}$
+         \item[(4)] $i = i + 1$
+          \item[(5)] Se $i \leq n$, voltar ao passo (3)
+         \item[(6)] FIM
+      \end{itemize}
+   \end{block}
+\end{frame}
+
+\begin{frame}
+   \begin{block}{Exemplo}
+      Determinar o vetor solução do seguinte sistema linear:
+      $$\left\{ \begin{array}{lllllll}
+                   x_1 & & & & & = & 1 \\
+                   2x_1 & + & 5x_2 & & & = & 2 \\
+                   3x_1 &+& 6x_2 &+& 4x_3 &=& 3
+                \end{array} \right.$$
+   \end{block}
+
+   \begin{block}{Exercício 1}
+      Determinar o vetor solução dos seguintes sistemas lineares:
+      \begin{itemize}
+         \item[(a)] $\left\{ \begin{array}{lllllll}
+                   x_1 &-& 3x_2 &+& x_3 & = & 6 \\
+                   & & 4x_2 &-& x_3 & = & 5 \\
+                   & & & & x_3 &=& 4
+            \end{array} \right.$
+         \item[(b)] $\left\{ \begin{array}{lllllllll}
+                   x_1 & & & & & & &=& 1 \\
+                   x_1 &+& x_2 & & & & &=& -1 \\
+                   x_1 &+& x_2 &+& x_3 & & &=& 3 \\
+                   x_1 &+& x_2 &+& x_3 &+& x_4 &=& 3
+            \end{array} \right.$
+      \end{itemize}
+   \end{block}
+\end{frame}
+
+\begin{frame}
+    \begin{block}{Exercício 2}
+      Implementar um programa computacional para a resolução de um sistema linear triangular superior. Como dados de entrada deverão ser fornecidos a dimensão da matriz, os valores dos coeficientes e os valores dos termos independentes.
+   \end{block}
+
+   \begin{block}{}
+      Os métodos numéricos para resolução de um sistema linear podem ser divididos em dois grupos:
+      \begin{description}
+         \item[Métodos Diretos:] são aqueles que, a menos de erros de arredondamento, fornecem a solução exata do sistema linear, caso ela exista, após um número finito de operações.
+         \item[Métodos Iterativos:] geram uma sequência de vetores $\{\vec{x}^{(k)}\}$, a partir de uma aproximação inicial $\vec{x}^{(0)}$. Sob certas condições esta sequência converge para a solução $\vec{x}^*$, caso ela exista.
+      \end{description}
+   \end{block}
+\end{frame}
+
+\begin{frame}
+    \begin{block}{Definição}
+      Denomina-se \textbf{transformações elementares} às seguintes operações sobre as equações de um sistema linear:
+      \begin{itemize}
+         \item[(a)] Trocar a ordem de duas equações do sistema.
+         \item[(b)] Multiplicar uma equação do sistema por uma constante não nula.
+         \item[(c)] Adicionar um múltiplo de uma equação a uma outra equação.
+      \end{itemize}
+   \end{block}
+
+   Obs.: Qualquer conjunto de transformações elementares pode ser aplicado a um sistema de equações lineares sem alterar o conjunto solução do mesmo.
+
+   \begin{block}{Definição}
+      Dois sistemas $S_1$ e $S_2$ serão \textbf{equivalentes} se $S_2$ puder ser obtido de $S_1$ através de transformações elementares.
+   \end{block}
+\end{frame}
+
+\section{Métodos de resolução}
+\subsection{Método de eliminação de Gauss}
+
+\begin{frame}{Método de eliminação de Gauss}
+    \begin{block}{Método de Eliminação de Gauss}
+      O \textbf{Método de Eliminação de Gauss}, ou simplesmente \textbf{Método de Gauss}, consiste em transformar o sistema original $A\vec{x} = \vec{b}$ utilizando $(n-1)$ passos em um sistema linear equivalente com matriz dos coeficientes triangular superior $U\vec{x} = \vec{c}$ o qual se resolve facilmente por substituição.
+   \end{block}
+
+   \begin{block}{Exemplo}
+      Resolver
+      $$\left\{ \begin{array}{lllllll}
+        2x_1 &+& 3x_2 &-& x_3 &=& 5 \\
+        4x_1 &+& 4x_2 &-& 3x_3 & = & 3 \\
+        2x_1 &-& 3x_2 &+& x_3 &=& -1
+      \end{array} \right.$$
+      pelo método de Gauss
+   \end{block}
+\end{frame}
+
+\begin{frame}
+   \textbf{Solução:} Escreve-se a matriz aumentada do sistema linear, isto é,
+   $$B = \left[ \begin{array}{rrrrr}
+      \textbf{2} & 3 & -1 & | & 5 \\
+      4 & 4 & -3 & | & 3 \\
+      2 & -3 & 1 & | & -1
+   \end{array} \right] = \Big[ \; A \;|\; \vec{b} \; \Big]$$
+
+   Fazendo $B_0 = B$ e chamando de $L_1^{(0)}$, $L_2^{(0)}$, $L_3^{(0)}$ as linhas $1$, $2$ e $3$, respectivamente, de $B_0$, escolhe-se $a_{11}^{(0)}$ como pivô e calculam-se os multiplicadores:
+   $$m_{21}^{(0)} = -\frac{a_{21}^{(0)}}{a_{11}^{(0)}} = -\frac{4}{2} = -2$$
+   $$m_{31}^{(0)} = -\frac{a_{31}^{(0)}}{a_{11}^{(0)}} = -\frac{2}{2} = -1$$
+
+\end{frame}
+
+\begin{frame}
+    Faz-se, agora, as seguintes transformações elementares sobre as linhas de $B_0$:
+   $$L_1^{(1)} \hspace{1cm} \leftarrow \hspace{1cm} L_1^{(0)} \hspace{2cm} \;\,$$
+   $$L_2^{(1)} \hspace{1cm} \leftarrow \hspace{1cm} L_2^{(0)} + m_{21}^{(0)} \cdot L_1^{(0)}$$
+   $$L_3^{(1)} \hspace{1cm} \leftarrow \hspace{1cm} L_3^{(0)} + m_{31}^{(0)} \cdot L_1^{(0)}$$
+
+   onde $L_{1}^{(1)}$, $L_{2}^{(1)}$ e $L_{3}^{(1)}$ são linhas da matriz transformada, $B_1$. Efetuando-se as transformações acima indicadas tem-se:
+   $$B_1 = \left[ \begin{array}{rrrrr}
+      2 & 3 & -1 & | & 5 \\
+      0 & \textbf{-2} & -1 & | & -7 \\
+      0 & -6 & 2 & | & -6
+   \end{array} \right]$$
+
+   Escolhe-se $a_{22}^{(1)} = -2$ como pivô e calcula-se o multiplicador
+   $$m_{32}^{(1)} = -\frac{a_{32}^{(1)}}{a_{22}^{(1)}} = -\frac{-6}{-2} = -3$$
+\end{frame}
+
+\begin{frame}
+    São feitas agora as seguintes transformações elementares sobre as linhas de $B_1$:
+   $$L_1^{(2)} \hspace{1cm} \leftarrow \hspace{1cm} L_1^{(1)} \hspace{2cm} \;\,$$
+   $$L_2^{(2)} \hspace{1cm} \leftarrow \hspace{1cm} L_2^{(1)} \hspace{2cm} \;\,$$
+   $$L_3^{(2)} \hspace{1cm} \leftarrow \hspace{1cm} L_3^{(1)} + m_{32}^{(1)} \cdot L_2^{(1)}$$
+
+   onde $L_{1}^{(1)}$, $L_{2}^{(1)}$ e $L_{3}^{(1)}$ são linhas da matriz transformada, $B_2$, que está na forma triangular, isto é,
+   $$B_2 = \left[ \begin{array}{rrrrr}
+      2 & 3 & -1 & | & 5 \\
+      0 & -2 & -1 & | & -7 \\
+      0 & 0 & 5 & | & 15
+   \end{array} \right]$$
+
+   A matriz $B_2$ é a matriz aumentada do sistema triangular superior
+   $$\left\{ \begin{array}{lllllll}
+      2x_1 &+& 3x_2 &-& x_3 &=& 5 \\
+      &-& 2x_2 &-& x_3 & = & -7 \\
+      & & & & 5x_3 &=& 15
+   \end{array} \right. \hspace{1cm} \Rightarrow \hspace{1cm} \overline{x} = \left[ \begin{array}{r}  1 \\ 2 \\ 3 \end{array}
+ \right]$$
+\end{frame}
+
+\begin{frame}{Dispositivo Prático}
+   \begin{figure}[h!]
+ \centering
+ \includegraphics[scale=0.25]{./imagens/tabela.png}
+ % tabela.png: 1442x870 pixel, 96dpi, 38.15x23.02 cm, bb=0 0 1081 652
+
+\end{figure}
+
+\end{frame}
+
+\begin{frame}
+    \begin{figure}[h!]
+ \centering
+ \includegraphics[scale=0.3]{./imagens/algoritmo-01.png}
+ % tabela.png: 1442x870 pixel, 96dpi, 38.15x23.02 cm, bb=0 0 1081 652
+
+\end{figure}
+\end{frame}
+
+\frame{
+   \frametitle{Aplicação na Engenharia}
+   \begin{block}{Problema}
+      Uma placa quadrada de material homogêneo é mantida com a borda $AB$ a temperatura de $10^oC$, a borda $BC$ a $20^oC$, a borda $CD$ a $30^oC$ e a borda $AD$ a $40^oC$, conforme ilustrado na figura abaixo. Após atingido o equilibrio térmico, qual será a temperatura aproximada em cada ponto da placa?
+      \begin{figure}[ht]
+         \centering{\includegraphics[scale=0.25]{imagens/placa01.png}}
+      \end{figure}
+   \end{block}
+}
+
+\frame {
+   \textbf{Solução:}
+   Intuitivamente podemos supor que a temperatura de um dado ponto da placa, após o equilibrio térmico, será dada pela média das temperaturas dos pontos vizinhos. Logo podemos escrever que
+   $$T_{22} = \frac{T_{12} + T_{23} + T_{32} + T_{21}}{4} = \frac{1}{4}(T_{23} + T_{32} + 50)$$
+   $$T_{23} = \frac{T_{13} + T_{24} + T_{33} + T_{22}}{4} = \frac{1}{4}(T_{33} + T_{22} + 30)$$
+   $$T_{32} = \frac{T_{22} + T_{33} + T_{42} + T_{31}}{4} = \frac{1}{4}(T_{22} + T_{33} + 70)$$
+   $$T_{33} = \frac{T_{23} + T_{34} + T_{43} + T_{32}}{4} = \frac{1}{4}(T_{23} + T_{32} + 50)$$
+}
+%===============================================================================
+\frame {
+   Reescrevendo as equações anteriores temos o seguinte sistema algébrico linear
+   $$\left\{ \begin{array}{rcrcrcrcr}
+   4T_{22} & - & T_{23} & - & T_{32} & + & 0T_{33} & = & 50 \\
+   -T_{22} & + & 4T_{23} & + & 0T_{32} & - & T_{33} & = & 30 \\
+   -T_{22} & + & 0T_{23} & + & 4T_{32} & - & T_{33} & = & 70 \\
+   0T_{22} & - & T_{23} & - & T_{32} & + & 4T_{33} & = & 50
+   \end{array}\right.$$
+   cuja a matriz ampliada $B_0$ é dada por
+   $$B_0 = \left[ \begin{array}{rrrrcr}
+   4 & -1 & -1 & 0 & | & 50 \\
+   -1 & 4 & 0 & -1 & | & 30 \\
+   -1 & 0 & 4 & -1 & | & 70 \\
+   0 & -1 & -1 & 4 & | & 50 \\
+   \end{array} \right]$$
+}
+
+\frame{
+   Escolhe-se $a_{11}^{(0)} = 4$ como pivô e calculam-se os multiplicadores:
+   $$m_{21}^{(0)} = -\frac{a_{21}^{(0)}}{a_{11}^{(0)}} = -\frac{(-1)}{4} = 0,25$$
+   $$m_{31}^{(0)} = -\frac{a_{31}^{(0)}}{a_{11}^{(0)}} = -\frac{(-1)}{4} = 0,25$$
+   $$m_{41}^{(0)} = -\frac{a_{41}^{(0)}}{a_{11}^{(0)}} = -\frac{0}{4} = 0$$
+
+   Faz-se, agora, as seguintes transformações elementares:
+   $$L_1^{(1)} \quadd \leftarrow \quadd L_1^{(0)} \quaddd \quadd \;\,$$
+   $$L_2^{(1)} \quadd \leftarrow \quadd L_2^{(0)} + 0,25 \cdot L_1^{(0)}$$
+   $$L_3^{(1)} \quadd \leftarrow \quadd L_3^{(0)} + 0,25 \cdot L_1^{(0)}$$
+   $$L_4^{(1)} \quadd \leftarrow \quadd L_4^{(0)} \quaddd \quadd \;\,$$
+}
+
+\frame{
+   Efetuando-se as transformações acima indicadas tem-se:
+   $$B_1 = \left[ \begin{array}{rrrrcr}
+   4 & -1 & -1 & 0 & | & 50 \\
+   0 & 3,75 & -0,25 & -1 & | & 42,5 \\
+   0 & -0,25 & 3,75 & -1 & | & 82,5 \\
+   0 & -1 & -1 & 4 & | & 50 \\
+   \end{array} \right]$$
+
+   Escolhe-se $a_{22}^{(1)} = 3,75$ como pivô e calcula-se os multiplicadores:
+   $$m_{32}^{(1)} = -\frac{a_{32}^{(1)}}{a_{22}^{(1)}} = -\frac{(-0,25)}{3,75} = 0,06666$$
+   $$m_{42}^{(1)} = -\frac{a_{42}^{(1)}}{a_{22}^{(1)}} = -\frac{(-1)}{3,75} = 0,26666$$
+}
+%===============================================================================
+\frame{
+   São feitas agora as seguintes transformações elementares sobre as linhas de $B_1$:
+   $$L_1^{(2)} \quadd \leftarrow \quadd L_1^{(1)} \quaddd \quadd \;\, $$
+   $$L_2^{(2)} \quadd \leftarrow \quadd L_2^{(1)} \quaddd \quadd \;\,$$
+   $$\quad \;\, L_3^{(2)} \quadd \leftarrow \quadd L_3^{(1)} + 0,06666 \cdot L_2^{(1)}$$
+   $$\quad \;\, L_4^{(2)} \quadd \leftarrow \quadd L_4^{(1)} + 0,26666 \cdot L_2^{(1)}$$
+
+   Efetuando-se as transformações acima indicadas tem-se:
+   $$B_2 = \left[ \begin{array}{rrrrcr}
+   4 & -1 & -1 & 0 & | & 50 \\
+   0 & 3,75 & -0,25 & -1 & | & 42,5 \\
+   0 & 0 & 3,73333 & -1,06666 & | & 85,33333 \\
+   0 & 0 & -1,06666 & 3,73333 & | & 61,33333 \\
+   \end{array} \right]$$
+}
+%===============================================================================
+\frame{
+   Escolhe-se $a_{33}^{(2)} = 3,73333$ como pivô e calcula-se o multiplicador:
+   $$m_{43}^{(2)} = -\frac{a_{43}^{(2)}}{a_{33}^{(2)}} = -\frac{(-1,06666)}{3,73333} = 0,28571429$$
+
+   São feitas agora as seguintes transformações elementares sobre as linhas de $B_1$:
+   $$L_1^{(3)} \quadd \leftarrow \quadd L_1^{(2)} \quaddd \quadd \;\, $$
+   $$L_2^{(3)} \quadd \leftarrow \quadd L_2^{(2)} \quaddd \quadd \;\,$$
+   $$L_3^{(3)} \quadd \leftarrow \quadd L_3^{(2)} \quaddd \quadd \;\,$$
+   $$\quad \;\, L_4^{(3)} \quadd \leftarrow \quadd L_4^{(2)} + 0,28571 \cdot L_3^{(2)}$$
+
+
+}
+
+\frame{
+   Efetuando-se as transformações acima indicadas tem-se:
+   $$B_2 = \left[ \begin{array}{rrrrcr}
+   4 & -1 & -1 & 0 & | & 50 \\
+   0 & 3,75 & -0,25 & -1 & | & 42,5 \\
+   0 & 0 & 3,73333 & -1,06666 & | & 85,33333 \\
+   0 & 0 & 0 & 3,42857 & | & 85,71428 \\
+   \end{array} \right]$$
+
+      Fazendo substituição retroativa temos:
+   $$T_{4} = \frac{85,71428}{3,42857} = 25\quaddd \quaddd \quadd\;$$
+   $$T_{3} = \frac{85,33333 + 1,06666 \cdot 25}{3,73333} = 30\quadd$$
+   $$T_{2} = \frac{42,5 + 0,25 \cdot 30 + 1 \cdot 25}{3,75} = 20\quadd$$
+   $$T_{1} = \frac{50 + 1 \cdot 20 + 1 \cdot 30 + 0 \cdot 25}{4} = 25 \quad$$
+
+}
+
+\frame{
+
+   \begin{block}{Exercício}
+      Resolva o sistema linear abaixo utilizando o Método de Gauss:
+      $$\left\{ \begin{array}{rrrrrrr}
+      2x_1 &+& 4x_2 &-& 6x_3 &=& -21,2 \\
+      -x_1 &-& 3x_2 &+& x_3 &=& 5,7 \\
+      4x_1 &+& 2x_2 &-& x_3 &=& 1,8 \\
+      \end{array} \right.$$
+   \end{block}
+}
+
+\frame{
+   \begin{block}{Exercício 2}
+      Determinar o vetor solução dos sistemas lineares abaixo através do método de eliminação de Gauss:
+      \begin{itemize}
+         \item[(a)] $\left\{ \begin{array}{rrrrrrrrr}
+            2x_1 &+& 3x_2 &+& x_3 &-& x_4 &=& 6,9 \\
+            -x_1 &+& x_2 &-& 4x_3 &+& x_4 &=& -6,6 \\
+            x_1 &+& x_2 &+& x_3 &+& x_4 &=& 10,2 \\
+            4x_1 &-& 5x_2 &+& x_3 &-& 2x_4 &=& -12,3
+            \end{array} \right.$
+         \item[(b)] $\left\{ \begin{array}{rrrrrrrrr}
+            4x_1 &+& 3x_2 &+& 2x_3 &+& x_4 &=& 10 \\
+            x_1 &+& 2x_2 &+& 3x_3 &+& 4x_4 &=& 5 \\
+            x_1 &-& x_2 &-& x_3 &-& x_4 &=& -1 \\
+            x_1 &+& x_2 &+& x_3 &+& x_4 &=& 3
+            \end{array} \right.$
+         \item[(c)] $\left\{ \begin{array}{rrrrrrrrr}
+            x_1 &+& x_2 &+& 2x_3 &+& 4x_4 &=& 7,12 \\
+            x_1 &+& x_2 &+& 5x_3 &+& 6x_4 &=& 12,02 \\
+            2x_1 &+& 5x_2 &+& x_3 &+& 2x_4 &=& 14,90 \\
+            4x_1 &+& 6x_2 &+& 2x_3 &+& x_4 &=& 20,72
+         \end{array} \right.$
+      \end{itemize}
+   \end{block}
+}
+
+\subsection{Método de Pivotação Completa}
+\frame{
+   \frametitle{Método de Pivotação Completa}
+   No momento de se calcular o multiplicador $m_{ik}$, se o pivô estiver próximo de zero, o método pode ampliar os erros de arredondamento. Para se contornar estes problemas, escolhe-se como pivô $\max(|a_{ij}|)$, com $i,j =1, 2, ..., n$. Logo,
+   $$m_{iq} = - \frac{a_{iq}}{a_{pq}}$$
+   onde $a_{pq}$ é o elemento pivô e a linha $p$ é a linha pivotal.
+
+   Soma-se, a cada linha não pivotal, o produto da linha pivotal pelo fator correspondente $m_{iq}$ da linha não pivotal. Rejeitando esta coluna e a p-ésima linha do pivô, tem-se uma nova matriz $M^{(1)}$. Repetindo o mesmo raciocínio $n-1$ vezes chegamos a uma única linha. Para se obter a solução, constrói-se o sistema formado por todas as linhas pivotais e, a partir da última linha pertencente a matriz $M^{(n-1)}$, resolve-se através de substituições retroativas.
+}
+
+\frame{
+   \begin{block}{Exemplo}
+      Resolver pelo método de pivotação completa, retendo, durante as eliminações, cinco algarismos depois da vírgula:
+      $$\left\{ \begin{array}{rrrrrrr}
+      0,20x_1 &-& 2,00x_2 &+& 4,50x_3 &=& 13,20 \\
+      1,90x_1 &+& 1,25x_2 &-& 2,95x_3 &=& -5,46 \\
+      2,00x_1 &-& 5,00x_2 &+& 3,00x_3 &=& 20,4
+      \end{array} \right.$$
+   \end{block}
+
+   \textbf{Solução:} A matriz ampliada é dada por:
+   $$B_0 = \left[ \begin{array}{rrrrrr}
+   0,20 & -2,00 & 4,50 &|& 13,20 \\
+   1,90 &  1,25 & -2,95 &|& -5,46 \\
+   2,00 & \setcolor{blue}{-5,00} & 3,00 &|& 20,40
+   \end{array} \right]$$
+% 
+   Escolhe-se como pivô o maior em valor absoluto dentre os coeficientes da matriz $A$, ou seja, $a_{32} = -5$, e calculam-se os multiplicadores:
+}
+% %===============================================================================
+\frame{
+   $$m_{12}^{(0)} = -\frac{a_{12}}{a_{32}} = -\frac{(-2)}{(-5)} = -0,4$$
+   $$m_{22}^{(0)} = -\frac{a_{22}}{a_{32}} = -\frac{1,25}{(-5)} = 0,25$$
+
+   Faz-se, agora, as seguintes transformações elementares sobre as linhas de $B_0$:
+   $$L_1^{(1)} \quadd \leftarrow \quadd L_1^{(0)} + m_{12}^{(0)} \cdot L_3^{(0)}$$
+   $$L_2^{(1)} \quadd \leftarrow \quadd L_2^{(0)} + m_{22}^{(0)} \cdot L_2^{(0)}$$
+   $$L_3^{(1)} \quadd \leftarrow \quadd L_3^{(0)} \quaddd \quadd \;\,$$
+
+   $$B_1 = \left[ \begin{array}{rrrrrr}
+   -0,60 & 0,00 & \setcolor{blue}{3,30} &|& 5,04 \\
+   2,40 &  0,00 & -2,20 &|& -0,36 \\
+   2,00 & -5,00 & 3,00 &|& 20,40
+   \end{array} \right]$$
+
+}
+%===============================================================================
+\frame{
+   Escolhe-se como pivô o maior em valor absoluto dentre os coeficientes da matriz $A$ com exceção da segunda coluna, ou seja, $a_{32} = 3,3$, e calculam-se os multiplicadores:
+   $$m_{23}^{(1)} = -\frac{a_{23}}{a_{13}} = -\frac{(-2,2)}{3,3} = \frac{2}{3}$$
+
+   Faz-se, agora, as seguintes transformações elementares sobre as linhas de $B_0$:
+   $$L_1^{(2)} \quadd \leftarrow \quadd L_1^{(1)} \quaddd \quadd \;\,$$
+   $$L_2^{(2)} \quadd \leftarrow \quadd L_2^{(1)} + m_{23}^{(1)} \cdot L_2^{(1)}$$
+   $$L_3^{(2)} \quadd \leftarrow \quadd L_3^{(1)} \quaddd \quadd \;\,$$
+
+   $$B_2 = \left[ \begin{array}{rrrrrr}
+   -0,60 & 0,00 & 3,30 &|& 5,04 \\
+   2,00 &  0,00 & 0,00 &|& 3,00 \\
+   2,00 & -5,00 & 3,00 &|& 20,40
+   \end{array} \right]$$
+}
+%===============================================================================
+\frame{
+   Efetuando-se as substituições retroativas obtemos:
+   $$x_1 = \frac{3,00}{2,00} = 1,5 \quaddd \quaddd \quaddd$$
+   $$x_3 = \frac{5,04 + 0,6 \cdot 1,5}{3,3} = 1,8 \quaddd \quad\;$$
+   $$x_2 = \frac{20,4 - 2 \cdot 1,5 - 3 \cdot 1,8}{-5,0} = -2,4\;\;$$
+
+
+}
+
+\frame {
+   \begin{block}{Exercício 1}
+      Resolva o sistema linear abaixo utilizando o método de pivotação completa:
+      $$\left\{ \begin{array}{rrrrrrrrr}
+      2x_1 &+& 2x_2 &+& x_3 &+& x_4 &=& 7 \\
+      x_1 &-& x_2 &+& 2x_3 &-& x_4 &=& 1 \\
+      3x_1 &+& 2x_2 &-& 3x_3 &-& 2x_4 &=& 4 \\
+      4x_1 &+& 3x_2 &+& 2x_3 &+& x_4 &=& 12
+      \end{array} \right.$$
+   \end{block}
+}
+%===============================================================================
+\frame{
+   \begin{block}{Exercício 2}
+      Determinar o vetor solução dos sistemas lineares abaixo através do método de pivotação completa:
+      \begin{itemize}
+         \item[(a)] $\left\{ \begin{array}{rrrrrrrrr}
+            2x_1 &+& 3x_2 &+& x_3 &-& x_4 &=& 6,9 \\
+            -x_1 &+& x_2 &-& 4x_3 &+& x_4 &=& -6,6 \\
+            x_1 &+& x_2 &+& x_3 &+& x_4 &=& 10,2 \\
+            4x_1 &-& 5x_2 &+& x_3 &-& 2x_4 &=& -12,3
+            \end{array} \right.$
+         \item[(b)] $\left\{ \begin{array}{rrrrrrrrr}
+            4x_1 &+& 3x_2 &+& 2x_3 &+& x_4 &=& 10 \\
+            x_1 &+& 2x_2 &+& 3x_3 &+& 4x_4 &=& 5 \\
+            x_1 &-& x_2 &-& x_3 &-& x_4 &=& -1 \\
+            x_1 &+& x_2 &+& x_3 &+& x_4 &=& 3
+            \end{array} \right.$
+         \item[(c)] $\left\{ \begin{array}{rrrrrrrrr}
+            x_1 &+& x_2 &+& 2x_3 &+& 4x_4 &=& 7,12 \\
+            x_1 &+& x_2 &+& 5x_3 &+& 6x_4 &=& 12,02 \\
+            2x_1 &+& 5x_2 &+& x_3 &+& 2x_4 &=& 14,90 \\
+            4x_1 &+& 6x_2 &+& 2x_3 &+& x_4 &=& 20,72
+         \end{array} \right.$
+      \end{itemize}
+   \end{block}
+}
+% %===============================================================================
+% \frame{
+%    \frametitle{Refinamento da Solução}
+%    Seja $\overline{x}^{(0)}$ a solução aproximada para o sistema $A\vec{x} = \vec{b}$. Obtém-se a solução melhorada $\overline{x}^{(1)}$ aplicando-se a correção $\delta^{(0)}$ em $\overline{x}^{(0)}$.
+%    $$\overline{x}^{(1)} = \overline{x}^{(0)} + \delta^{(0)}$$
+% 
+%    Se
+%    $$A\,\overline{x}^{(1)} = \vec{b}$$
+%    então
+%    $$A\left(\overline{x}^{(0)} + \delta^{(0)}\right) = \vec{b}$$
+%    $$\Rightarrow \quad A\,\overline{x}^{(0)} + A\,\delta^{(0)} = \vec{b}$$
+%    $$\Rightarrow \quad A\,\delta^{(0)} = \vec{b} - A\,\overline{x}^{(0)}$$
+%    $$\Rightarrow \quad A\,\delta^{(0)} = \vec{r}^{(0)} \quadd\;\;\,$$
+%    Assim, $\delta^{(0)}$ é obtido resolvendo o sistema $A\,\delta^{(0)} = \vec{r}^{(0)}$.
+% }
+% %===============================================================================
+% \frame{
+%    Obtido $\delta^{(0)}$, calcula-se $\overline{x}^{(1)} = \overline{x}^{(0)} + \delta^{(0)}$.
+% 
+%    Repete-se o processo para se obter $\overline{x}^{(2)}$, $\overline{x}^{(3)}$, ..., $\overline{x}^{(k)}$ até que se tenha a precisão desejada. Logo, obtem-se o refinamento de forma iterativa pela seguinte equação:
+%    $$\overline{x}^{(i+1)} = \overline{x}^{(i)} + \delta^{(i)}, \quad \textnormal{ com } i = 0,1,2,..., k$$
+% 
+%    
+% }
+% 
+% \frame{
+% \begin{block}{Exercício 1}
+%       Resolver o seguinte sistema com arredondamento em duas casas decimais na matriz aumentada utilizando o método de eliminação de Gauss. Considerando a solução $\overline{x}$ obtida, faça o refinamento até que se obtenha o resíduo $\vec{r}^{(k)} = \vec{0}$, considerando precisão dupla, ou seja, quatro casas decimais.
+%       $$\left\{ \begin{array}{rrrrrrrrr}
+%       8,7x_1 &+& 3,0x_2 &+& 9,3x_3 &+& 11,0x_4 &=& 16,4 \\
+%       24,5x_1 &-& 8,8x_2 &+& 11,5x_3 &-& 45,1x_4 &=& -49,7 \\
+%       52,3x_1 &-& 84,0x_2 &-& 23,5x_3 &+& 11,4x_4 &=& -80,8 \\
+%       21,0x_1 &-& 81,0x_2 &-& 13,2x_3 &+& 21,5x_4 &=& -106,3
+%       \end{array} \right.$$
+%    \end{block}
+% 
+% }
+\end{document}

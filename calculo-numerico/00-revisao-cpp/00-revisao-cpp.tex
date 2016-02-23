@@ -1,0 +1,481 @@
+%\documentclass[t,handout]{beamer}
+
+% \documentclass{beamer}
+% 
+% \usepackage{beamerthemeshadow}
+% \usepackage{amsfonts}
+% \usepackage{amssymb}
+% \usepackage{amsmath}
+% \usepackage{amsthm}
+% \usepackage[portuguese]{babel}
+% \usepackage[latin1]{inputenc}
+% \usepackage{graphicx}
+% \usepackage{latexsym}
+% \usepackage{geometry}
+% \usepackage{rotating}
+% \usepackage{color}
+% \usepackage{pgf}
+% \usepackage{xcolor}
+% \usepackage{textcomp}
+
+
+\documentclass{beamer}
+
+\usepackage{textcomp}
+\usepackage[latin1]{inputenc}
+
+\usepackage[portuguese]{babel}
+\usepackage[tight]{subfigure}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{url}
+% \usepackage{inconsolata}
+\newcommand{\setcolor}[2]{\color{#1}{#2}\color{black}}
+\usepackage{mathtools}
+%Pacote de listagem de cï¿½digo
+\usepackage{listings}
+
+\lstset{extendedchars=true, breaklines=true, frame=tb,
+basicstyle=\footnotesize, stringstyle=\ttfamily,
+showstringspaces=false,language=HTML }
+
+\usecolortheme[RGB={153,204,123}]{structure}
+\setbeamertemplate{footline}[frame number]
+\setbeamertemplate{navigation symbols}{}
+
+ \usetheme{Ilmenau} %LEGAL (forte candidato)
+\newcommand*\oldmacro{}
+\let\oldmacro\insertshortauthor% save previous definition
+\renewcommand*\insertshortauthor{%
+  \leftskip=.3cm% before the author could be a plus1fill ...
+  \insertframenumber\,/\,\inserttotalframenumber\hfill\oldmacro}
+
+
+\author[Ivo Calado]{Ivo Calado}
+\date{\today}
+\institute[IFAL]{Instituto Federal de Educação, Ciência e Tecnologia de Alagoas}
+\title[Cálculo Numérico]{Revisão sobre C++}
+\logo{\includegraphics[width=0.2\linewidth]{imagens/ifal-logo.jpg}}
+\subtitle{\textit{Cálculo Numérico\\}}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+% \section{Roteiro}
+% \AtBeginSection[]
+{\frame{
+\frametitle{Roteiro}
+\tableofcontents[hidesubsections]
+}
+}
+
+\section{Introdução à linguagem C++}
+\begin{frame}[fragile]{Estrutura básica de um programa}
+\begin{lstlisting}
+//arquivo.cpp
+ #include <stdio.h> Provenientes de diretórios default
+ #include "a.h" //headers entre "" são relativos ao arquivo atual
+ 
+ int main(int arcg, char* argv[]) {
+  int a, b;
+  for(int i = 10; i < 20; i++) {
+    int j;
+  }
+  return 0;
+ }
+ 
+ \end{lstlisting}
+ 
+ \begin{block}{Compilação}
+    g++ a.cpp -o programa
+ \end{block}
+
+\end{frame}
+
+\begin{frame}[fragile]{Definição de variáveis}
+ \begin{lstlisting}
+ 
+  int main(int arcg, char* argv[]) {
+        int a, b = 3, d = 4;
+        return 0;
+ }
+\end{lstlisting}
+\begin{figure}[h!]
+ \centering
+ \includegraphics[scale=0.4]{./imagens/variaveis.png}
+ % variaveis.png: 852x166 pixel, 96dpi, 22.54x4.39 cm, bb=0 0 639 124
+\end{figure}
+
+\end{frame}
+
+\begin{frame}[fragile]{Determinando o tamanho de uma variável}
+ \begin{lstlisting}
+  /* usando o operador sizeof */
+
+#include <stdio.h>
+
+int main()
+  {
+    int nr;
+
+    printf("A variável nr é um inteiro e tem %d bytes.\n",sizeof(nr));
+    printf("Já o tipo de dado char tem %d bytes.\n",sizeof(char));
+    
+    return(0);
+  }
+ \end{lstlisting}
+
+\end{frame}
+
+
+\begin{frame}[fragile]{Constantes}
+\begin{block}{Objetivo}
+ Definir um identificador que irá possuir o mesmo valor durante toda a execução do programa
+\end{block}
+
+ \begin{lstlisting}
+#define minhaConstante 20 
+int main(int arcg, char* argv[]) {
+	int k = minhaConstante;
+        const int j; //erro de compilação
+        const int i = 10;
+        i = 20;//erro de compilaçao
+        return 0;
+}
+ \end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]{Expressões aritméticas}
+  \begin{itemize}
+   \item Encontram-se definidas as operações aritméticas +, -, *, /, \%
+   \item Operações entre parênteses são executadas primeiro, seguidas de *,/ e \% e, por fim, + e -
+   \item Operadores adicionais: i++, ++i
+   
+  \end{itemize}
+
+\begin{lstlisting}
+int main(int arcg, char* argv[]) {
+        int a = 10 + 20 * 30 - 3 % 3;
+        return 0;
+}
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]{Expressões lógicas e comparadores}
+  \begin{itemize}
+   \item Operadores lógicos: \&\&, $||$ e !
+     \item Operadores comparativos: $<$, $<=$, $>$, $>=$, !=, ==
+  \item Operadores lógicos bit-a-bit: \textasciitilde, \&, $|$ e \textasciicircum
+  \item Deslocamento de bits: $>>$ e $<<$
+  \item Atribuição: =, +=, -=, /=, *= \%=, $>>=$, $<<=$, $|=$, \&=
+
+  \end{itemize}
+ 
+\end{frame}
+
+\begin{frame}[fragile]{Entrada e saída de dados (estilo C)}
+\begin{lstlisting}
+ #include<stdio.h>
+int main(int arcg, char* argv[]) {
+        int i;
+        printf("Digite um valor: ");
+        scanf("%d", &i);
+        printf("O valor digitado é %d\n", i);
+        return 0;
+ }
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]{Entrada e saída de dados (estilo C++)}
+ \begin{lstlisting}
+#include<iostream>
+
+using namespace std;
+int main(int arcg, char* argv[]) {
+        int i;
+        cout<<"Digite um valor: ";
+        cin>>i;
+        cout<<"O valor digitado foi: "<<i<<endl;
+        return 0;
+ }
+ 
+ \end{lstlisting}
+
+\end{frame}
+
+
+\section{Estruturas de seleção}
+
+\begin{frame}[fragile]{O comando \textit{if}}
+\begin{lstlisting}
+#include <stdio.h>
+int main(int argc, char* argv[])
+{
+        float a, b, Maior;
+        printf("Digite os dois numeros: ");
+        scanf("%f %f", &a, &b);
+        Maior = a;
+        if (b > a)
+                Maior = b;
+        printf("O maior dos numeros %.2f , %.2f e' %.2f\n", a, b, Maior);
+}
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]{O comando \textit{if-else}}
+\begin{lstlisting}
+ #include <stdio.h>
+int main(int argc, char * argv[]) {
+        int x, y;
+        printf("Digite o numero: ");
+        scanf("%d", &x);
+        if (x % 2 == 0)
+                printf("%d e' par \n", x);
+        else
+                printf("%d e' impar \n", x);
+}
+
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]{O operador ternário}
+\begin{lstlisting}
+#include <stdio.h>
+int main(int argc, char* argv[])
+{
+        float a, b, Maior;
+        printf("Digite os dois numeros: ");
+        scanf("%f %f", &a, &b);
+        Maior = (b > a)? b : a;
+        printf("O maior dos numeros %.2f , %.2f e' %.2f\n", a, b, Maior);
+}
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]{\textit{Switch}}
+\begin{lstlisting}
+#include <stdio.h>
+int main(int argc, char** argv) {
+        int mes, numDias;
+        printf("Digite o mes \n"); scanf("%d", &mes);
+        switch (mes)
+        {
+                case 2: numDias = 29;
+                break;
+                case 4: case 6: case 9:
+                case 11:
+                        numDias = 30;
+                break;
+                default : numDias = 31;
+        }
+        printf("O mes de numero %d tem %d dias \n", mes, numDias);
+}
+
+\end{lstlisting}
+
+\end{frame}
+
+\section{Estruturas de repetição}
+\begin{frame}[fragile]{O comando \textit{for}}
+\begin{lstlisting}
+#include <stdio.h>
+int main(int a, char** b) {
+        for (int i = 1; i <= 10; i++)
+                printf("%d ", i);
+        return 0;
+}
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]{O comando \textit{while}}
+\begin{lstlisting}
+#include <stdio.h>
+int main(int a, char** b) {
+        int i = 10;
+        while(i--)
+                printf("%d ", i);
+        return 0;
+}
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]{O comando \textit{do-while}}
+\begin{lstlisting}
+#include <stdio.h>
+int main(int a, char** b) {
+        int i = 10;
+        do
+                printf("%d ", i);
+        while(i--);
+        return 0;
+}
+\end{lstlisting}
+ 
+\end{frame}
+
+\section{Vetores e matrizes}
+\begin{frame}[fragile]{Vetores}
+\begin{itemize}
+ \item Um vetor é um conjunto de variáveis de um mesmo tipo de dado as quais são acessadas e referenciadas através da aposição de índices ao identificador do vetor
+\end{itemize}
+
+\begin{lstlisting}
+int main(int a, char** b) {
+        int v[10];
+        v[0] = 10; //Modifica a primeira posição
+        v[5] = 30; //Modifica a sexta posição
+        return 0;
+}
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]{Cadeias de caracteres}
+ \begin{itemize}
+  \item Em C não existe um tipo primitivo capaz de armazenar uma cadeia de caracteres. Para tal, faz uso de vetores de caracteres
+ \end{itemize}
+ 
+ \begin{lstlisting}
+int main(int a, char** b) {
+        char s[10];
+        printf("Digite um nome: ");
+        scanf("%s", s);
+        printf("Nome digitado: %s\n", s);
+        return 0;
+}  
+ \end{lstlisting}
+
+
+\end{frame}
+
+\begin{frame}[fragile]{Matrizes}
+\begin{itemize}
+ \item Matrizes são estruturas indexadas utilizadas para representar certa quantidade de valores de um mesmo tipo
+ \item Um vetor é um tipo especial de matriz, chamado de matriz \textit{unidimensional}
+ \item Matrizes podem ter 1, 2, ..., n dimensões
+\end{itemize}
+\begin{lstlisting}
+int main(int a, char** b) {
+        int m[10][10];
+        
+        //Acessando a linha 0 e a coluna 1        
+        m[0][1] = 10; 
+        return 0;
+}   
+\end{lstlisting}
+
+
+\end{frame}
+
+
+\section{Funções e ponteiros}
+\begin{frame}[fragile]{Definição de uma função}
+\begin{lstlisting}
+#include <stdio.h>
+int soma(int a, int b) {
+        return a + b;
+}
+
+int main(int a, char** b) {
+        int c = soma(10, 50);
+        return 0;
+}
+
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]{Função recursiva}
+\begin{lstlisting}
+#include <stdio.h>
+int fat(int a) {
+        if(a == 0)
+                return 1;
+        else
+                return a * fat(a - 1);
+}
+
+int main(int a, char** b) {
+        int f = fat(5);
+        printf("Fatorial de 5 = %d\n", f);
+        return 0;
+}
+\end{lstlisting}
+
+\end{frame}
+
+
+\begin{frame}{Funções de biblioteca}
+\begin{itemize}
+ \item Utiliza-se a diretiva include para incluir funções e métodos definidos em outros locais
+ \item É possível definir o seu próprio conjunto de funções, métodos e classes
+\end{itemize}
+ 
+\end{frame}
+
+\begin{frame}[fragile]{Ponteiros}
+
+\begin{lstlisting}
+#include <stdio.h>
+
+int main(int a, char** b) {
+        int f = 10;
+        int *p = &f;
+        printf("f = %d; *p = %d, p = %p\n", f, *p, p);
+        return 0;
+}
+\end{lstlisting}
+
+\begin{block}{}
+ f = 10; *p = 10, p = 0x7fff56d17044
+\end{block}
+
+\end{frame}
+
+\begin{frame}[fragile]{Implementando a função swap}
+
+\begin{lstlisting}
+#include <stdio.h>
+
+void swap(int *a, int *b) {
+        int k = *a;
+        *a = *b;
+        *b = k;
+}
+
+int main(int a, char** b) {
+        int p1 = 10, p2 = 20;
+        printf("p1 = %d; p2 = %d\n", p1, p2);
+
+        swap(&p1, &p2);
+        printf("p1 = %d; p2 = %d\n", p1, p2);
+        return 0;
+}
+
+\end{lstlisting}
+
+  \begin{block}{}
+p1 = 10; p2 = 20
+p1 = 20; p2 = 10
+
+\end{block}
+
+\end{frame}
+
+
+
+
+
+
+\end{document}

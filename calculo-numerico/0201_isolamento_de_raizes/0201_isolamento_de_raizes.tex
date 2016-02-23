@@ -1,0 +1,698 @@
+%\documentclass[t,handout]{beamer}
+
+% \documentclass{beamer}
+% 
+% \usepackage{beamerthemeshadow}
+% \usepackage{amsfonts}
+% \usepackage{amssymb}
+% \usepackage{amsmath}
+% \usepackage{amsthm}
+% \usepackage[portuguese]{babel}
+% \usepackage[latin1]{inputenc}
+% \usepackage{graphicx}
+% \usepackage{latexsym}
+% \usepackage{geometry}
+% \usepackage{rotating}
+% \usepackage{color}
+% \usepackage{pgf}
+% \usepackage{xcolor}
+% \usepackage{textcomp}
+
+
+\documentclass{beamer}
+
+
+\usepackage[latin1]{inputenc}
+
+\usepackage[portuguese]{babel}
+\usepackage[tight]{subfigure}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{url}
+% \usepackage{inconsolata}
+\newcommand{\setcolor}[2]{\color{#1}{#2}\color{black}}
+\usepackage{mathtools}
+%Pacote de listagem de cï¿½digo
+\usepackage{listings}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{caption}
+
+\lstset{extendedchars=true, breaklines=true, frame=tb,
+basicstyle=\footnotesize, stringstyle=\ttfamily,
+showstringspaces=false,language=HTML }
+
+\usecolortheme[RGB={153,204,123}]{structure}
+\setbeamertemplate{footline}[frame number]
+\setbeamertemplate{navigation symbols}{}
+
+ \usetheme{Ilmenau} %LEGAL (forte candidato)
+\newcommand*\oldmacro{}
+\let\oldmacro\insertshortauthor% save previous definition
+\renewcommand*\insertshortauthor{%
+  \leftskip=.3cm% before the author could be a plus1fill ...
+  \insertframenumber\,/\,\inserttotalframenumber\hfill\oldmacro}
+
+
+\author[Ivo Calado]{Ivo Calado}
+\date{\today}
+\institute[IFAL]{Instituto Federal de Educação, Ciência e Tecnologia de Alagoas}
+\title[Cálculo Numérico]{Isolamento de Raízes}
+\logo{\includegraphics[width=0.2\linewidth]{imagens/ifal-logo.jpg}}
+\subtitle{\textit{Cálculo Numérico\\}}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+% \section{Roteiro}
+% \AtBeginSection[]
+{\frame{
+\frametitle{Roteiro}
+\tableofcontents[hidesubsections]
+}
+}
+
+\begin{frame}{Observação}
+ Este material é baseado no material produzido pelo professor \textbf{Jonas Joacir Radtke} da \textbf{UFTPR}
+\end{frame}
+
+\begin{frame}
+\begin{block}{Definição}
+ Um número real $\xi$ é um \textbf{zero da função} $f(x)$ ou uma \textbf{raiz da equação} $f(x) = 0$ se $f(\xi) = 0$.
+\end{block}
+
+   \begin{block}{Etapas para o cálculo de raizes}
+      \begin{itemize}
+         \item[(i)] \textbf{Localização} ou \textbf{isolamento} das raízes, que consiste em obter um intervalo que contém a raiz; e
+         \item[(ii)] \textbf{Refinamento}, que consiste em, escolhidas aproximações iniciais no intervalo encontrado no processo de localização, melhorá-las sucessivamente até se obter uma aproximação para a raiz dentro de uma precisão $\varepsilon$ prefixada.
+      \end{itemize}
+   \end{block}
+
+
+ 
+\end{frame}
+
+\section{Isolamento de Raízes}
+\begin{frame}{Isolamento de Raízes}
+    \begin{block}{Teorema de Bolzano}
+      Se uma função contínua $f(x)$ assume valores de sinais opostos nos pontos extremos do intervalo $[a,b]$, isto é $f(a) \cdot f(b) < 0$, então o intervalo conterá, no mínimo, uma raiz da equação $f(x) = 0$, em outras palavras haverá, no mínimo, um número $\xi \in (a,b)$ tal que $f(\xi) = 0$.
+   \end{block}
+   \begin{figure}
+      \begin{minipage}[c]{0.4 \linewidth}
+         \centering\includegraphics[scale=0.25]{imagens/figura0301.jpg}
+      \end{minipage} \hfill
+      \begin{minipage}[c]{0.55 \linewidth}
+         \centering\includegraphics[scale=0.25]{imagens/figura0302.jpg}
+      \end{minipage}
+   \end{figure}
+
+\end{frame}
+
+\begin{frame}
+\begin{block}{}
+      \textbf{Observação:} Sob as hipóteses do Teorema de Bolzano, se $f'(x)$ existir e preservar o sinal em $(a,b)$, então este intervalo contém um única equação de $f(x) = 0$.
+\end{block}
+
+   \begin{block}{Exemplo}
+      Isolar os zeros reais de $f(x) = x^3 - 9x + 3$.
+   \end{block}
+
+   \textbf{Solução:} Construindo uma tabela de valores para $f(x)$ e considerando apenas os sinais temos:
+      \begin{table}[ht]
+         \begin{center}
+            \footnotesize{\begin{tabular}{c|cccccccccccc}
+               \hline
+               $x$ & $-\infty$ & $-100$ & $-10$ & $-5$ & $-3$ & $-1$ & $0$ & $1$ & $2$ & $3$ & $4$ & $5$ \\
+               \hline
+               $f(x)$ & $-$ & $-$ & $-$ & $-$ & $+$ & $+$ & $+$ & $-$ & $-$ & $+$ & $+$ & $+$ \\
+               \hline
+            \end{tabular}}
+         \end{center}
+      \end{table}
+
+      Sabendo que $f(x)$ é contínua para qualquer $x$ real e observando as variações de sinal, podemos concluir que cada um dos intervalos $I_1 = [-5,-3]$, $I_2 = [0,1]$ e $I_3 = [2,3]$ contém pelo menos um zero de $f(x)$. $\blacksquare$
+\end{frame}
+
+\begin{frame}
+    
+    \begin{block}{Exercício}
+      Isolar os zeros da função $f(x) = \sqrt{x} - 5e^{-x}$.
+   \end{block}
+
+   
+   \textbf{Solução:} Temos que $D(f) = \mathbb{R}^+$ ($D(f) \equiv$ domínio de $f(x)$).
+
+      Construindo uma tabela de valores com o sinal de $f(x)$ para determinados valores de $x$ temos
+      \begin{table}[ht]
+         \begin{center}
+            \footnotesize{\begin{tabular}{c|ccccc}
+               \hline
+               $x$ & $0$ & $1$ & $2$ & $3$ & $\ldots$ \\
+               \hline
+               $f(x)$ & $-$ & $-$ & $+$ & $+$ & $\ldots$ \\
+               \hline
+            \end{tabular}}
+         \end{center}
+      \end{table}
+
+      Analisando a tabela, vemos que $f(x)$ admite pelo menos um zero no intervalo $(1,2)$.
+
+      Para saber se este zero é único neste intervalo devemos analisar o sinal de $f'(x)$:
+      $$f'(x) = \frac{1}{2\sqrt{x}} + 5e^{-x} > 0, \,\forall x > 0$$
+
+      Assim, podemos concluir que $f(x)$ admite um único zero em todo seu domínio de definição e este zero está no intervalo $(1,2)$. $\blacksquare$
+   
+\end{frame}
+
+\begin{frame}
+ \textbf{Observação:} Se $f(a) \cdot f(b) > 0$ então podemos ter várias situações no intervalo $[a,b]$, conforme mostram os gráficos:
+       \begin{figure}
+         \centering\includegraphics[scale=0.29]{imagens/figura0205.jpg}
+      \end{figure}
+
+      A análise gráfica da função $f(x)$ ou da equação $f(x) = 0$ é fundamental para se obter boas aproximações para a raiz.
+
+\end{frame}
+
+\begin{frame}
+    Para analisar graficamente uma função ou equação é suficiente utilizar um dos seguintes processos:
+   \begin{itemize}
+      \item[(i)] esboçar o gráfico da função $f(x)$ e localizar as absisas dos pontos onde a curva intercepta o eixo $ox$;
+      \item[(ii)] a partir da equação $f(x) = 0$, obter a equação equivalente $g(x) = h(x)$, esboçar os gráficos das funções $g(x)$ e $h(x)$ no mesmo eixo cartesiano e localizar os pontos $x$ onde as duas curvas se interceptam, pois neste caso $f(\xi) = 0 \Leftrightarrow g(\xi) = h(\xi)$
+      \item[(iii)] usar os programas que traçam gráficos de funções, disponíveis em algumas calculadoras ou softwares matemáticos.
+   \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \begin{block}{Exercício 2}
+      Analise graficamente as seguintes funções:
+      \begin{itemize}
+         \item[(a)] $f(x) = x^3 - 9x + 3$
+         \item[(b)] $f(x) = \sqrt{x} - 5e^{-x}$
+         \item[(c)] $f(x) = x\,\log(x) - 1$
+      \end{itemize}
+   \end{block}
+   \begin{block}{Exercício 3}
+      Isole ao menos uma das raízes das seguintes equações:
+      \begin{itemize}
+         \item[(a)] $4\,cos(x) - e^{2x} = 0$
+         \item[(b)] $\displaystyle\frac{x}{2} - tg(x) = 0$
+         \item[(c)] $1 - x\,ln(x) = 0$
+         \item[(d)] $2^x - 3x = 0$
+         \item[(e)] $x^3 + x - 1000 = 0$
+      \end{itemize}
+   \end{block}
+\end{frame}
+
+\begin{frame}
+   \setcolor{blue}{a)}
+   \begin{figure}
+      \centering\includegraphics[scale=0.6]{imagens/figura0206.jpg}
+   \end{figure}
+\end{frame}
+
+\begin{frame}
+   \setcolor{blue}{b)}
+   \begin{figure}
+      \centering\includegraphics[scale=0.6]{imagens/figura0208.jpg}
+   \end{figure}
+\end{frame}
+
+\begin{frame}
+   \setcolor{blue}{c)}
+   \begin{figure}
+      \centering\includegraphics[scale=0.6]{imagens/figura0209.jpg}
+   \end{figure}
+\end{frame}
+
+\section{Refinamento}
+\begin{frame}
+    \frametitle{Refinamento}
+   \begin{block}{Definição}
+      Um \textbf{método iterativo} consiste em uma sequência de instruções que são executadas passo a passo, algumas das quais são repetidas em ciclos.
+   \end{block}
+
+   A execução de um ciclo recebe o nome de \textbf{iteração}. Cada iteração utiliza resultados das iterações anteriores e efetua determinados testes que permitem verificar se foi atingido um resultado próximo o suficiente do resultado esperado.
+
+\end{frame}
+
+\begin{frame}
+    \begin{figure}
+      \centering\includegraphics[scale=0.62]{imagens/figura0210.jpg}
+   \end{figure}
+\end{frame}
+
+\begin{frame}{Critérios de Parada}
+    Existem duas interpretações para raiz aproximada que nem sempre levam ao mesmo resultado:
+
+   \begin{block}{}
+      $\overline{x}$ é raiz aproximada com precisão $\varepsilon$ se:
+      \begin{itemize}
+         \item[(i)] $|\overline{x} - \xi| < \varepsilon \hspace{0.5cm}$ ou
+         \item[(ii)] $|f(\overline{x})| < \varepsilon$
+      \end{itemize}
+   \end{block}
+   Para aplicar o teste $(i)$ sem conhecer $\xi$ podemos reduzir o intervalo que contém a raiz a cada iteração. Ao se conseguir um intervalo $[a,b]$ tal que:
+   $$\xi \in [a,b] \hspace{0.5cm} \textrm{e} \hspace{0.5cm} b - a < \varepsilon$$
+   então $\forall x \in [a,b],\; |x - \xi| < \varepsilon$. Portanto $\forall x \in [a,b]$ pode ser tomado como $\overline{x}$.
+\end{frame}
+
+\begin{frame}
+   \textbf{Observação:} Nem sempre é possível ter as exigências $(i)$ e $(ii)$ satisfeitas simultaneamente. Os gráficos a seguir ilustram algumas possibilidades:
+   \begin{figure}
+      \centering\includegraphics[scale=0.28]{imagens/figura0212.jpg}
+   \end{figure}
+\end{frame}
+
+% \section{Métodos}
+\section{Mét. da Bissecção}
+\begin{frame}
+ \begin{center}
+ \Huge Método da Bissecção
+\end{center}
+\end{frame}
+
+\begin{frame}
+   Seja a função $f(x)$ contínua no intervalo $[a,b]$ e tal que $f(a) \cdot f(b) < 0$ e supondo por simplicidade que o intervalor $(a,b)$ contenha uma única raiz da equação $f(x) = 0$.
+
+   \begin{block}{Objetivo}
+      Reduzir a amplitude do intervalo que contém a raiz até se atingir a precisão requerida: $b - a < \varepsilon$, usando para isto a sucessiva divisão de $[a,b]$ ao meio.
+   \end{block}
+   \begin{figure}
+      \centering\includegraphics[scale=0.25]{imagens/figura0213.jpg}
+   \end{figure}
+\end{frame}
+
+\begin{frame}
+   \begin{block}{Exemplo}
+      Encontre o zero da função $f(x) = x\,\log(x) - 1$ utilizando o Método da Bissecção.
+   \end{block}
+
+   \textbf{Solução: }Já vimos que a função $f(x)$ dada tem um zero no intervalo $(2,3)$.
+      $$\footnotesize{x_0 = \displaystyle\frac{2 + 3}{2} = 2,5 \; \left\{ \begin{array}{l} f(2) = -0,3979 < 0 \\ f(3) = 0,4314 > 0 \\ f(2,5) = -0,00515 < 0 \end{array} \right. \; \Rightarrow \quad \left\{ \begin{array}{l} \xi \in (2,5;3) \\ a_1 = x_0 = 2,5 \\ b_1 = b_0 = 3 \end{array} \right.}$$
+      $$\footnotesize{x_1 = \displaystyle\frac{2,5 + 3}{2} = 2,75 \; \left\{ \begin{array}{l} f(2,5) < 0 \\ f(3) > 0 \\ f(2,75) = 0,2082 > 0 \end{array} \right. \; \Rightarrow \quad \left\{ \begin{array}{l} \xi \in (2,5;2,75) \\ a_2 = a_1 = 2,5 \\ b_2 = x_1 = 2,75 \end{array} \right.}$$
+
+      $ $
+
+      Repetir o processo até atingir a precisão requerida.
+   
+
+\end{frame}
+
+\begin{frame}
+ \begin{figure}
+      \centering\includegraphics[scale=0.39]{imagens/bisseccao.jpg}
+   \end{figure}
+\end{frame}
+
+\begin{frame}
+    Em alguma etapa do processo tem-se ou a raiz exata $\xi$ ou uma sequência infinita de intervalos encaixados $a_0$, $b_0$, $a_1$, $b_1$, $a_2$, $b_2$, $\ldots$, $a_n$, $b_n$, $\ldots$, tal que
+   $$f(a_n) \cdots f(b_n) < 0 \hspace{0.25cm} n = 1, 2, 3, \ldots$$
+
+   Como a cada iteração o intervalo $[a,b]$ é dividido o meio, na n-ésima iteração o comprimento do intervalo será:
+   $$b_n - a_n = \frac{b_{n-1} - a_{n-1}}{2} = \frac{b_0 - a_0}{2^n}$$
+
+   Deve-se obter o valor de $n$ tal que $b_n - a_n < \varepsilon$, ou seja,
+   $$\frac{b_0 - a_0}{2^n} < \varepsilon \hspace{0.25cm} \Rightarrow \hspace{0.25cm} 2^n > \frac{b_0 - a_0}{\varepsilon} \hspace{0.25cm} \Rightarrow \hspace{0.25cm} \log(2^n) > \log\left(\frac{b_0 - a_0}{\varepsilon}\right)$$
+   $$\Rightarrow \hspace{0.25cm} n\,\log(2) > \log(b_0 - a_0) - \log(\varepsilon) \hspace{0.25cm} \Rightarrow \hspace{0.25cm} n > \frac{\log(b_0 - a_0) - \log(\varepsilon)}{\log(2)}$$
+\end{frame}
+
+\begin{frame}
+   \begin{block}{Exemplo}
+      Se desejarmos encontrar $\xi$, o zero da função $f(x) = x\,\log(x) - 1$ que está no intervalo $[2,3]$ com precisão $\varepsilon = 10^{-2}$, quantas iterações, no mínimo, devemos efetuar?
+   \end{block}
+
+   \textbf{Solução:} Como $a_0 = 2$, $b_0 = 3$ e $\varepsilon = 10^{-2}$ temos que
+      $$n = \frac{\log(3 - 2) - \log(10^{-2})}{\log(2)}$$
+      $$n = \frac{\log(1) + 2\,\log(10)}{\log(2)}$$
+      $$n = \frac{0 + 2}{0,3010}$$
+      $$n \approx 6,64$$
+
+      Logo, devemos efetuar $7$ iterações para atingir a precisão requerida.
+\end{frame}
+
+\begin{frame}
+    \begin{block}{Exercício 1}
+      Estimar o número de iterações e calcular pelo menos um zero real das funções abaixo, usando o método da Bissecção e $\varepsilon = 0,1$.
+      \begin{itemize}
+         \item[(a)] $f(x) = x^3 - 9x + 3$
+         \item[(b)] $f(x) = x + log(x)$
+         \item[(c)] $f(x) = 3x - cos(x)$
+         \item[(d)] $f(x) = x + 2\,cos(x)$
+      \end{itemize}
+   \end{block}
+
+   \begin{block}{Exercício 2}
+      Implementar o método da bissecção para obter pelo menos um zero real das funções do Exercício 1 com precisão $\varepsilon = 10^{-8}$. O programa deve imprimir as aproximações obtidas em cada iteração e fazer um gráfico da raiz aproximada versus $k$.
+   \end{block}
+\end{frame}
+
+\section{Mét. da Posição Falsa}
+\begin{frame}
+ \begin{center}
+ \Huge Método da Posição Falsa
+\end{center}
+\end{frame}
+
+\begin{frame}
+   Seja $f(x)$ uma função contínua em $[a,b]$, intervalo que contém uma raiz da equação $f(x) = 0$.
+
+   Supor que o intervalo $(a,b)$ contenha uma única taiz da equação $f(x) = 0$. Podemos esperar conseguir a raiz aproximada $\overline{x}$ usando as informações sobre os valores de $f(x)$ disponíveis a cada iteração.
+   
+   No caso da bissecção, $x$ é simplesmente a média aritmética entre $a$ e $b$:
+   
+   $$x = \dfrac{a+b}{2}$$
+   
+   O objetivo do método da posição falsa é obter uma aproximação melhor que a média aritmética
+   
+   \pause
+   \begin{block}{Intuição}
+    Seja $f(x) = x^3-9x+3, [a,b] = [0,1]\,e\, f(1) = -5 < 0 < 3 = f(0)$
+    
+    $\xi$ ``parece'' estar mais próximo de $0$ que de $1$
+   \end{block}
+
+\end{frame}
+
+\begin{frame}{Método da posição falsa}
+ Em vez de tomarmos a média aritmética entre $a$ e $b$, tomamos a média aritmética ponderada, com pesos $|f(b)|$ e $|f(a)|$, respectivamente
+ 
+ $$x = \dfrac{a|f(b)| + b|f(a)|}{|f(b)| + |f(a)|} = \dfrac{af(b) - bf(a)}{f(b) - f(a)}$$
+ 
+ Graficamente, este ponto $x$ é a intersecção entre o eixo $\overrightarrow{ox}$ e a reta $r(x)$ que passa por $(a, f(a))$ e $bf(b)$
+ 
+    \begin{figure}
+      \centering\includegraphics[scale=0.24]{imagens/posicao-falsa.jpg}
+   \end{figure}
+ 
+\end{frame}
+
+
+\begin{frame}
+ O método da posição falsa aplicado a $xlog(x) - 1$ em $[a_0, b_0] = [2,3]$, fica:
+ 
+ $$f(a_0) = -0,3979 < 0$$
+ $$f(b_0) = 0,4314 > 0$$
+ 
+ $$x_0 = \dfrac{a_0f(b_0) - b_0f(a_0)}{f(b_0) - f(a_0)} = \dfrac{2*0,4314 - 3*(-0,3979)}{0,4314 - (-0,3979)} = 2,4798$$
+ 
+ $f(x_0) = -0,0219 < 0$. Como $f(a_0)$ e $f(x_0)$ têm o mesmo sinal,
+ 
+ $a_1 = x_0 = 2,4798$
+ 
+ $b_1 = b_0 = 3$
+\end{frame}
+
+
+
+
+% 
+% \section{Mét. da Iteração Linear}
+% \begin{frame}
+%  \begin{center}
+%  \Huge Método da Iteração Linear
+% \end{center}
+% \end{frame}
+% 
+% 
+% \begin{frame}
+%    Seja $f(x)$ uma função contínua em $[a,b]$, intervalo que contém uma raiz da equação $f(x) = 0$.
+% 
+%    \begin{block}{Método da Iteração Linear}
+%       O Método da Iteração Linear ou Método do Ponto Fixo consiste em transformar esta equação em uma equação equivalente $x = \varphi(x)$ e a partir de uma aproximação inicial $x_0$ gerar a sequência $\{x_k\}$ de aproximações para $\xi$, dada por $x_{k+1} = \varphi(x_k)$. Transformamos assim o problema de encontrar um zero de $f(x)$ no problema de encontrar um ponto fixo de $\varphi(x)$.
+%    \end{block}
+%  
+%    \begin{figure}
+%       \centering\includegraphics[scale=0.24]{imagens/figura0216a.jpg}
+%    \end{figure}
+% \end{frame}
+% 
+% \begin{frame}
+%     Uma função $\varphi(x)$ que satisfaz a condição acima é chamada de \textbf{função de iteração} para a equação $f(x) = 0$.
+% 
+%    \begin{block}{Exemplo}
+%       Para a equação $x^2 + x - 6 = 0$ temos várias funções.de iteração, entre as quais:
+%       \begin{itemize}
+%          \item $\varphi_1(x) = 6 - x^2$
+%          \item $\varphi_2(x) = \pm\sqrt{6 - x}$
+%          \item $\varphi_3(x) = \displaystyle\frac{6}{x} - 1$
+%          \item $\varphi_4(x) = \frac{6}{x+1}$
+%       \end{itemize}
+%    \end{block}
+% 
+%    Graficamente, uma raiz da equação $x = \varphi(x)$ é a absissa do ponto de intersecção da reta $y = x$ e da curva $y = \varphi(x)$.
+% 
+%    Convém ressaltar que dependendo da escolha da função $\varphi(x)$ o processo pode gerar um sequência divergente.
+% \end{frame}
+% 
+% \frame{
+%    \begin{figure}
+%       \centering\includegraphics[scale=0.5]{imagens/figura0216a.jpg}
+%    \end{figure}
+% }
+% %===============================================================================
+% \frame{
+%    \begin{figure}
+%       \centering\includegraphics[scale=0.5]{imagens/figura0216b.jpg}
+%    \end{figure}
+% }
+% %===============================================================================
+% \frame{
+%    \begin{figure}
+%       \centering\includegraphics[scale=0.5]{imagens/figura0216c.jpg}
+%    \end{figure}
+% }
+% %===============================================================================
+% \frame{
+%    \begin{figure}
+%       \centering\includegraphics[scale=0.5]{imagens/figura0216d.jpg}
+%    \end{figure}
+% }
+% 
+% \frame{
+%    \frametitle{Convergência do Método de Iteração Linear}
+%    \begin{block}{Teorema 1}
+%       Seja $\xi$ uma raiz da equação $f(x) = 0$, isolada num intervalo $I$ centrado em $\xi$ e $\varphi(x)$ uma função de iteração para a equação $f(x) = 0$.
+% 
+%       Se
+%       \begin{itemize}
+%          \item[(i)] $\varphi(x)$ e $\varphi'(x)$ são contínuas em $I$
+%          \item[(ii)] $|\varphi'(x)| \leq M < 1,\; \forall x \in I$ e
+%          \item[(iii)] $x_0 \in I$,
+%       \end{itemize}
+%       então a sequência $\{x_k\}$ gerada pelo processo iterativo $x_{k+1} = \varphi(x_k)$ converge para $\xi$.
+%    \end{block}
+% }
+% 
+% \frame{
+%    \begin{figure}
+%       \centering\includegraphics[scale=0.51]{imagens/iteracao_linear.jpg}
+%    \end{figure}
+% }
+% 
+% \frame{
+%    \begin{block}{Exemplo}
+%       Para a equação $x^2 + x - 6 = 0$ calcule a sequência $\{x_k\}$ com $x_0 = 1,5$ verificando a convergência do método da Iteração Linear com
+%       \begin{itemize}
+%          \item[(a)] $\varphi_1(x) = 6 - x^2$
+%          \item[(b)] $\varphi_2(x) = \sqrt{6 - x}$
+%       \end{itemize}
+%    \end{block}
+% 
+%    \textbf{Solução:}
+%    \begin{itemize}
+%       \item[(a)] Utilizando $\varphi = \varphi_1 = 6 - x^2$ obtemos
+%       $$x_1 = \varphi(x_0) = 6 - 1,5^2 = 3,75 $$
+%       $$x_2 = \varphi(x_1) = 6 - 3,75^2 = -8,0625 $$
+%       $$x_3 = \varphi(x_2) = 6 - (-8,0625)^2 = -59,003906 $$
+%       $$x_4 = \varphi(x_3) = 6 - (-59,003906)^2 = -3475,4609$$
+%       $$\vdots$$
+%    \end{itemize}
+% }
+% 
+% \frame{
+%    \begin{itemize}
+%       \item[] Analisando as condições do Teorema 1 verificamos que:
+% 
+%       $\varphi_1(x) = 6 - x^2$ e $\varphi_1' = -2x$ são contínuas em $\mathbb{R}$.
+%       $$|\varphi_1'(x)| < 1 \Leftrightarrow |2x| < 1 \Leftrightarrow -\frac{1}{2} < x < \frac{1}{2}$$
+%       então, não existe um intervalo $I$ centrado em $\xi = 2$, tal que $|\varphi_1'(x)| < 1,\;\forall x \in I$. Portanto, $\varphi_1(x)$ não satisfaz a condição $(ii)$ do Teorema 1 com relação a $\xi = 2$. Esta é a justificativa teórica da divergência da sequência $\{x_k\}$ gerada por $\varphi_1(x)$ para $x_0 = 1,5$.
+%       \item[(b)] Utilizando $\varphi = \varphi_2 = \sqrt{6 - x}$ obtemos
+%       $$x_1 = \varphi(x_0) = \sqrt{6 - 1,5} = 2,12132 $$
+%       $$x_2 = \varphi(x_1) = \sqrt{6 - 2,12132} = 1,96944 $$
+%       $$x_3 = \varphi(x_2) = \sqrt{6 - 1,96944} = 2,00763 $$
+%    \end{itemize}
+% }
+% %===============================================================================
+% \frame{
+%    \begin{itemize}
+%       \item[]
+%       $$x_4 = \varphi(x_3) = \sqrt{6 - 2,00763} = 1,99809 $$
+%       $$x_5 = \varphi(x_4) = \sqrt{6 - 1,99809} = 2,00048 $$
+%       $$\vdots$$
+% 
+%       Analisando as condições do Teorema 1 verificamos que:
+%       $$\varphi_2(x) = \sqrt{6 - x} \textnormal{e} \varphi_2'(x) = \frac{-1}{2\sqrt{6 - x}}$$
+%       $$\varphi_2 \textnormal{ é contínua em } S = \{x \in \mathbb{R} | x \leq 6 \}$$
+%       $$\varphi_2' \textnormal{ é contínua em } S' = \{x \in \mathbb{R} | x < 6 \}$$
+%       $$|\varphi_2'(x)| < 1  \Leftrightarrow  \left| \frac{1}{2\sqrt{6 - x}}\right| < 1 \Leftrightarrow x < 5,75$$
+% 
+%       Logo, é possível obter um intervalo $I$ centrado em $\xi = 2$ tal que as condições do Teorema 1 sejam satisfeitas.
+%    \end{itemize}
+% }
+% 
+% %===============================================================================
+% \frame{
+%    \begin{figure}
+%       \centering\includegraphics[scale=0.45]{imagens/figura020305.jpg}
+%    \end{figure}
+% }
+% %===============================================================================
+% \frame{
+%    \begin{figure}
+%       \centering\includegraphics[scale=0.38]{imagens/figura020306.png}
+%    \end{figure}
+% }
+% %===============================================================================
+% \frame{
+%    \begin{block}{Exercício 1}
+%       Calcular pelo menos uma raiz real das equações abaixo, com $\varepsilon = 10^{-3}$, usando o método de iteração linear, analisando previamente a convergência da função de iteração escolhida.
+%       \begin{itemize}
+%          \item[(a)] $f(x) = x^3 - \cos{x} = 0$
+%          \item[(b)] $f(x) = x^2 + e^{3x} - 3 = 0$
+%          \item[(c)] $f(x) = 3x^4 - x - 3 = 0$
+%          \item[(d)] $f(x) = e^x + \cos{x} - 5 = 0$
+%       \end{itemize}
+%    \end{block}
+% 
+%    \begin{block}{Exercício 2}
+%       Implementar o método da iteração linear para obter uma raiz real das equações do Exercício 1 com precisão $\varepsilon = 10^{-8}$. O programa deve imprimir as aproximações obtidas em cada iteração e fazer um gráfico da raiz aproximada versus $k$.
+%    \end{block}
+% }
+
+% \section{Mét. de Newton}
+% \begin{frame}
+%  \begin{center}
+%  \Huge Método da Newton
+% \end{center}
+% \end{frame}
+% \frame{
+%    Seja $f(x)$ uma função contínua no intervalo $[a,b]$ e $\xi$ o seu único zero neste intervalo; as derivadas $f'(x)$ ($f'(x) \neq 0$) e $f''(x)$ devem também ser contínuas. Encontra-se uma aproximação $x_n$ para a raiz $\xi$ e é feita uma expansão em série de Taylor para $f(x) = 0$.
+% 
+%    Da série de Taylor temos
+%    $$f(x) \approx f(x_n) + f'(x_n) (x - x_n)$$
+% 
+%    Tomando $x = x_{n+1}$ e $f(x_{n+1}) \approx 0$ obtemos
+%    $$f(x_{n+1}) \approx 0 = f(x_n) + f'(x_n)(x_{n+1} - x_n)$$
+%    ou ainda,
+%    $$\frac{-f(x_n)}{f'(x_n)}= x_{n+1} - x_n$$
+% 
+%    Isolando $x_{n+1}$ temos
+%    $$x_{n+1} = x_n - \frac{f(x_n)}{f'(x_n)} n = 0, 1, 2, \ldots$$
+% }
+% 
+% \frame{
+%    \frametitle{Interpretação Geométrica}
+%    O método de Newton é equivalente a substituir um pequeno arco da curva $y = f(x)$ por uma reta tangente, traçada a partir de um ponto da curva
+%    \begin{figure}
+% %      \psfrag{ylabel}[l][][1][0] { $r$ (m)}
+%       \centering\includegraphics[scale=0.3]{imagens/figura0221.jpg}
+%    \end{figure}
+% }
+% %===============================================================================
+% \frame{
+%    \begin{figure}
+%       \centering\includegraphics[scale=0.31]{imagens/newton.jpg}
+%    \end{figure}
+% 
+% %    \begin{algoritmo}
+% %       Sejam $f(x)$, $f'(x)$ e $f''(x)$ contínuas num intervalo $I$ que contém a raiz $x = \xi$ de $f(x) = 0$ e que $f'(\xi) \neq 0$.
+% %       \begin{itemize}
+% %          \item[(1)] Dados iniciais:
+% %             \begin{itemize}
+% %                \item aproximação inicial $x_0$
+% %                \item precisões $\varepsilon_1$ e $\varepsilon_2$
+% %             \end{itemize}
+% %          \item[(2)] $i = 0$
+% %          \item[(3)] Se $|f(x_i)| < \varepsilon_1$, avança ao passo $\azul{(7)}$
+% %          \item[(4)] $x_{i+1} = x_i - \displaystyle\frac{f(x_i)}{f'(x_i)}$
+% %          \item[(5)] $i = i + 1$
+% %          \item[(6)] Se $\big|f(x_i)\big| > \varepsilon_1$ e $\big|x_i - x_{i-1}\big| > \varepsilon_2$, volte ao passo $\azul{(4)}$
+% %          \item[(7)] $\overline{x} = x_i$
+% %          \item[(8)] FIM
+% %       \end{itemize}
+% %    \end{algoritmo}
+% }
+% 
+% \frame{
+%    \begin{block}{Exemplo}
+%       Calcule o zero real da função $f(x) = x^2 + x - 6$ com $x_0 = 1,5$.
+%    \end{block}
+% 
+%    \textbf{Solução:}
+%       Pelo método de Newton obtemos
+%       $$x_{i+1} = x_i - \frac{f(x_i)}{f'(x_i)} = x_i - \frac{x_i^2 + x_i - 6}{2x_i + 1}$$
+% 
+%       Logo,
+%       $$x_0 = 1,5$$
+%       $$x_1 = 1,5 - \frac{1,5^2 + 1,5 - 6}{2\cdot 1,5 + 1} = 2,0625$$
+%       $$x_2 = 2,0625 - \frac{2,0625^2 + 2,0625 - 6}{2\cdot 2,0625 + 1} = 2,00076$$
+%       $$x_3 = 2,00076 - \frac{2,00076^2 + 2,00076 - 6}{2 \cdot 2,00076 + 1} = 2,00000$$
+% 
+%       Calcular até que um dos dois critérios de parada seja satisfeito.
+% 
+% }
+% 
+% \frame{
+%    \frametitle{Convergência}
+%    
+%    \begin{block}{Teorema}
+%       Seja $f(x)$, $f'(x)$ e $f''(x)$ contínuas num intervalo $I$ que contém a raiz $x = \xi$ de $f(x) = 0$. Supor que $f'(\xi) \neq 0$.
+% 
+%       Então, existe um intervalo $\bar{I} \subset I$, contendo a raiz $\xi$, tal que se $x_0 \in \bar{I}$, a sequência $\{x_i\}$ gerada pela fórmula recursiva
+%       $x_{i+1} = x_i - \displaystyle\frac{f(x_i)}{f'(x_i)}$
+%       convergirá para a raiz.
+%    \end{block}
+% }
+% 
+% \frame{
+%     \frametitle{Método da Bissecção $\times$ Método de Newton}
+%    \begin{block}{Método da Bissecção $\times$ Método de Newton}
+%       \begin{itemize}
+%          \item Método da Bissecção: Não exige o conhecimento das derivadas, mas tem uma convergência lenta. Deve ser usado apenas para diminuir o intervalo que contém a raiz.
+%          \item Método de Newton: Requer o conhecimento da forma analítica de $f'(x)$ e uma boa aproximação inicial, mas sua convergência é extraordinária.
+%       \end{itemize}
+%    \end{block}
+% }
+% 
+% \frame{
+%    \begin{block}{Exercício 1}
+%       Obtenha a raiz quadrada de um número positivo qualquer $a$ utilizando o método de Newton com precisão $\varepsilon_1 = 10^{-8}$. Compare o número de iterações com o método da Bissecção.
+%    \end{block}
+% 
+% %    \begin{block}{Exercício 1}
+% %       Calcular pelo menos uma raiz real das equações abaixo, com $\varepsilon_1 = 10^{-3}$, usando o método de Newton.
+% %       \begin{itemize}
+% %          \begin{minipage}[c]{0.47 \linewidth}
+% %             \item[(a)] $x^2 - 5x + 2 = 0$
+% %             \item[(c)] $e^x - \tg{x} = 0$
+% %          \end{minipage} \hfill
+% %          \begin{minipage}[c]{0.47 \linewidth}
+% %             \item[(b)] $2x - \sen{x} + 4 = 0$
+% %             \item[(d)] $10^x + x^3 + 2 = 0$
+% %          \end{minipage}
+% %       \end{itemize}
+% %    \end{block}
+% % 
+% %    \begin{block}{Exercício 2}
+% %       Deduza o método de Newton a partir de sua interpretação geométrica.
+% %    \end{block}
+% % 
+%    \begin{block}{Exercício 3}
+%       Implementar o método de Newton para obter uma raiz real de um polinômio qualquer com precisão $\varepsilon = 10^{-8}$, informando como dados de entrada o chute inicial $x_0$, o grau do polinômio e seus coeficientes. O programa deve imprimir as aproximações obtidas em cada iteração e fazer um gráfico da raiz aproximada versus $k$.
+%    \end{block}
+% }
+\end{document}
