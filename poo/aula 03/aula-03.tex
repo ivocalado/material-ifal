@@ -1,0 +1,898 @@
+%\documentclass[t,handout]{beamer}
+\documentclass{beamer}
+
+
+\usepackage[latin1]{inputenc}
+
+\usepackage[portuguese]{babel}
+\usepackage[tight]{subfigure}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{url}
+
+% \usepackage{inconsolata}
+\newcommand{\setcolor}[2]{\color{#1}{#2}\color{black}}
+
+%Pacote de listagem de cï¿½digo
+\usepackage{listings}
+%\lstset{numbers=left, stepnumber=1, firstnumber=1,
+%numberstyle=\tiny, extendedchars=true, breaklines=true, frame=tb,
+%basicstyle=\footnotesize, stringstyle=\ttfamily,
+%showstringspaces=false }
+
+\lstset{extendedchars=true, breaklines=true, frame=tb,
+basicstyle=\footnotesize, stringstyle=\ttfamily,
+showstringspaces=false,language=HTML }
+
+% \usecolortheme[RGB={130,35,150}]{structure}
+% \usecolortheme[RGB={33,33,94}]{structure}
+\usecolortheme[RGB={153,204,123}]{structure}
+\setbeamertemplate{footline}[frame number]
+\setbeamertemplate{navigation symbols}{}
+
+% \usetheme{Frankfurt} %LEGAL     !!!
+% \usetheme{Madrid}     %LEGAL/L%IMPO/COM CAIXA     (sem barra de desenvolvimento)
+
+% \usetheme{Antibes} %NAO
+% \usetheme{Berlin} %PODE SER...     (BARRA DE DESENVOLVIMANTO)
+% \usetheme{Berkeley}     %FEIO
+% \usetheme{Boadilla} %TUDO BRANCO...
+% \usetheme{Copenhagen}     %NAO
+% \usetheme{Darmstadt} %LEGAL!     !!!
+% \usetheme{Dresden}     %LEGAL/LIMPO/SEM CAIXA     (sem caixa fica ruim...)
+
+% \usetheme{Goettingen}     %FEIO DEMAIS!
+ \usetheme{Ilmenau} %LEGAL (forte candidato)
+% \usetheme{JuanLesPins} %BACANA
+% \usetheme{Luebeck}     %FEIO
+
+% \usetheme{Malmoe}     %FEIO
+% \usetheme{Warsaw} %NAO...
+% \usetheme{Seattle}
+% \usetheme{CambridgeUS}
+% \usetheme{Singapore}
+
+%Insere o numero de frames no slide
+\newcommand*\oldmacro{}
+\let\oldmacro\insertshortauthor% save previous definition
+\renewcommand*\insertshortauthor{%
+  \leftskip=.3cm% before the author could be a plus1fill ...
+  \insertframenumber\,/\,\inserttotalframenumber\hfill\oldmacro}
+
+
+\author[Ivo Calado]{Ivo Calado\\\url{ivo.calado@ifal.edu.br}}
+\date{\today}
+\institute[IFAL]{Instituto Federal de Educação, Ciência e Tecnologia de Alagoas}
+\title[POO]{Programação Orientada a Objetos}
+\logo{\includegraphics[width=0.2\linewidth]{imagens/ifal-logo.jpg}}
+\subtitle{\textit{Aula 03: Criação de classes e objetos\\}}
+
+\begin{document}
+
+
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+% \section{Roteiro}
+% \AtBeginSection[]
+{\frame{
+\frametitle{Roteiro}
+\tableofcontents[hidesubsections]
+}
+}
+
+\section{Classes}
+\subsection{Revisão}
+\begin{frame}[allowframebreaks]{Definição}
+\begin{block}{Definição}
+POO é um paradigma de programação onde um programa consiste de uma rede de objetos se comunicando
+\end{block}
+\begin{itemize}
+ \item O programa passa a ser composto por um conjunto de \textbf{entidades} que se comunicam
+ \item Cada \textbf{entidade} é chamada de \textbf{objeto} no domínio de POO
+\end{itemize}
+
+\begin{figure}
+ \centering
+ \includegraphics[scale=0.5]{./imagens/objetos.png}
+ \caption{Linguagens OO oferecem suporte explícito para representar objetos do mundo real em software}
+ % objetos.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{figure}
+
+\begin{figure}
+ \centering
+ \includegraphics[scale=0.4]{./imagens/mapeamento-dominio.png}
+ % mapeamento-dominio.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+ \caption{Objetos reais mapeados para objetos no paradigma OO}
+\end{figure}
+
+
+\end{frame}
+
+\begin{frame}{Mas como podemos representar um objeto?}
+Linguagens OO geralmente oferecem dois recursos para representarmos objetos, que são \textbf{atributos} e \textbf{métodos}
+
+\begin{itemize}
+ \item \textbf{Atributos:} armazenam dados do objetos. Também conhecidos como estados do objetos
+ \item \textbf{Métodos:} correspondem as \textbf{funções} do objeto
+ \begin{itemize}
+  \item Podem manipular os valores dos atributos
+  \item Possbilitam interagir com outros objetos
+  \item Uma requisição de execução de um método é chamada \textbf{mensagem}
+ \end{itemize}
+
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Mas como podemos representar um objeto?}
+\begin{block}{Exemplo 1: como poderíamos representar modelar uma lâmpada em termos de \textbf{atributos} e \textbf{métodos}?}
+\begin{itemize}
+ \item \textbf{Atributos:}
+ \begin{itemize}
+  \item EstaLigado: [Verdadeiro/Falso]
+ \end{itemize}
+ \item \textbf{Métodos:}
+ \begin{itemize}
+  \item Ligar
+  \item Desligar
+ \end{itemize}
+\end{itemize}
+\end{block}
+\end{frame}
+
+% \pause
+\begin{frame}{Mas como podemos representar um objeto?}
+\begin{block}{Exemplo 2: como poderíamos representar modelar uma lâmpada com suporte a ajuste de potência, em termos de \textbf{atributos} e \textbf{métodos}?}
+\pause
+\begin{itemize}
+ \item \textbf{Atributos:}
+ \begin{itemize}
+  \item EstaLigado: [Verdadeiro/Falso]
+  \item PotênciaAtual: [\textit{Watts}]
+ \end{itemize}
+ \item \textbf{Métodos:}
+ \begin{itemize}
+  \item Ligar
+  \item Desligar
+  \item AjustarPotência(novaPotência)
+ \end{itemize}
+\end{itemize}
+\end{block}
+
+\end{frame}
+\begin{frame}{Mas como podemos representar um objeto?}
+\begin{block}{Qual a diferença entre uma função na \textbf{programação estruturada} e um método de um objeto na \textbf{OO}?}
+Funções na programação estruturada não estão associadas a nenhum objeto enquanto que métodos \textbf{pertencem} a um objeto
+\end{block}
+
+
+\end{frame}
+
+\begin{frame}{Quais informações modelar sobre um objeto?}
+Suponha que fosse solicitado a modelagem de uma pessoa. Quais atributos deveriam ser considerados?
+\pause
+
+Algumas propriedades ``óbvias'' poderiam ser:
+\begin{itemize}
+ \item 1 - nome
+ \item 2 - endereco
+ \item 3 - cpf
+ \item 4 - dataNascimento
+ 
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Quais informações modelar sobre um objeto?}
+Porém, poderíamos considerar algumas outras propriedades, como:
+
+\begin{itemize}
+ \item 5 - peso
+ \item 6 - altura
+ \item 7 - cor dos olhos
+ \item 8 - cor dos cabelos
+ \item 9 - dias que não toma banho
+ \item 10 - tamanho da unha do dedão do pé
+\end{itemize}
+\begin{block}{Quais propriedades deveríamos considerar?}\pause
+Depende do \textbf{domínio} do problema!
+\end{block}
+
+
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Abstraindo atributos}
+\begin{figure}
+ \centering
+ \includegraphics{./imagens/abstracao-01.pdf}
+ % abstracao.pdf: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{figure}
+
+\begin{figure}
+ \centering
+ \includegraphics{./imagens/abstracao-02.pdf}
+ % abstracao.pdf: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{figure}
+
+\begin{figure}
+ \centering
+ \includegraphics{./imagens/abstracao-03.pdf}
+ % abstracao.pdf: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{figure}
+
+\begin{figure}
+ \centering
+ \includegraphics{./imagens/abstracao-04.pdf}
+ % abstracao.pdf: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{figure}
+
+
+\end{frame}
+
+\begin{frame}{Seleção das propriedades importantes = Abstração}
+\begin{block}{Abstração}
+ \textit{``A \textbf{abstração} é o processo de filtragem de detalhes sem importância do objeto, para que apenas as \textbf{características apropriadas} que o descrevem permaneçam''}
+ \pause
+ \begin{itemize}
+  \item As \textbf{características apropriadas} sempre dependem do \textbf{domínio} que está sendo trabalhado
+ \end{itemize}
+
+\end{block}
+
+\end{frame}
+
+\begin{frame}{Resumo: POO x Programação Estruturada}
+\begin{figure}
+ \centering
+ \includegraphics[scale=0.35]{./imagens/pooxestruturada.png}
+ % pooxestruturada.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{figure}
+
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Classes}
+\begin{itemize}
+ \item Antes de um objeto ser criado devemos projetá-lo
+\end{itemize}
+
+ \begin{figure}
+ \centering
+ \includegraphics[scale=0.4]{./imagens/classe.jpg}
+ % classe.jpg: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{figure}
+
+\begin{itemize}
+ \item Cada classe deve pode ter um conjunto de \textbf{atributos} e \textbf{métodos}
+ \begin{itemize}
+  \item Atributos representam as \textbf{propriedades} do tipo a ser criado
+  \item Métodos representam as \textbf{ações} que o tipo pode realizar
+ \end{itemize}
+ \item Um objeto é a ``concretização de uma classe''
+ \textbf{Um objeto é uma instância de uma classe}
+\end{itemize}
+
+\begin{block}{Fazendo uma analogia com uma tabela}
+\begin{itemize}
+ \item A \textbf{tabela} seria a \textbf{classe}
+ \item Cada linha da tabela (\textbf{tupla}) seria um \textbf{objeto}
+\end{itemize}
+
+\end{block}
+\begin{itemize}
+\item Todas as instâncias de uma classe têm os mesmos métodos e atributos mas podem ter valores diferentes
+\end{itemize}
+
+
+\end{frame}
+\subsection{Sintaxe}
+\begin{frame}[fragile]{Criação de classes}
+Definição da classe:
+  \begin{lstlisting}
+    public class Pessoa {
+      /*Neste ponto são inseridos métodos e atributos*/
+    }
+  \end{lstlisting}
+  
+Instanciação da classe:
+\begin{lstlisting}
+ Pessoa p = new Pessoa();
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Atributos}
+\begin{itemize}
+ \item Os atributos representam propriedades da classe. 
+ \item Podem ser tipos primitivos ou complexos definidos
+\end{itemize}
+\begin{lstlisting}
+ public class Pessoa {
+    String nome;
+    int idade;
+    Endereco endereco;
+    private String cpf;
+ }
+\end{lstlisting}
+Utilização:
+\begin{lstlisting}
+ Pessoa p = new Pessoa();
+ p.nome = "Maria";
+ p.cpf= "0011"; //Erro! Não é possível acessar diretamente atributos privados
+\end{lstlisting}
+
+ 
+\end{frame}
+
+\begin{frame}[fragile]{Métodos}
+ \begin{itemize}
+  \item Métodos representam ações do objeto
+  \item Podem receber parâmetros ou não e podem ter retorno ou não
+ \end{itemize}
+ \begin{lstlisting}
+  public class Funcionario {
+    double salario;
+    public void adicionarBonificacao(double bonificacao) {
+      salario += bonificacao;
+    }
+  }
+ \end{lstlisting}
+ Utilização:
+ \begin{lstlisting}
+  Funcionario f = new Funcionario();
+  f.salario = 1000;
+  f.adicionarBonificacao(500);
+ \end{lstlisting}
+
+ 
+
+
+\end{frame}
+
+\begin{frame}[fragile]{Tipos de retorno de métodos}
+ \begin{itemize}
+  \item Cada método deve definir o tipo de retorno ou informar que o método não irá retornar nada com a palavra-chave \textbf{void}
+  \item Métodos que têm retorno utilizam a palavra-chave \textbf{return} para indicar o valor retornado, que obrigatoriamente deverá ser do tipo especificado na assinatura do método
+ \end{itemize}
+ \begin{lstlisting}
+  ...
+  public double calcularSalarioFinal() {
+    return salario*1.25;
+  }
+  ...
+ \end{lstlisting}
+
+
+\end{frame}
+
+
+\begin{frame}[fragile]{Sobrecarca de métodos} 
+\begin{itemize}
+ \item É possível definir dois ou mais métodos com o mesmo nome mas com assinaturas distintas
+ \item A JVM irá diferenciar o método correto a ser chamado a partir dos tipos passados
+\end{itemize}
+\begin{lstlisting}
+ ...
+  public void adicionarBonificacao(double bonificacao) {...}
+  
+  public void adicionarBonificacao(double bonificacao1, bonificacao2) {...}
+ ...
+\end{lstlisting}
+
+
+ 
+\end{frame}
+
+\begin{frame}[fragile, allowframebreaks]{Construtores}
+ \begin{itemize}
+  \item Construtores representam um tipo especial de métodos que são chamados implicitamente pela JVM durante o processo de instanciação de um novo objeto
+  \item Diferentemente dos métodos tradicionais, os construtores não definem tipo de retorno (nem mesmo \textbf{void})
+  \item Outra particularidade é que os construtores devem ter \textbf{obrigatoriamente} o mesmo nome da classe
+ \end{itemize}
+ 
+ \begin{lstlisting}
+  public class Pessoa {
+    ... //Definição de atributos e métodos
+    public Pessoa() {...}
+    
+    public Pessoa(String nome) {...}
+    
+    public Pessoa(String nome, String endereco) {...}
+  }
+ \end{lstlisting}
+Utilização:
+\begin{lstlisting}
+ Pessoa p1 = new Pessoa();
+ Pessoa p2 = new Pessoa("maria");
+ Pessoa p3 = new Pessoa("maria", "Palmeira dos indios");
+\end{lstlisting}
+\begin{itemize}
+ \item Por padrão, quando não definido, toda classe possui um construtor \textbf{default} que é um construtor sem parâmetros
+ \item Todavia, caso seja definido um construtor específico, o construtor \textbf{default} só fica disponível SE for definido explícitamente
+\end{itemize}
+\begin{lstlisting}
+ public class Pessoa {
+... //Definição de atributos e métodos
+
+  public Pessoa(String nome){...}
+ }
+\end{lstlisting}
+
+Utilização:
+\begin{lstlisting}
+ 
+ Pessoa p1 = new Pessoa("Maria"); //Ok, foi definido um construtor com essa assinatura
+ Pessoa p2 = new Pessoa();// ERRO! Como foi definido um construtor não-default, o construtor default so fica disponível se definido explicitamente
+\end{lstlisting}
+
+
+
+
+
+
+\end{frame}
+
+\section{Arrays e ArrayLists}
+
+\subsection{Arrays}
+\begin{frame}[fragile, allowframebreaks]{Definição de Arrays}
+ \begin{itemize}
+  \item Conforme discutido anteriormente, um array representa uma sequência continua de elementos \textbf{do mesmo tipo}
+  \item Para criação de um vetor, deve-de definir o tamanho do vetor
+  \item É importante lembrar que a primeira posição de um vetor inicia em \textbf{0}
+ \end{itemize}
+ \begin{lstlisting}
+  int vet[] = new int[10];
+  vet[0] = 3; //Modifica a primeira posição do vetor
+  vet[9] = 9; //Modifica a última posição do vetor
+  vet[10] = 0; //Erro! 
+ \end{lstlisting}
+
+\begin{itemize}
+ \item Diferentemente dos tipos primitivos, para tipos complexos é necessário inicializar cada posição do vetor
+\end{itemize}
+
+\begin{lstlisting}
+ Pessoa vet[] = new Pessoa[10];
+ vet[0] = new Pessoa(); //Inicialização
+ vet[0].setNome("maria"); //Ok!
+ vet[1].setNome("João"); //Erro! NullPoiterException
+\end{lstlisting}
+
+
+\end{frame}
+
+\begin{frame}[fragile, allowframebreaks]{ArrayList}
+ \begin{itemize}
+  \item Arrays em Java são estruturas de dados cujos tamanho são definidas antes da estrutura ser usada
+  \item Todavia, em algumas situações não é possível precisar qual será o tamanho inicial dos elementos a serem inseridos
+  \item Neste sentido, é possível fazer uso da classe \textbf{ArrayList} para criação de listas de objetos
+ \end{itemize}
+ 
+ \begin{lstlisting}
+  import java.util.ArrayList;
+  ...
+  
+  ArrayList<Pessoa> lista = new ArrayList<>(); //Cria a lista
+  Pessoa p = new Pessoa();
+  lista.add(p); //Adiciona o elemento à lista
+  int tamanho = lista.size(); //Retorna o tamanho atual da lista
+  Pessoa p2 = lista.get(0); //Recupera a primeira posição da lista
+ \end{lstlisting}
+
+ \begin{itemize}
+  \item Durante a criação da lista, deve-se definir qual será o tipo do elemento a ser inserido
+  \item O tipo do elemento obrigatoriamente deve ser um tipo complexos
+  \item A utilização de tipos primitivos gera erro sendo necessária a utilização de classes \textit{wrappers}
+  \item A conversão entre o tipo primitivo e \textit{wrapper} correspondente é feita de maneira automática e transparente desenvolvedor
+ \end{itemize}
+
+\begin{center}
+  \begin{tabular}{|c|c|}
+  \hline
+  \textbf{Tipo primitivo} & \textbf{Classe wrapper correspondente} \\ \hline
+  boolean  & Boolean \\ \hline
+  short  & Short \\ \hline
+  int  & Integer\\ \hline
+  long  & Long\\ \hline
+  float  & Float \\ \hline
+  double  & Double\\ \hline
+  \end{tabular}
+\end{center}
+
+\begin{center}
+  \begin{tabular}{|c|c|}
+  \hline
+  \textbf{Tipo primitivo} & \textbf{Classe wrapper correspondente} \\ \hline
+  char  & Character\\ \hline
+  byte & Byte \\ \hline
+  \end{tabular}
+\end{center}
+
+Exemplo: 
+\begin{lstlisting}
+  int a = 10;
+  Integer b = a;
+  int c = b;
+  
+  ArrayList<Integer> lista = new ArrayList<>();
+  lista.add(a);
+  lista.add(b);
+  lista.add(c);
+\end{lstlisting}
+
+
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Principais métodos da lista?}
+       \begin{center}
+         \begin{tabular}{|c|p{5cm}|}
+         \hline
+	 \textbf{Método} & \textbf{Descrição} \\ \hline
+	 add(E elemento) & Adiciona o objeto E no final da lista \\ \hline
+	 add(int index, E element) & Adiciona o objeto E na lista, na posição indicada pelo parâmetro index \\ \hline
+	 isEmpty() & Retorna um boolean, indicando se a lista está vazia \\ \hline
+	 size() & Retorna um int indicando o tamanho da lista \\ \hline
+	 remove(int index) & Remove o objeto (não interessa qual) no indice indicado pelo parametro index \\ \hline
+	 
+         \end{tabular}
+       \end{center}
+
+       \begin{center}
+         \begin{tabular}{|c|p{5cm}|}
+         \hline
+	 \textbf{Método} & \textbf{Descrição} \\ \hline
+	 remove(E elemento) & Remove da lista o objeto indicado pelo parâmetro o. Esse objeto deve implementar o método \textit{equals} \\ \hline
+	 indexOf(E elemento) & Retorna o índice da \textbf{primeira} ocorrência do elemento passado ou -1 caso não seja encontrado \\ \hline
+	 lastIndexOf(E elemento) & Retorna o índice da \textbf{última} ocorrência do elemento passado ou -1 caso não seja encontrado \\ \hline
+	 
+         \end{tabular}
+       \end{center}
+       
+\end{frame}
+
+\begin{frame}[fragile, allowframebreaks]{Como iterar na lista}
+ \begin{itemize}
+  \item Para iterar na lista é possível utilizar a estrutura for de duas formas
+ \end{itemize}
+ 
+ Forma 1 (acesso ao índice da posição):
+ 
+ \begin{lstlisting}
+  ArrayList<Integer> lista = new ArrayList<Integer>();
+  ... //Adições e remoções elementos
+  
+  for(int i = 0; i < lista.size(); i++) {
+    int lista.get(i); //Recupera a i-ésima posição da lista
+  }
+ \end{lstlisting}
+
+Forma 2 (sem acesso ao índice da posição): 
+
+\begin{lstlisting}
+ ArrayList<Integer> lista = new ArrayList<Integer>();
+  ... //Adições e remoções elementos
+  
+  for(Integer v : lista) {
+    //a variável 'v' passa a conter o valor atual da lista
+  }
+\end{lstlisting}
+
+\end{frame}
+
+
+\section{Associações}
+\subsection{Introdução}
+\begin{frame}{Associação}
+ \begin{itemize}
+  \item Uma \textbf{associação} é um relacionamento estrutural que indica
+que os objetos de uma classe estão vinculados a objetos de outra classe.
+ \item Uma associação é representada por uma linha sólida conectando duas classes.
+ \end{itemize}
+
+ \begin{center}
+ \includegraphics[scale=0.35]{./imagens/associacao.png}
+ % associacao.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{center}
+
+\end{frame}
+
+\begin{frame}{Indicadores de multiplicidade}
+  \begin{itemize}
+   \item 1  $=>$  Exatamente um
+   \item 1..*  $=>$  Um ou mais
+   \item 0..*  $=>$  Zero ou mais (muitos)
+   \item *  $=>$  Zero ou mais (muitos)
+   \item 0..1  $=>$  Zero ou um
+   \item m..n  $=>$  Faixa de valores (por exemplo: 4..7)
+  \end{itemize}
+  
+  \begin{center}
+ \includegraphics[scale=0.35]{./imagens/multiplicidade.png}
+ % multiplicidade.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{center}
+
+\end{frame}
+
+\begin{frame}{Exemplo de associação}
+ \begin{itemize}
+  \item Um \textbf{Estudande} pode ser
+  \begin{itemize}
+   \item um \textbf{aluno} de uma Disciplina
+   \item um \textbf{jogador} da Equipe de Futebol
+  \end{itemize}
+  \item Cada Disciplina deve ser cursara por no mínimo 1 aluno
+  \item Um aluno pode cursar de 0 até 8 disciplinas
+
+ \end{itemize}
+\begin{center}
+ \includegraphics[scale=0.35]{./imagens/exemplo-associacao.png}
+ % exemplo-associacao.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{center}
+
+\end{frame}
+
+\subsection{Agregação}
+\begin{frame}{Agregação}
+\begin{itemize}
+ \item Trata-se de um tipo especial de associação
+ \item Utilizada para indicar relacionamento ``todo-parte''
+\end{itemize}
+
+\begin{figure}
+ \centering
+ \includegraphics[scale=0.35]{./imagens/agregacao.png}
+ % agregacao.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+ \caption{Um objeto ``parte'' pode fazer parte de vários objetos ``todo''}
+\end{figure}
+
+ 
+\end{frame}
+\subsection{Composição}
+\begin{frame}{Composição}
+ \begin{itemize}
+  \item É uma variante semanticamente mais ``forte'' da agregação
+  \item Os objetos ``parte'' só podem pertender a um único objeto ``todo'' e têm o seu tempo de vida coincidente com o dele
+ \end{itemize}
+
+ \begin{figure}
+ \centering
+ \includegraphics[scale=0.35]{./imagens/composicao.png}
+ % composicao.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+ \caption{Quando o ``todo'' \textit{morre} todas as suas ``partes'' também \textit{morrem}}
+\end{figure}
+
+\end{frame}
+
+\begin{frame}{Exemplos de composição}
+ \begin{figure}
+ \centering
+ \includegraphics[scale=0.25]{./imagens/composicao-exemplo2.png}
+ % composicao-exemplo2.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{figure}
+
+\end{frame}
+
+\begin{frame}{Agregação x Composição}
+ \begin{figure}
+ \centering
+ \includegraphics[scale=0.35]{./imagens/agregacao-x-composicao.png}
+ % agregacao-x-composicao.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{figure}
+
+\end{frame}
+
+\section{Pacotes e Encapsulamento}
+\begin{frame}[fragile, allowframebreaks]{Pacotes}
+ \begin{itemize}
+  \item Em projetos mais complexos pode surgir a necessidade de construir mais do que uma classe com o mesmo nome mas propósitos distintos. Como nomear as classes?
+  \item Além disso, muitas vezes é interessante agrupar as classes de acordo com a funcionalidade
+  \item Para tal, a linguagem Java fornece o conceito de ``pacotes''
+  \item A utiização de pacotes é especialmente útil na construção de bibliotecas
+  \item Com isso, os códigos fontes do Java passam a ser organizados numa hierarquia de pacotes, podendo ser importados a partir da palavra chave \textbf{import}
+ \end{itemize}
+ 
+ \begin{figure}
+ \centering
+ \includegraphics[scale=0.5]{./imagens/pacotes.png}
+ % pacotes.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{figure}
+
+O que muda na classe?
+\begin{lstlisting}
+package br.edu.ifal.poo;
+
+
+public class Pessoa {
+	private String nome;
+	private String endereco;
+	//outros métodos e atributos
+}
+
+\end{lstlisting}
+
+\begin{itemize}
+ \item Uma classe mais interna \textbf{não} pode importar uma classe mais externa
+\end{itemize}
+
+\begin{block}{Existe alguma regra para nomeação de pacotes?}
+   Utilizar o nome de domínio invertido!
+\end{block}
+
+\end{frame}
+\subsection{Encapsulamento}
+\begin{frame}[fragile]{O que é encapsulamento?}
+\begin{itemize}
+ \item Trata-se de uma forma de atribuir diferentes níveis de acesso aos métodos e atributos
+ \item A ideia básica é esconder detalhes da implementação do mundo exterior sempre que possível
+\end{itemize}
+Considere o seguinte código:
+\begin{lstlisting}
+ public class Empregado {
+    String nome;
+    Empregado(String n) {
+      nome = n;
+    }
+ }
+\end{lstlisting}
+Como impedir que o nome do empregado seja modificado após a construção do objeto?
+ 
+\end{frame}
+
+\begin{frame}{Níveis de encapsulamento}
+Define-se 4 tipos de encapsulamento:
+ \begin{itemize}
+  \item \textbf{public}: pode ser acessado de qualquer ponto da aplicação
+  \item \textbf{private}: só pode ser acessado internamento
+  \item \textbf{protected}: só pode ser acessado na hierarquia de classes (mais detalhes quando formos ver herança!)
+  \item \textit{\textbf{default}}: só pode ser acesso de dentro do próprio pacote
+ \end{itemize}
+ 
+\end{frame}
+
+
+\begin{frame}{Regras gerais de utilização}
+ \begin{itemize}
+  \item \textbf{Normalmente} atributos são \textbf{privados}
+  \item \textbf{Normalmente} métodos são públicos
+  \item Atributos e métodos que só tem interesse dentro do pacote devem utilizar encapsulamento \textbf{default}
+ \end{itemize}
+ 
+ 
+\end{frame}
+
+\begin{frame}[fragile]{Qual o efeito do encapsulamento para as classes?}
+É possível modificar o encapsulamento de uma classe. Todavia segue regras levemente diferentes:
+ \begin{itemize}
+  \item Em cada unidade de compilação (arquivo .java) \textbf{apenas uma única} classe pode ser \textbf{pública}
+  \item Classes privadas e protegidas só podem ser definidas internamente
+ \end{itemize}
+ 
+ \begin{lstlisting}
+  public class Pessoa {
+    private class Endereco {
+      public String cidade; }
+    Endereco end;    
+    public Pessoa() {
+      end = new Endereco();
+      end.rua = "Palmeira";    }    
+  }
+ \end{lstlisting}
+
+
+\end{frame}
+
+\begin{frame}[fragile]{Os métodos get e set}
+ \begin{itemize}
+  \item Embora não seja obrigatório, convenciona-se chamar os métodos de acesso/modificação dos atributos de \textbf{get} e \textbf{set}, respetivamente
+ \end{itemize}
+ Exemplo: 
+ \begin{lstlisting}
+  //...Código
+  private String nome;
+  private String endereco;
+  public void setNome(String n){nome = n;}
+  public String getEndereco() {return nome;}
+  public void setEndereco(String end) {endereco = end;}
+  public String getEndereco() {return end;}
+  //...Código
+ \end{lstlisting}
+
+\end{frame}
+
+\begin{frame}{Um pouco mais sobre métodos set e get: JavaBeans}
+ \begin{itemize}
+  \item A utilização dos métodos set e get é importante visto que diversas bibliotecas de Java levam em consideração essa padronização
+ \end{itemize}
+ 
+ \begin{block}{O que seriam JavaBean?}
+  Trata-se de uma especificação de software definida pela Sun/Oracle para criação de componentes reutilizáveis. Em termos práticos, um \textbf{bean} é uma classe Java com as seguintes propriedades:
+  \begin{itemize}
+   \item Possuir construtor \textit{default} (isto é, sem argumentos)
+   \item Possuir métodos get e set para os atributos da classe (apenas dos que necessitarem ser acessados). 
+  \end{itemize}
+
+ \end{block}
+
+
+\end{frame}
+
+
+
+\section*{}
+
+\begin{frame}{Atividade para casa}
+ Pesquisar para que serve os modificadores \textbf{static} e \textbf{final} quando aplicados a métodos, atributos e classes
+\end{frame}
+
+\section{Um pouco mais sobre this}
+\begin{frame}[fragile]{Utilizando o this para invocar métodos}
+ \begin{itemize}
+  \item Além de referenciar atributos do objeto é possível utilizar o \textbf{this} para referenciar um método
+ \end{itemize}
+ 
+ \begin{lstlisting}
+  public class Pessoa {
+    public void met1() {}
+    
+    public void met2() {
+      this.met1();
+    }
+  }
+ \end{lstlisting}
+
+
+\end{frame}
+
+\begin{frame}[fragile]{Como um construtor pode invocar outro construtor}
+ Considere o seguinte código:
+ \begin{lstlisting}
+  public class Pessoa { //definição dos atributos e métodos
+    public Pessoa(String nome) {
+      this.nome = nome;
+    }    
+    public Pessoa(String nome, String cpf) {
+      this.nome = nome;
+      this.cpf = cpf;
+    }    
+    public Peesoa(String nome, String cpf, String endereco) {
+      this.nome = nome;
+      this.cpf = cpf;
+      this.end = endereco;
+    }  }
+ \end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]{Invocando um construtor de outro construtor}
+ \begin{lstlisting}
+  public class Pessoa {
+	  //definição dos atributos e métodos
+	public Pessoa(String nome) {
+		this.nome = nome;		
+	}
+	
+	public Pessoa(String nome, String cpf) {
+		this(nome);		
+		this.cpf = cpf;		
+	}	
+	public Pessoa(String nome, String cpf, String endereco) {
+		this(nome, cpf);
+		this.endereco = endereco;
+	}
+}
+ \end{lstlisting}
+
+\end{frame}
+
+\begin{frame}{Invocando um construtor de outro construtor}
+ \begin{block}{Importante!}
+  Quando um construtor é invocado de outro construtor, tal comando deve ser o \textbf{primeiro} do bloco
+ \end{block}
+
+\end{frame}
+
+
+
+\end{document}

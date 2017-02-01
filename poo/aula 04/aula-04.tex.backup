@@ -1,0 +1,1181 @@
+%\documentclass[t,handout]{beamer}
+\documentclass{beamer}
+
+
+\usepackage[latin1]{inputenc}
+
+\usepackage[portuguese]{babel}
+\usepackage[tight]{subfigure}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{url}
+
+% \usepackage{inconsolata}
+\newcommand{\setcolor}[2]{\color{#1}{#2}\color{black}}
+
+%Pacote de listagem de cï¿½digo
+\usepackage{listings}
+%\lstset{numbers=left, stepnumber=1, firstnumber=1,
+%numberstyle=\tiny, extendedchars=true, breaklines=true, frame=tb,
+%basicstyle=\footnotesize, stringstyle=\ttfamily,
+%showstringspaces=false }
+
+\lstset{extendedchars=true, breaklines=true, frame=tb,
+basicstyle=\footnotesize, stringstyle=\ttfamily,
+showstringspaces=false,language=HTML }
+
+% \usecolortheme[RGB={130,35,150}]{structure}
+% \usecolortheme[RGB={33,33,94}]{structure}
+\usecolortheme[RGB={153,204,123}]{structure}
+\setbeamertemplate{footline}[frame number]
+\setbeamertemplate{navigation symbols}{}
+
+% \usetheme{Frankfurt} %LEGAL     !!!
+% \usetheme{Madrid}     %LEGAL/L%IMPO/COM CAIXA     (sem barra de desenvolvimento)
+
+% \usetheme{Antibes} %NAO
+% \usetheme{Berlin} %PODE SER...     (BARRA DE DESENVOLVIMANTO)
+% \usetheme{Berkeley}     %FEIO
+% \usetheme{Boadilla} %TUDO BRANCO...
+% \usetheme{Copenhagen}     %NAO
+% \usetheme{Darmstadt} %LEGAL!     !!!
+% \usetheme{Dresden}     %LEGAL/LIMPO/SEM CAIXA     (sem caixa fica ruim...)
+
+% \usetheme{Goettingen}     %FEIO DEMAIS!
+ \usetheme{Ilmenau} %LEGAL (forte candidato)
+% \usetheme{JuanLesPins} %BACANA
+% \usetheme{Luebeck}     %FEIO
+
+% \usetheme{Malmoe}     %FEIO
+% \usetheme{Warsaw} %NAO...
+% \usetheme{Seattle}
+% \usetheme{CambridgeUS}
+% \usetheme{Singapore}
+
+%Insere o numero de frames no slide
+\newcommand*\oldmacro{}
+\let\oldmacro\insertshortauthor% save previous definition
+\renewcommand*\insertshortauthor{%
+  \leftskip=.3cm% before the author could be a plus1fill ...
+  \insertframenumber\,/\,\inserttotalframenumber\hfill\oldmacro}
+
+\newcommand{\nologo}{\setbeamertemplate{logo}{}} 
+
+\author[Ivo Calado]{Ivo Calado\\\url{ivo.calado@ifal.edu.br}}
+\date{\today}
+\institute[IFAL]{Instituto Federal de Educação, Ciência e Tecnologia de Alagoas}
+\title[POO]{Programação Orientada a Objetos}
+\logo{\includegraphics[width=0.2\linewidth]{imagens/ifal-logo.jpg}}
+\subtitle{\textit{Aula 04: um pouco mais de sintaxe\\}}
+
+\begin{document}
+
+
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+% \section{Roteiro}
+% \AtBeginSection[]
+{\frame{
+\frametitle{Roteiro}
+\tableofcontents[hidesubsections]
+}
+}
+
+\section{Estrutura da linguagem}
+\subsection{Comentários}
+\begin{frame}[fragile]{Comentário de linha}
+ \begin{itemize}
+  \item Java fornece dois tipos de comentários, que são os comentários de linha e de bloco
+  \item Comentários de linha iniciam com // enquanto que comentários de bloco iniciam com /* e terminam com */
+ \end{itemize}
+ 
+ \begin{lstlisting}
+  public class Pessoa {
+    //Este é um comentário de linha
+    
+    /*
+       Este é um comentário de bloco
+    */
+  
+  }
+ \end{lstlisting}
+
+\end{frame}
+
+\subsection{Documentação e geração de Javadoc}
+\begin{frame}{Gerando documentação}
+ \begin{itemize}
+  \item Além da adição de comentários, a JDK oferece o suporte para geração automática de documentação com base nos comentários
+  \item A geração dos comentários se dá a partir dos comentários de bloco adicionados imediatamente antes das classes, métodos e atributos
+  \item Todavia, para que um comentário de bloco possa ser incluído como parte da documentação ele deve iniciar com /** ao invés de simplesmente /*
+ \end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]{Ex 1: Adição de documentação à classe}
+ \begin{lstlisting}
+  package br.edu.ifal.poo;
+
+/**
+ * Classe tem o objetivo de representar uma pessoa. Cada pessoa possui um nome,
+ * cpf e endereço
+ * 
+ * @author ivocalado
+ * @version 1.5
+ * @since 1.1
+ * @see br.edu.ifal.poo.Endereco
+ */
+public class Pessoa {
+//Métodos e atributos
+}
+
+ \end{lstlisting}
+
+\end{frame}
+
+\begin{frame}{Parâmetros utilizados} 
+  \begin{itemize}
+   \item @autor: geralmente utilizado para indicar o autor do arquivo. Podem ser utilizadas várias entradas para indicar os autores da aplicação
+   \item @version: indica a versão atual do software
+   \item @since: indica em qual versão a classe, método ou atributo foi inserido na aplicação
+   \item @see adiciona um link para uma determinada classe
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]{Ex 2: Adição de documentação aos atributos}
+ \begin{lstlisting}
+  public class Pessoa {
+	/**
+	 * representa a propriedade nome da entidade
+	 */
+	private String nome;
+	/**
+	 * representa o cpf
+	 */
+	private String cpf;
+	/**
+	 * representa o endereço da pessoa
+	 * @see br.edu.ifal.poo.Endereco
+	 */
+	private Endereco endereco;
+	
+    }
+ \end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]{Ex 3: Adição de documentação aos métodos}
+  \begin{lstlisting}
+// Definições da classe e atributos
+	/**
+	 * Construtor mínimo da classe Pessoa. 
+	 * @param nome a ser setado
+	 * @param cpf a ser setado
+	 */
+	public Pessoa(String nome, String cpf) {
+		this.nome = nome;
+	}	
+	/**
+	 * @return o endereco da pessoa ( @see {@link Endereco})
+	 */
+	public Endereco getEndereco() {
+		return endereco;
+	}
+//Demais definições
+  \end{lstlisting}
+
+\end{frame}
+
+\begin{frame}{Parâmetros utilizados}
+ \begin{itemize}
+  \item @param: indica os parâmetros de entrada do método
+  \item @return: o parâmetro de retorno do método
+  \item @link uma outra forma de referenciar uma classe
+ \end{itemize}
+
+\end{frame}
+
+
+
+
+\begin{frame}{Gerando javadoc a partir do Eclipse}
+ \begin{center}
+ \includegraphics[scale=0.5]{./imagens/javadoc.png}
+ % javadoc.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{center}
+
+\end{frame}
+
+\subsection{Bibliotecas interessantes}
+\begin{frame}[fragile]{java.util.Random}
+ \begin{itemize}
+  \item Objetivos: gerar números \textbf{pseudo-randomicos}
+ \end{itemize}
+ \begin{lstlisting}
+  import java.util.Random;
+  //...
+    Random r = new Random();
+    Random r2 = new Random(10);//Seed predefinida
+    int v1 = r.nextInt();
+    int v2 = r.nextInt(10);
+    float v3 = r.nextFloat();
+    double v4 = r.nextDouble();
+    boolean v5 = r.nextBoolean();
+    long v6 = r.nextLong();
+ \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{java.lang.Math}
+ \begin{lstlisting}
+  double e = Math.E;
+  double pi = Math.PI;
+  int v1 = Math.abs(-10); //retorna o número absoluto
+  int v2 = Math.max(10, 5); //retorna o valor máximo
+  int v3 = Math.min(10, -2); //retorna o valor mínimo
+  double v4 = Math.ceil(10.4); //calcula o proximo inteiro superior
+  double v5 = Math.floor(10.4); //calcula o proximo inteiro inferior
+  double v6 = Math.pow(2, 3); // 2 elevado ao cubo
+  double v7 = Math.sqrt(25);//Raiz quadrada de 25
+  double v8 = Math.round(2.4999);//Arredondamento
+  //Funções relacionadas à trigonometria
+ \end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]{java.util.Date e java.util.SimpleDateFormat}
+ \begin{lstlisting}
+  SimpleDateFormat pr = new SimpleDateFormat("dd/MM/yyyy");
+  try {
+	  Date d = pr.parse("23/07/2016");
+	  String resultado = pr.format(d); 
+  } catch (ParseException e) {
+  }
+ \end{lstlisting}
+
+\end{frame}
+
+
+\section{Herança}
+
+\subsection{Motivação}
+
+
+\begin{frame}[fragile, allowframebreaks]{O problema da repetição de código}
+\begin{itemize}
+ \item Considere que foi solicitada a criação de uma classe Funcionario nos seguintes moldes:
+\end{itemize}
+
+ \begin{lstlisting}
+  public class Funcionario {
+    String nome;
+    String cpf;
+    double salario;
+   // setters e getters
+}
+ \end{lstlisting}
+ \begin{itemize}
+  \item Considere agora que é necessário criar um tipo específico de funcionário, denominado gerente, que deveria ter como campos extras a senha, o número de funcionários gerenciados e um método de autenticação. Uma possível implementação seria:
+ \end{itemize}
+ \begin{lstlisting}
+  public class Gerente {
+    String nome;
+    String cpf;
+    double salario;
+    int senha;
+    int numeroDeFuncionariosGerenciados;
+      
+    public boolean autentica(int senha) {
+      if (this.senha == senha) {
+	System.out.println("Acesso Permitido!");
+	return true;
+      } else {
+	System.out.println("Acesso Negado!");
+	return false;
+      }
+    }
+  
+  // outros métodos 
+}
+ \end{lstlisting}
+
+\end{frame}
+
+
+\begin{frame}{Qual o problema?}
+ \begin{itemize}
+  \item Duplicação de código!
+  \item Toda vez que precisarmos criar um novo tipo de funcionário os métodos e atributos seriam duplicados
+ \end{itemize}
+ 
+  Poderíamos definir uma única classe funcionário com todos os atributos possíveis. Mas quais os problemas dessa abordagem? \pause
+  \begin{itemize}
+   \item Vários atributos ficariam vazios
+   \item Conforme precisarmos criar novos tipos de funcionário, a classe acaba por ficar ``inchada''
+  \end{itemize}
+
+\end{frame}
+
+
+\begin{frame}{Qual a solução? Herança!}
+ \begin{itemize}
+  \item Herança é uma forma de relacionamento entre duas classes de tal maneira que uma delas (\textbf{subclasse}) herda atributos e métodos da outra (\textbf{superclasse})
+  \item No nosso exemplo, a classe \textbf{Gerente} seria uma \textbf{extensão} (ou especialização) da classe \textbf{Funcionario}
+ \end{itemize}
+ 
+ \begin{block}{Quais informações são herdadas?}
+  \begin{itemize}
+   \item métodos e atributos públicos
+   \item métodos e atributos protegidos (\textbf{protected})
+   \item métodos e atributos com encapsulamento \textit{default} são herdados apenas se as classes estiverem no mesmo pacote
+  \end{itemize}
+
+ \end{block}
+\end{frame}
+
+
+\subsection{Sintaxe}
+\begin{frame}[fragile]{Como ficaria nossa classe Gerente?}
+  \begin{itemize}
+   \item Para indicarmos que uma classe herda da outra fazemos uso da palavra-chave \textbf{extends}
+  \end{itemize}
+  \begin{lstlisting}
+public class Gerente extends Funcionario {
+  int senha;
+  int numeroDeFuncionariosGerenciados;  
+  public boolean autentica(int senha) {
+    String nomeGerente = getNome();
+    if (this.senha == senha) {
+      System.out.println("Acesso Permitido a " + nomeGerente);
+      return true;
+    } else {
+      System.out.println("Acesso Negado a "+ nomeGerente);
+      return false;     } } }   
+  \end{lstlisting}
+
+
+\end{frame}
+
+\begin{frame}{Subclasse x superclasse}
+ \begin{block}{Super e Sub classe}
+ A nomenclatura mais encontrada é que \textbf{Funcionario} é a superclasse de Gerente, e Gerente é a \textbf{subclasse} de Funcionario. Dizemos também que todo Gerente \textbf{é um} Funcionário. Outra forma é dizer que Funcionario é classe \textbf{mãe} de Gerente e Gerente é classe \textbf{filha} de Funcionario.
+
+ \end{block}
+\end{frame}
+
+\begin{frame}[fragile]{Como utilizar a classe Gerente?}
+ \begin{itemize}
+  \item Da mesma forma que a classe \textbf{Funcionario!}
+ \end{itemize}
+ \begin{lstlisting}
+public class TestaGerente {
+  public static void main(String[] args) {
+    Gerente gerente = new Gerente();
+    
+    // podemos chamar métodos do Funcionario:
+    gerente.setNome("João da Silva"); //método pertencente à Funcionário
+    
+    // e também métodos do Gerente!
+    gerente.setSenha(4231);
+  }
+}  
+ \end{lstlisting}
+
+\end{frame}
+
+\begin{frame}{Qual a representação UML da herança?}
+ \begin{center}
+ \includegraphics[scale=0.35]{./imagens/heranca.png}
+ % heranca.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{center}
+
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]{O modificador de acesso protected}
+ \begin{block}{Considere a situação}
+  Suponha que se deseja construir uma classe \textbf{Funcionario} na qual alguns métodos deveriam ser acessados \textbf{apenas} pelas classes filhas. É possível com o modificador \textbf{protected}!
+ \end{block}
+\begin{lstlisting}
+ public class Funcionario {
+    private int v1;
+    protected int v2;
+    protected void metodo1() {
+    }
+ }
+ 
+ public class Gerente extends Funcionario {
+    public void metodo2() {
+      metodo1(); //Ok!, Gerente herda o metodo1 e pode utilizá-lo!
+      v1 = 10; //Erro, não é possível acessar um atributo privado
+      v2 = 20; //Ok! É possível acessar um atributo protegido
+    }
+ }
+\end{lstlisting}
+
+
+\end{frame}
+
+
+\begin{frame}[fragile]{Palavra-chave super}
+ \begin{itemize}
+  \item De maneira semelhante ao \textbf{this}, a palavra-chave \textbf{super} possibilita fazer referências a métodos, atributos e construtores da superclasse
+ \end{itemize}
+ \begin{lstlisting}
+  public classe Gerente extends Funcionario {
+    public Gerente(String nome, String cpf, double salario) {
+      super(nome, cpf, salario); //invoca o construtor de Funcionário!
+    }    
+    public void metodo1() {
+    //
+      String nome = super.getNome();
+    //
+    }  
+  }
+ \end{lstlisting}
+\end{frame}
+
+\subsection{Hierarquia de classes}
+
+\begin{frame}{Hierarquia de classes}
+ \begin{itemize}
+  \item O processo de herança não se restringe a uma única camada. Podem existir um número indefinido de camadas
+ \end{itemize}
+
+ \begin{center}
+ \includegraphics[scale=0.3]{./imagens/hierarquia.png}
+ % hierarquia.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{center}
+
+\begin{itemize}
+ \item A classe \textbf{Executivo} irá herdar os métodos e atributos de \textbf{Gerente} e \textbf{Empregado}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Java: herança única!}
+ \begin{itemize}
+  \item Em Java, cada classe pode herdar diretamente de apenas uma \textbf{única classe}
+  
+ \end{itemize}
+ \begin{center}
+ \includegraphics[scale=0.3]{./imagens/heranca-multipla.png}
+ % heranca-multipla.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{center}
+\begin{block}{Curiosidade: alguma linguagem dá suporte à herança múltipla?}
+ Sim! C++ é um exemplo de uma linguagem orientada a objetos com suporte à herança múltipla
+\end{block}
+
+
+\end{frame}
+
+\begin{frame}{A classe java.lang.Object}
+ \begin{itemize}
+  \item Em Java, a classe \textbf{Object} do pacote \textbf{java.lang} é superclasse de qualquer outra classe
+  \item Se uma classe não herda explicitamente de nenhuma outra classe então ela \textbf{herda} de Object
+  \item Significa dizer que qualquer classe \textbf{é um} Object
+ \end{itemize}
+ \begin{center}
+  \begin{tabular}{|c|c|}
+  \hline
+  \textbf{Principais métodos} & \textbf{Descrição} \\ \hline
+  boolean equals(Object)  & Compara dois objetos e \\ 
+  & retorna \textbf{true} se forem iguais \\ \hline
+  int hashCode()  & Gera um identificador inteiro \\
+  & com base nos atributos do objetos \\ \hline
+  String toString() & Gera uma representação textual do objeto	\\ \hline
+  \end{tabular}
+\end{center}
+
+
+\end{frame}
+
+\begin{frame}[fragile,allowframebreaks]{Sobreposição de métodos}
+  \begin{itemize}
+   \item Um dos recursos do Java é a possibilidade de reescrever métodos para adicionar novas funcionalidades às subclasses
+   \item A subclasse passa a ter a nova funcionalidade
+  \end{itemize}
+  
+  \begin{lstlisting}
+public class Funcionario {
+  protected double salario;
+
+  public Funcionario(double salario) {
+    this.salario = salario;
+  }
+  public double getBonificacao() {
+    return this.salario * 0.10;
+  }
+  // métodos
+}
+
+public class Gerente extends Funcionario {
+
+  public Gerente(double salario) {
+    super(salario);
+  }
+  
+  public double getBonificacao() {
+    return this.salario * 0.15;
+  }
+}
+  \end{lstlisting}
+  
+Utilização: 
+\begin{lstlisting}
+//...
+  Funcionario f = new Funcionario(1000);
+  double grat1 = f.getBonificacao(); // == 100
+  
+  
+  Gerente g = new Gerente(1000);
+  double grat2 = g.getBonificacao();// == 150
+
+//...
+\end{lstlisting}
+\end{frame}
+
+
+\begin{frame}{Como reutilizar o método da classe base?}
+ \begin{block}{Considere a seguinte situação}
+  A empresa possui a seguinte regra para bonificação dos seus funcionários: funcionários comuns recebem uma bonificação de 10\% enquanto Gerentes devem receber R\$ 100,00 além da bonificação padrão. Como fazer?
+  \pause
+  \begin{itemize}
+   \item Implementar o método getBonificacao com a funcionalidade completa (cálculo dos 10\% e somatório do valor extra). Qual o problema?
+   \item Reutilização do método de cálculo de bonificação: soma-se a bonificação geral com o valor da bonificação específica
+  \end{itemize}
+
+ \end{block}
+
+\end{frame}
+
+\begin{frame}[fragile, allowframebreaks]{Como implementar?}
+ \begin{lstlisting}
+public class Funcionario {
+  protected double salario;
+
+  public Funcionario(double salario) {
+    this.salario = salario;
+  }
+  public double getBonificacao() {
+    return this.salario * 0.10;
+  }
+  // métodos
+}
+
+public class Gerente extends Funcionario {
+
+  public Gerente(double salario) {
+    super(salario);
+  }
+  
+  public double getBonificacao() {
+    return super.getBonificacao() + 100;
+  }
+}  
+ \end{lstlisting}
+
+\end{frame}
+
+\begin{frame}{Sobrecarga x Sobreposição}
+\begin{itemize}
+ \item \textbf{Sobrecarga (\textit{overload}):} criação de diferentes métodos na mesma classe, com mesmo nome e assinaturas diferentes (parâmetros de entrada e retorno)
+ \item \textbf{Sobreposição (reescrita ou \textit{override}):} reescrita de um método na subclasse com a mesma assinatura
+\end{itemize}
+
+  
+  
+\end{frame}
+
+
+
+
+
+\begin{frame}[allowframebreaks,fragile]{Classes final e métodos final}
+\begin{block}{Situação 1}
+ Seu sistema possui uma classe Departamento que não deve, sob hipótese alguma, ser modificado seu comportamento na forma de especialização. Em outras palavras, você deseja \textbf{impedir que qualquer outra classe herde} da classe Departamento
+\end{block}
+
+\begin{block}{Situação 2}
+ Seu sistema possui uma classe Funcionario e que por sua vez possui um método para cálculo dos descontos de impostos. Você deseja impedir que qualquer classe que venha a herdar de Funcionario modifique a implementação desse método. Em outras palavras, \textbf{você deseja impedir a sobreposição do método}
+\end{block}
+
+\begin{itemize}
+ \item Para ambos os casos devemos fazer uso da palavra chave \textbf{final} na classe e no método respectivamente
+ \item A utilização da palavra chave \textbf{final} na classe impede que qualquer outra classe possa herdar dela
+\end{itemize}
+\begin{lstlisting}
+ public final class Departamento {
+  //Métodos e atributos
+ }
+ 
+ //ERRO! Não é possível herdar de uma classe final
+ public class DepartamentoEspecializado extends Departamento {
+ 
+ }
+\end{lstlisting}
+
+\begin{itemize}
+ \item A utilização da palavra chave \textbf{final} no método impede que qualquer outra classe que venha a herdar dela sobrescreva o método \textbf{final}
+\end{itemize}
+\begin{lstlisting}
+ public class Funcionario {
+  public final double calcularDescontos() {
+    return 300;
+  }
+ }
+ 
+public class Gerente extends Funcionario {
+  public double calcularDesconto() {
+    return 100;//ERRO! Não é possível sobrescrever um método final!
+  }
+}
+
+\end{lstlisting}
+
+
+
+
+
+
+
+ 
+\end{frame}
+
+\begin{frame}[fragile,allowframebreaks]{Atribuindo uma subclasse à uma superclasse}
+  \begin{itemize}
+   \item Tendo em vista que herança é um relacionamento do tipo \textbf{é um} pode-se entender que um objeto da classe especializado \textbf{também} é um objeto da classe base
+   \item Com base nisso, a atribuição de tipos especializados para tipos base pode ser feito de maneira direta
+  \end{itemize}
+  Considere a seguinte hierarquia:
+\begin{center}
+ \includegraphics[scale=0.5]{./imagens/hierarquia.png}
+ % hierarquia.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{center}
+
+  
+  \begin{lstlisting}
+  //...
+Empregado e1 = new Empregado(); //Ok
+Gerente g1 = new Gerente(); //Ok
+Executivo ex1 = new Executivo(); Ok
+Empregado e2 = new Gerente(); //Ok, um Gerente é um Empregado
+Empregado e3 = new Executivo(); //Ok, um Executivo é um Empregado
+e1 = g1; //Ok, um Gerente é um Empregado
+Gerente g2 = new Empregado(); //Erro! Um Empregado não necessariamente é um Gerente
+Executivo ex2 = new Gerente(); //Erro! Um Empregado não necessariamente é um Gerente
+  \end{lstlisting}
+\end{frame}
+
+
+\begin{frame}[fragile]{Atribuindo uma superclasse à uma subclasse}
+E no código abaixo, o que acontece?
+\begin{lstlisting}
+ Gerente g1 = new Gerente();
+ Empregado e1 = g1;
+ Gerente g2 = e1;
+\end{lstlisting}
+\pause
+\begin{itemize}
+ \item Erro! Não é possível atribuir um tipo geral para um tipo específico diretamente \textbf{mesmo que ele seja do tipo destino}
+ \item Para realizar a atribuição deve-se fazer um \textbf{cast}
+\end{itemize}
+\begin{lstlisting}
+ Gerente g1 = new Gerente();
+ Empregado e1 = g1;
+ Gerente g2 = (Gerente) e1; 
+\end{lstlisting}
+
+\end{frame}
+
+
+\begin{frame}[fragile]{Verificando o tipo real do objeto via instanceof}
+O que acontece quando testamos o seguinte código?
+\begin{lstlisting}
+ Empregado e1 = new Gerente();//Ok
+ Gerente g1 = (Gerente)e1; //Ok
+ Programador p1 = (Programador)g1;
+\end{lstlisting}
+\pause
+\begin{itemize}
+ \item Não é possível forçar um cast pois um Gerente \textbf{não é} um \textbf{Programador}
+ \item Para verificar se um objeto é de um tipo específico utiliza-se \textbf{instanceof}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]{Usando o instanceof}
+ \begin{lstlisting}
+Funcionario f = ....//algum tipo de instanciação
+if (f instanceof Gerente) {
+//É seguro fazer o cast
+  Gerente ge = (Gerente) f;
+}  
+ \end{lstlisting}
+ \begin{itemize}
+  \item A palavra chave \textbf{instanceof} retorna \textbf{true} se o objeto testado for do tipo a ser testado
+ \end{itemize}
+
+
+\end{frame}
+
+
+
+
+
+
+
+\subsection{Polimorfismo, classes abstratas e interfaces}
+
+\begin{frame}{Polimorfismo}
+Considere o seguinte diagrama de classes:
+\begin{figure}
+ \centering
+ \includegraphics[scale=0.35]{./imagens/ex-polimorfismo.png}
+ % ex-polimorfismo.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{figure}
+
+Como seria a implementação dessas classes se um Funcionário padrão tivesse $5\%$ de bonificação, o Gerente tivesse $20\%$ e o Atendente tivesse $15\%$ de bonificação?
+
+
+
+\end{frame}
+
+\begin{frame}[fragile]{O que acontece se invocarmos o getBonificação}
+ Agora considere o seguinte código:
+ \begin{lstlisting}
+Funcionario f = new Gerente();
+f.setSalario(100);
+double s = f.getSalario();  
+double gratificacao = f.getBonificacao();
+ \end{lstlisting}
+ \begin{itemize}
+  \item Qual será o valor da bonificação? 5 ou 20?\pause
+  
+ \end{itemize}
+\textbf{20}! Pois o objeto alocado é de um \textbf{Gerente} \textbf{ainda que} esteja sendo representado como um \textbf{Funcionario}
+ 
+ 
+ 
+
+\end{frame}
+
+\begin{frame}{Definição de Polimorfismo}
+  \begin{figure}
+ \centering
+ \includegraphics[scale=0.4]{./imagens/polimorfismo.jpeg}
+ % polimorfismo.jpeg: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{figure}
+
+\begin{block} {Definição}
+ Polimorfismo é a capacidade de um objeto poder ser referenciado de várias formas. A invocação do método vai ser decidida em tempo de execução. O Java vai procurar o objeto na memória e, aí sim, decidir qual método deve ser chamado, sempre relacionando com sua classe de verdade, e não com a que estamos referenciando. 
+\end{block}
+
+\end{frame}
+
+\begin{frame}[fragile]{Quando é útil utilizar polimorfismo?}
+\begin{itemize}
+ \item Sempre que for necessário tratar os objetos de maneira uniforme
+ \item Suponha que precisamos criar uma classe para acumular as bonificações de todos os funcionários
+\end{itemize}
+
+
+ \begin{lstlisting}
+public class ControleDeBonificacoes {
+  private double totalDeBonificacoes = 0;
+  public void registra(Funcionario funcionario) {
+    this.totalDeBonificacoes += funcionario.getBonificacao();
+  }
+  public double getTotalDeBonificacoes() {
+    return this.totalDeBonificacoes;
+  }
+}
+ \end{lstlisting}
+\end{frame}
+
+{\nologo
+\begin{frame}[fragile]{Quando é útil utilizar o polimorfismo?}
+ \begin{lstlisting}
+ControleDeBonificacoes controle = new ControleDeBonificacoes();
+
+Gerente funcionario1 = new Gerente();
+funcionario1.setSalario(5000.0);
+controle.registra(funcionario1);
+
+Funcionario funcionario2 = new Funcionario();
+funcionario2.setSalario(1000.0);
+controle.registra(funcionario2);
+
+System.out.println(controle.getTotalDeBonificacoes());
+  
+ \end{lstlisting}
+
+\end{frame}
+}
+
+\begin{frame}[fragile]{Aplicação prática do polimorfismo: System.out.println()}
+ \begin{itemize}
+  \item Não há uma implementação do método println para todos as classes complexas (nem seria possível)
+  \item A única coisa que é necessário é definir o método println para superclasse e utilizar o polimorfismo!
+ \end{itemize}
+ 
+ \begin{lstlisting}
+//...
+public void println(Object o) {
+  String mensagem = o.toString(); //Irá recuperar a implementação correta dado o tipo real do objeto
+  print(mensagem);
+  print("\n")
+}
+ \end{lstlisting}
+
+
+\end{frame}
+
+{\nologo
+\begin{frame}{Exercício 1}
+ \begin{figure}
+ \centering
+ \includegraphics[scale=0.35]{./imagens/exercicio-01.png}
+ % exercicio-01.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{figure}
+
+\end{frame}
+}
+
+{\nologo
+\begin{frame}{Exercício 2}
+ \begin{figure}
+ \centering
+ \includegraphics[scale=0.45]{./imagens/exercicio-02.png}
+ % exercicio-01.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{figure}
+\textbf{Dica:} utilizar o \textbf{instanceof} para identificar os tipos concretos nos métodos de recuperação
+\end{frame}
+}
+
+\begin{frame}[fragile,allowframebreaks]{Reescrevendo o toString()}
+Considere o seguinte código:
+\begin{lstlisting}
+ Funcionario f = new Funcionario();
+ System.out.println(f);
+\end{lstlisting}
+
+ \begin{itemize}
+  \item Ao executar esse código é impresso um texto semelhante a ``pac1.Funcionario@4f93b604''
+  \item Isto acontece pois o método \textbf{println} invoca \textbf{toString} de cada objeto que por padrão retorna uma representação do endereço de memórica do objeto
+  \item No entanto, é possível sobrescrever o método toString para fornecer uma saída customizada
+ \end{itemize}
+ \begin{lstlisting}
+public class Funcionario {
+  private String nome;
+  private String cpf;
+  //getters e setters
+
+  public String toString() {
+    return "nome=" + nome + ", cpf=" + cpf;
+  }
+}  
+
+public class Main {
+  public static void main(String[] args) {
+    Funcionario f2 = new Funcionario();
+    f2.setNome("Maria");
+    f2.setCpf("1234");		
+    System.out.println(f2);
+  }
+}
+ \end{lstlisting}
+
+
+\end{frame}
+
+\begin{frame}[fragile,allowframebreaks]{Reescrevendo o equals}
+  \begin{itemize}
+   \item Para compararmos objetos em Java utilizamos o método \textbf{equals}
+   \item Por padrão este método verifica se as duas refereências apontam para o mesmo endereço de memória
+  \end{itemize}  
+  \begin{lstlisting}
+ Funcionario f1 = new Funcionario();
+ Funcionario f2 = new Funcionario(); 
+ if(f1.equals(f2))  {
+ 
+ } else {//Sempre entrará aqui pois os objetos são diferentes
+ 
+ }
+  \end{lstlisting}
+\begin{itemize}
+ \item E se quisermos testar se dois objetos são iguais a partir do seu cpf?
+ \item Devemos sobrescrever o método equals
+\end{itemize}
+\begin{lstlisting}
+public class Funcionario {
+  private String nome;
+  private String cpf;
+
+  public boolean equals(Object obj) {
+    //compara-se o objeto recebido com o objeto testado
+  }
+}
+
+\end{lstlisting}
+\begin{itemize}
+ \item A assinatura do método equals recebe por padrão um Object. O que devemos fazer?
+ \item Utilizar o instanceof e cast para converter para o tipo pretendido
+\end{itemize}
+ \begin{lstlisting}
+public boolean equals(Object obj) {
+  if (obj instanceof Funcionario) {
+    Funcionario f = (Funcionario) obj;
+    return cpf.equals(f.cpf); //Por que não é necessário chamar getCpf?
+  } else {
+    return false;
+  }
+}  
+ \end{lstlisting}
+\begin{block}{Curiosidade: como um ArrayList remove um elemento?}
+ Ele faz uso do método equals para remover objetos
+\end{block}
+\begin{lstlisting}
+ArrayList<Funcionario> lista = new ArrayList<>();
+lista.add(f2); 
+System.out.println(lista.size()); //==1
+Funcionario f3 = new Funcionario();
+f3.setCpf("1234");
+lista.remove(f3);
+System.out.println(lista.size()); //==0
+\end{lstlisting}
+
+
+
+\end{frame}
+
+
+\begin{frame}[allowframebreaks,fragile]{Classes abstratas}
+Considere a hierarquia abaixo
+ \begin{center}
+ \includegraphics[scale=0.4]{./imagens/hierarquia.png}
+ % hierarquia.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{center}
+   \begin{block}{Agora considere o seguinte cenário}
+   O sistema possui um tipo geral \textbf{Empregado} em que \textbf{parte} dos seus atributos e a implementação dos seus métodos servem a maioria dos casos. No entanto, alguns métodos \textbf{não possuem} uma implementação padrão (ex.: o cálculo da bonificação) devendo sempre ser redefinidas. O que fazer?
+  \end{block}
+  \begin{itemize}
+   \item Definir a classe Empregado como \textbf{abstrata}
+   \item Manter o método de cálculo de bonificação sem implementação
+  \end{itemize}
+ \begin{lstlisting}
+public abstract class Empregado {
+  private String nome;
+  private String cpf;
+  private double salario;
+
+  public abstract double calcularBonificacao();//método abstrato. Sem implementação!
+  
+  public String setNome(String nome) {
+    this.nome = nome;
+  }
+  //demais métodos e atributos
+}
+
+public class Gerente extends Empregado {
+
+//Implementação do método abstrato
+public double calcularBonificacao() {
+  return 0;
+}
+}
+
+public class Secretario extends Empregado {
+
+//Implementação do método abstrato
+public double calcularBonificacao() {
+  return 100;
+}
+}
+public class Main {
+  public static void main(String[] args) {
+    Gerente g = new Gerente();
+    Secretario s = new Secretario();
+    Empregado f = new Secretario();
+    Empregado e = new Empregado();//Erro! Não é possívei instanciar um empregado!
+  }
+}
+ \end{lstlisting}
+\begin{block}{Importante!}
+ Uma classe abstrata NÃO pode ser instanciada visto que ela é \textbf{incompleta}!
+\end{block}
+
+
+
+\end{frame}
+{\nologo
+\begin{frame}{Interfaces}
+ Considere a seguinte hierarquia de classes:
+ \begin{figure}
+ \centering
+ \includegraphics[scale=0.3]{./imagens/interface-01.png}
+ % interface-01.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{figure}
+\pause
+
+Suponha agora que os tipos \textbf{Diretor} e \textbf{Gerente} tenham de oferecer suporte a verificação de senha a partir de um método \textbf{\textit{public boolean autentica(int senha)}}. Como modelar da maneira mais genérica possível?
+
+\end{frame}
+}
+\begin{frame}{Solução 1}
+Solução? Qual o principal problema?
+  \begin{figure}
+ \centering
+ \includegraphics[scale=0.35]{./imagens/interface-02.png}
+ % interface-02.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{figure}
+\pause
+\begin{itemize}
+ \item Nem todos os funcionários fazem autenticação
+ \end{itemize}
+\end{frame}
+
+
+\begin{frame}{Solução 2}
+ \begin{figure}
+ \centering
+ \includegraphics[scale=0.3]{./imagens/interface-03.png}
+ % interface-03.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{figure}
+\begin{itemize}
+ \item Conseguimos isolar a implementação em um único ponto
+ \item A classe \textbf{FuncionarioAutenticavel} poderia ser definida como \textbf{abstrata}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Mais problemas}
+ \begin{itemize}
+  \item E se precisássemos adicionar uma classe Cliente que também tivesse suporte a autenticação. Como seria?
+ \end{itemize}
+\begin{figure}
+ \centering
+ \includegraphics[scale=0.3]{./imagens/interface-04.png}
+ % interface-04.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{figure}
+O que há de errado com isso?
+\end{frame}
+
+\begin{frame}{Utilizando interfaces para especificar comportamentos}
+Para o nosso caso, devemos fazer uso de interfaces
+ 
+\begin{block}{Definição}
+ Uma interface pode definir uma série de métodos, mas nunca conter implementação deles. Ela só expõe o que \textbf{o objeto deve fazer}, e não \textbf{como ele faz}, nem \textbf{o que ele tem}. \textbf{Como ele faz} vai ser definido em uma \textbf{implementação} dessa interface
+\end{block}
+\begin{itemize}
+ \item O mais próximo do que já vimos seria uma classe sem atributos e com todos os seus métodos abstratos
+\end{itemize}
+
+
+\end{frame}
+
+\begin{frame}{Representação em UML}
+ \begin{figure}
+ \centering
+ \includegraphics[scale=0.35]{./imagens/interface-05.png}
+ % interface-05.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{figure}
+\begin{itemize}
+ \item A interface especifica os métodos (sem implementação) e as classes implementam tais métodos
+ \item O relacionamento é chamado de \textbf{realização}
+\end{itemize}
+
+\end{frame}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\subsection{Resumo}
+\begin{frame}[allowframebreaks,fragile]{Herança simples, classe abstrata e interfaces}
+Considere os seguintes cenários de um sistema com uma classe \textbf{Funcionario}
+  \begin{block}{Cenário 1: customização opcional}
+O sistema possui uma tipo geral \textbf{Funcionario} em que seus atributos e a implementação dos seus métodos servem a maioria dos casos. No caso das exceções, cria-se uma classe especializada herdada de \textbf{Funcionario}. Ex.: \textbf{Gerente}
+\begin{itemize}
+ \item Utiliza-se a herança tradicional
+ \item Pode-se criar objetos tanto da classe \textbf{Funcionario} quanto das classes \textbf{filhas}
+\end{itemize}
+
+  \end{block}
+  \begin{lstlisting}
+//...
+Gerente g = new Gerente(); // Ok, é possível criar um gerente!
+Funcionario f = new Funcionario(); //Ok, é possível criar um funcionário!
+Funcionario f2 = new Gerente(); //Ok, é possível criar um gerente e atribuir a um funcionário!
+//...
+  \end{lstlisting}
+  
+  \begin{block}{Cenário 2: customização parcial obrigatória}
+   O sistema possui um tipo geral \textbf{Funcionario} em que \textbf{parte} dos seus atributos e a implementação dos seus métodos servem a maioria dos casos. No entanto, alguns métodos \textbf{não possuem} uma implementação padrão devendo sempre ser redefinidas
+   \begin{itemize}
+    \item Define-se a classe \textbf{Funcionario} como \textbf{abstrata}
+    \item Pode-se criar objetos apenas das classes \textbf{filhas} visto que o tipo \textbf{Funcionario} é \textbf{incompleto}
+   \end{itemize}
+
+  \end{block}
+\begin{lstlisting}
+//...
+Gerente g = new Gerente(); // Ok, é possível criar um gerente!
+Funcionario f = new Funcionario(); //ERRO, NÃO é possível criar um funcionário!
+Funcionario f2 = new Gerente(); //Ok, é possível criar um gerente e atribuir a um funcionário!
+//...
+\end{lstlisting}
+
+  
+  \begin{block}{Cenário 3: customização total obrigatória}
+   O sistema possui um tipo geral \textbf{Funcionario} em que \textbf{todos os métodos} não possuem uma implementação padrão devendo sempre ser redefinidas
+   \begin{itemize}
+    \item Define-se a classe \textbf{Funcionario} como uma \textbf{interface}
+    \item Pode-se criar objetos apenas das classes \textbf{filhas} visto que o tipo \textbf{Funcionario} é \textbf{incompleto}
+   \end{itemize}   
+  \end{block}
+\begin{lstlisting}
+//...
+Gerente g = new Gerente(); // Ok, é possível criar um gerente!
+Funcionario f = new Funcionario(); //ERRO, NÃO é possível criar um funcionário!
+Funcionario f2 = new Gerente(); //Ok, é possível criar um gerente e atribuir a um funcionário!
+//...
+\end{lstlisting}
+
+
+\end{frame}
+
+\section{Dicas}
+
+\subsection{Dicas de criação de classes}
+\begin{frame}{Dicas de criação de classes}
+ \begin{enumerate}
+  \item Sempre mantenha os dados privados
+  \item Sempre inicialize os dados da sua classe
+  \item Evite muitos tipos básicos na sua classe
+  \item Nem todos os atributos da sua classe precisam de métodos \textbf{get} e \textbf{set}
+  \item Divida as classes que possuem muitas responsabilidades
+  \item Ao definir nomes para suas classes, métodos e atributos escolha nomes que reflitam suas responsabilidades
+  \begin{itemize}
+   \item É importante lembrar que \textbf{classes} representam entidades, \textbf{métodos} representam ações e \textbf{atributos} representam propriedades!
+  \end{itemize}
+
+ \end{enumerate}
+
+\end{frame}
+
+\end{document}

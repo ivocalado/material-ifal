@@ -1,0 +1,317 @@
+%\documentclass[t,handout]{beamer}
+\documentclass{beamer}
+
+
+\usepackage[latin1]{inputenc}
+
+\usepackage[portuguese]{babel}
+\usepackage[tight]{subfigure}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{url}
+
+% \usepackage{inconsolata}
+\newcommand{\setcolor}[2]{\color{#1}{#2}\color{black}}
+
+%Pacote de listagem de cï¿½digo
+\usepackage{listings}
+%\lstset{numbers=left, stepnumber=1, firstnumber=1,
+%numberstyle=\tiny, extendedchars=true, breaklines=true, frame=tb,
+%basicstyle=\footnotesize, stringstyle=\ttfamily,
+%showstringspaces=false }
+
+\lstset{extendedchars=true, breaklines=true, frame=tb,
+basicstyle=\footnotesize, stringstyle=\ttfamily,
+showstringspaces=false,language=HTML }
+
+% \usecolortheme[RGB={130,35,150}]{structure}
+% \usecolortheme[RGB={33,33,94}]{structure}
+\usecolortheme[RGB={153,204,123}]{structure}
+\setbeamertemplate{footline}[frame number]
+\setbeamertemplate{navigation symbols}{}
+
+% \usetheme{Frankfurt} %LEGAL     !!!
+% \usetheme{Madrid}     %LEGAL/L%IMPO/COM CAIXA     (sem barra de desenvolvimento)
+
+% \usetheme{Antibes} %NAO
+% \usetheme{Berlin} %PODE SER...     (BARRA DE DESENVOLVIMANTO)
+% \usetheme{Berkeley}     %FEIO
+% \usetheme{Boadilla} %TUDO BRANCO...
+% \usetheme{Copenhagen}     %NAO
+% \usetheme{Darmstadt} %LEGAL!     !!!
+% \usetheme{Dresden}     %LEGAL/LIMPO/SEM CAIXA     (sem caixa fica ruim...)
+
+% \usetheme{Goettingen}     %FEIO DEMAIS!
+ \usetheme{Ilmenau} %LEGAL (forte candidato)
+% \usetheme{JuanLesPins} %BACANA
+% \usetheme{Luebeck}     %FEIO
+
+% \usetheme{Malmoe}     %FEIO
+% \usetheme{Warsaw} %NAO...
+% \usetheme{Seattle}
+% \usetheme{CambridgeUS}
+% \usetheme{Singapore}
+
+%Insere o numero de frames no slide
+\newcommand*\oldmacro{}
+\let\oldmacro\insertshortauthor% save previous definition
+\renewcommand*\insertshortauthor{%
+  \leftskip=.3cm% before the author could be a plus1fill ...
+  \insertframenumber\,/\,\inserttotalframenumber\hfill\oldmacro}
+
+\newcommand{\nologo}{\setbeamertemplate{logo}{}} 
+
+\author[Ivo Calado]{Ivo Calado\\\url{ivo.calado@ifal.edu.br}}
+\date{\today}
+\institute[IFAL]{Instituto Federal de Educação, Ciência e Tecnologia de Alagoas}
+\title[POO]{Programação Orientada a Objetos}
+\logo{\includegraphics[width=0.2\linewidth]{imagens/ifal-logo.jpg}}
+\subtitle{\textit{Aula 04: Exceções\\}}
+
+\begin{document}
+
+
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+% \section{Roteiro}
+% \AtBeginSection[]
+{\frame{
+\frametitle{Roteiro}
+\tableofcontents[hidesubsections]
+}
+}
+
+\section{Introdução}
+\subsection{Motivação}
+\begin{frame}[fragile]{Motivação}
+ \begin{block}{Cenário}
+  Você necessita desenvolver um sistema de auto-atendimento para um banco. Como seria modelada a entidade Conta em termos de atributos e ações?
+ \end{block}
+ \pause
+ \begin{figure}
+ \centering
+ \includegraphics[scale=0.4]{./imagens/exemplo-conta-01.png}
+ % exemplo-conta.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{figure}
+
+
+\end{frame}
+{\nologo
+\begin{frame}[fragile]{Utilizando esta classe}
+ \begin{lstlisting}
+CaixaEletronico caixa = new CaixaEletronico();
+Conta minhaConta = new Conta();
+minhaConta.depositar(100);
+minhaConta.setLimite(100);
+minhaConta.sacar(200);  
+caixa.emitir(200);
+ \end{lstlisting}
+\begin{itemize}
+ \item E se o saque for maior que o saldo+limite, como indicar que o saque não foi possível e impedir a emissão do dinheiro?
+\end{itemize}
+\pause
+\begin{figure}
+ \centering
+ \includegraphics[scale=0.3]{./imagens/exemplo-conta-02.png}
+ % exemplo-conta-02.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{figure}
+
+\end{frame}
+}
+\begin{frame}[fragile,allowframebreaks]{Utilizando a nova classe}
+Definição:
+ \begin{lstlisting}
+boolean sacar(double valor) {
+    // posso sacar até saldo+limite
+    if (valor > this.saldo + this.limite) {
+      return false;
+    } else {
+      this.saldo = this.saldo - valor;
+    return true;
+  }
+}  
+ \end{lstlisting}
+Utilização:
+\begin{lstlisting}
+CaixaEletronico caixa = new CaixaEletronico();
+Conta minhaConta = new Conta();
+minhaConta.depositar(100);
+minhaConta.setLimite(100);
+if (minhaConta.sacar(1000)) {
+   caixa.emitir(1000);
+   caixa.exibirMensagem("Saque realizado com sucesso!");
+} else {
+   caixa.exibirMensagem("Saldo insuficiente");
+}
+\end{lstlisting}
+
+\end{frame}
+\begin{frame}[fragile,allowframebreaks]{\textit{Magic numbers}}
+\begin{itemize}
+ \item E se precisássemos sinalizar mais do que um tipo de insucesso? Por exemplo, se o usuário informou um valor negativo para saldo
+ \item Poderíamos fazer uso da estratégia conhecida como \textit{magic numbers} que consiste em definir diferentes códigos de erro para casa situação. Nossa classe ficaria assim:
+\end{itemize}
+
+ \begin{figure}
+ \centering
+ \includegraphics[scale=0.35]{./imagens/exemplo-conta-03.png}
+ % exemplo-conta-03.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{figure}
+
+Definição:
+ \begin{lstlisting}
+int sacar(double valor) {
+    // posso sacar até saldo+limite
+    if(valor <= 0) {
+      return -2;
+    } else if (valor > this.saldo + this.limite) {
+      return -1;
+    } else {
+      this.saldo = this.saldo - valor;
+    return 0;
+  }
+}  
+ \end{lstlisting}
+Utilização:
+\begin{lstlisting}
+CaixaEletronico caixa = new CaixaEletronico();
+Conta minhaConta = new Conta();
+minhaConta.depositar(100);
+minhaConta.setLimite(100);
+int resultado = minhaConta.sacar(1000)
+if (resultado == 0) {
+   caixa.emitir(1000);
+   caixa.exibirMensagem("Saque realizado com sucesso!");
+} else if(resultado == -1){
+   caixa.exibirMensagem("Saldo insuficiente!");
+} else {
+   caixa.exibirMensagem("Valor negativo solicitado!");
+}
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}{Magic numbers}
+  \begin{block}{Qual o principal problema da estratégia \textit{magic numbers}}
+Essa estratégia recebe o nome de \textit{magic numbers} justamente porque os valores retornados não possuem uma semântica clara definida e dependem extensamente da documentação associada. 
+  \end{block}
+
+\end{frame}
+
+
+
+\begin{frame}[fragile]{Mais problemas (2)?}
+ \begin{itemize}
+  \item E se o programador ao utilizar a classe \textbf{Conta} esquecesse de checar o retorno do método sacar?
+ \end{itemize}
+\begin{lstlisting}
+CaixaEletronico caixa = new CaixaEletronico();
+Conta minhaConta = new Conta();
+minhaConta.depositar(100);
+minhaConta.setLimite(100);
+caixa.emitir(1000);
+caixa.exibirMensagem("Saque realizado com sucesso!");
+\end{lstlisting}
+\pause
+\textbf{Consequência}: o sistema ficará num estado inconsistente
+
+
+\end{frame}
+
+\begin{frame}{Solução: Exceções}
+ \begin{block}{Execeções}
+Uma \textbf{exceção} representa uma situação que normalmente não ocorre e representa algo de estranho ou inesperado no sistema. Trata-se de um valioso recurso disponível em \textbf{algumas} linguagens de programação como Java
+ \end{block}
+
+\end{frame}
+
+
+\subsection{Preliminares}
+\begin{frame}[allowframebreaks,fragile]{O processo de chamada de métodos em Java}
+  Antes de vermos a solução do nosso problema, é necessário conhecer como Java gerencia a chamada de vários métodos. Para tal, criar a seguinte aplicação:
+  \begin{enumerate}
+   \item Criar uma classe C1, com os seguintes métodos:
+   \begin{enumerate}
+    \item metodo1, metodo2, metodo3 e metodo4
+    \item \textbf{metodo1} imprime ``Inicio metodo 1'', invoca \textbf{metodo2} e imprime ``Fim metodo 1''
+    \item \textbf{metodo2} imprime ``Inicio metodo 2'', invoca \textbf{metodo3} e imprime ``Fim metodo 2''
+    \item \textbf{metodo3} imprime ``Inicio metodo 3'', invoca \textbf{metodo4} e imprime ``Fim metodo 3''
+    \item \textbf{metodo4} imprime ``Inicio metodo 4'', realiza a divisão 10/2 e imprime ``Fim metodo 4''
+   \end{enumerate}
+   \item Criar uma classe C2 com método main que deve realizar os seguintes passos:
+   \begin{enumerate}
+    \item Instanciar um objeto da classe C1
+    \item Imprimir uma mensagem de boas vindas
+    \item invocar o método \textbf{metodo1} da classe 
+    \item Imprimir uma mensagem indicando o término do método
+   \end{enumerate}
+
+
+  \end{enumerate}
+
+  Código: 
+  \begin{lstlisting}
+public class C1 {
+   public void metodo1() {
+      System.out.println("=>inicio método 1");
+      metodo2();
+      System.out.println("=>fim método 1");
+   }
+
+   private void metodo2() {
+      System.out.println("==>inicio método 2");
+      metodo3();
+      System.out.println("==>fim método 2");
+   }
+
+   private void metodo3() {
+      System.out.println("===>inicio método 3");
+      metodo4();
+      System.out.println("===>fim método 3");
+   }
+
+   private void metodo4() {
+      System.out.println("====>inicio método 4");
+      int i = 10/2;
+      System.out.println("====>fim método 4");
+   }
+}   
+  \end{lstlisting}
+Saída:
+\begin{lstlisting}
+>inicio método main
+=>inicio método 1
+==>inicio método 2
+===>inicio método 3
+====>inicio método 4
+====>fim método 4
+===>fim método 3
+==>fim método 2
+=>fim método 1
+>fim método main
+\end{lstlisting}
+
+
+
+\end{frame}
+
+{\nologo
+\begin{frame}{A pilha de chamada em Java}
+As chamadas são empilhadas e após o final do método são desempilhados
+ \begin{figure}
+ \centering
+ \includegraphics[scale=0.25]{./imagens/pilhachamada.jpeg}
+ % pilhachamada.jpeg: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{figure}
+\pause
+\begin{itemize}
+ \item Agora vamos modificar o método \textbf{metodo4} para que seja realizada uma divisão por zero e verificar a saída
+\end{itemize}
+
+\end{frame}
+
+}
+
+\end{document}

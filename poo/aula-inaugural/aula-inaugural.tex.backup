@@ -1,0 +1,167 @@
+%\documentclass[t,handout]{beamer}
+\documentclass{beamer}
+
+
+\usepackage[latin1]{inputenc}
+
+\usepackage[portuguese]{babel}
+\usepackage[tight]{subfigure}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{url}
+\newcommand{\setcolor}[2]{\color{#1}{#2}\color{black}}
+
+%Pacote de listagem de cï¿½digo
+\usepackage{listings}
+%\lstset{numbers=left, stepnumber=1, firstnumber=1,
+%numberstyle=\tiny, extendedchars=true, breaklines=true, frame=tb,
+%basicstyle=\footnotesize, stringstyle=\ttfamily,
+%showstringspaces=false }
+
+\lstset{extendedchars=true, breaklines=true, frame=tb,
+basicstyle=\footnotesize, stringstyle=\ttfamily,
+showstringspaces=false,language=HTML }
+
+% \usecolortheme[RGB={130,35,150}]{structure}
+% \usecolortheme[RGB={33,33,94}]{structure}
+\usecolortheme[RGB={153,204,123}]{structure}
+\setbeamertemplate{footline}[frame number]
+\setbeamertemplate{navigation symbols}{}
+
+% \usetheme{Frankfurt} %LEGAL     !!!
+% \usetheme{Madrid}     %LEGAL/L%IMPO/COM CAIXA     (sem barra de desenvolvimento)
+
+% \usetheme{Antibes} %NAO
+% \usetheme{Berlin} %PODE SER...     (BARRA DE DESENVOLVIMANTO)
+% \usetheme{Berkeley}     %FEIO
+% \usetheme{Boadilla} %TUDO BRANCO...
+% \usetheme{Copenhagen}     %NAO
+% \usetheme{Darmstadt} %LEGAL!     !!!
+% \usetheme{Dresden}     %LEGAL/LIMPO/SEM CAIXA     (sem caixa fica ruim...)
+
+% \usetheme{Goettingen}     %FEIO DEMAIS!
+ \usetheme{Ilmenau} %LEGAL (forte candidato)
+% \usetheme{JuanLesPins} %BACANA
+% \usetheme{Luebeck}     %FEIO
+
+% \usetheme{Malmoe}     %FEIO
+% \usetheme{Warsaw} %NAO...
+% \usetheme{Seattle}
+% \usetheme{CambridgeUS}
+% \usetheme{Singapore}
+
+\author[Ivo]{Ivo Calado}
+\date{\today}
+\institute[IFAL]{Instituto Federal de Educação, Ciência e Tecnologia de Alagoas}
+\title{Programação Orientada a Objetos}
+\logo{\includegraphics[width=0.2\linewidth]{imagens/ifal-logo.jpg}}
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\section{Sobre o professor}
+\begin{frame}{Sobre o professor}
+Titulação:
+\begin{itemize}
+  \item Graduado em Ciência da Computação na UFAL
+  \item Mestre em Ciência da Computação na UFCG
+  \item Doutor em Engenharia Elétrica na UFCG
+\end{itemize}
+
+\textbf{Email:}\\ ivo.calado@ifal.edu.br ou\\
+		ivo.calado@ee.ufcg.edu.br\\
+\end{frame}
+
+\section{Objetivos}
+\begin{frame}{Objetivos}
+\begin{block}{Objetivo Geral}
+ Capacitar o aluno a resolver problemas através de soluções utilizando os conceitos de orientação a objetos. 
+\end{block}
+Específicos:
+ 
+\begin{itemize}
+  \item Compreender os conceitos fundamentais da linguagem utilizada;
+  \item Compreender os conceitos de orientação a objetos;
+  \item Implementar software utilizando o paradigma de orientação a objetos.
+\end{itemize}
+\end{frame}
+ 
+\section{Ementa}
+\begin{frame}[allowframebreaks]{Ementa}
+Conteúdo básico:
+ \begin{itemize}
+  \item Introdução à OO
+  \begin{itemize}
+   \item Motivação
+   \item POO x Programação Estruturada
+   \item Conceitos de classes, objetos, atributos e métodos
+  \end{itemize}
+  \item Fundamentos da linguagem de programação OO
+  \begin{itemize}
+   \item Introdução e Motivação da linguagem Java
+   \item Primeiros passos no ambiente de programação
+   \item Elementos básicos da linguagem e sua utilização (variáveis, operadores, comandos de entrada e saída, estrutura de controle, strings, arrays etc)
+  \end{itemize}
+  \item Fundamentos da POO
+  \begin{itemize}
+   \item Classes, objetos, atributos, métodos e construtores
+   \item Encapsulamento, herança, polimorfismo, classes abstratas e interface
+  \end{itemize}
+  \item Estrutura de dados
+  \begin{itemize}
+   \item Listas
+   \item Filas
+   \item Pilhas
+   \item Mapas
+  \end{itemize}
+  \item Tratamento de exceções
+  \item Programação com interface gráfica
+  \item Integração com Banco de Dados
+  \item Testes unitários
+ \end{itemize}
+\end{frame}
+
+\begin{frame}{O que estudar fora da disciplina}
+\begin{itemize}
+ \item Algoritmos
+ \item Modelagem de dados
+\end{itemize}
+
+\end{frame}
+
+\section{Avaliação}
+\begin{frame}{Processo de avaliação}
+ \begin{itemize}
+  \item Resolução de listas de exercícios
+  \item Provas
+  \item Trabalhos
+  \item Seminários
+ \end{itemize}
+\end{frame}
+
+\section{Bibliografia}
+\begin{frame}{Bibliografia}
+ \begin{itemize}
+  \item DEITEL, P.; DEITEL, H. Java® Como Programar. 8ª. ed. São Paulo: Pearson Education do Brasil, 2010.
+HORSTMANN, C. S.; CORNELL, G. Core Java@ - Fundamentos. 8ª. ed. São Paulo: Pearson Education do Brasil, v. 1, 2010.
+SIERRA, K.; BERT, B. Use a Cabeça! Java. 2ª. ed. Rio de Janeiro: Alta Books, 2005.
+ \end{itemize}
+
+\end{frame}
+
+\section{Site}
+\begin{frame}{Site da Disciplina}
+\begin{itemize}
+ \item Informações sobre a disciplina
+ \item Slides de aula
+ \item Materiais extras
+\end{itemize}
+
+ \textbf{Site:}\\
+\url{https://sites.google.com/a/ee.ufcg.edu.br/ivocalado/} ou \url{http://tinyurl.com/ivocalado}
+\end{frame}
+
+
+\end{document}

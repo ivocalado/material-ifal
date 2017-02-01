@@ -1,0 +1,415 @@
+%\documentclass[t,handout]{beamer}
+\documentclass{beamer}
+
+
+\usepackage[latin1]{inputenc}
+
+\usepackage[portuguese]{babel}
+\usepackage[tight]{subfigure}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{url}
+% \usepackage{inconsolata}
+\newcommand{\setcolor}[2]{\color{#1}{#2}\color{black}}
+
+%Pacote de listagem de cï¿½digo
+\usepackage{listings}
+%\lstset{numbers=left, stepnumber=1, firstnumber=1,
+%numberstyle=\tiny, extendedchars=true, breaklines=true, frame=tb,
+%basicstyle=\footnotesize, stringstyle=\ttfamily,
+%showstringspaces=false }
+
+\lstset{extendedchars=true, breaklines=true, frame=tb,
+basicstyle=\footnotesize, stringstyle=\ttfamily,
+showstringspaces=false,language=HTML }
+
+% \usecolortheme[RGB={130,35,150}]{structure}
+% \usecolortheme[RGB={33,33,94}]{structure}
+\usecolortheme[RGB={153,204,123}]{structure}
+\setbeamertemplate{footline}[frame number]
+\setbeamertemplate{navigation symbols}{}
+
+% \usetheme{Frankfurt} %LEGAL     !!!
+% \usetheme{Madrid}     %LEGAL/L%IMPO/COM CAIXA     (sem barra de desenvolvimento)
+
+% \usetheme{Antibes} %NAO
+% \usetheme{Berlin} %PODE SER...     (BARRA DE DESENVOLVIMANTO)
+% \usetheme{Berkeley}     %FEIO
+% \usetheme{Boadilla} %TUDO BRANCO...
+% \usetheme{Copenhagen}     %NAO
+% \usetheme{Darmstadt} %LEGAL!     !!!
+% \usetheme{Dresden}     %LEGAL/LIMPO/SEM CAIXA     (sem caixa fica ruim...)
+
+% \usetheme{Goettingen}     %FEIO DEMAIS!
+ \usetheme{Ilmenau} %LEGAL (forte candidato)
+% \usetheme{JuanLesPins} %BACANA
+% \usetheme{Luebeck}     %FEIO
+
+% \usetheme{Malmoe}     %FEIO
+% \usetheme{Warsaw} %NAO...
+% \usetheme{Seattle}
+% \usetheme{CambridgeUS}
+% \usetheme{Singapore}
+
+%Insere o numero de frames no slide
+\newcommand*\oldmacro{}
+\let\oldmacro\insertshortauthor% save previous definition
+\renewcommand*\insertshortauthor{%
+  \leftskip=.3cm% before the author could be a plus1fill ...
+  \insertframenumber\,/\,\inserttotalframenumber\hfill\oldmacro}
+
+
+\author[Ivo Calado]{Ivo Calado}
+\date{\today}
+\institute[IFAL]{Instituto Federal de Educação, Ciência e Tecnologia de Alagoas}
+\title{Programação Orientada a Objetos}
+\logo{\includegraphics[width=0.2\linewidth]{imagens/ifal-logo.jpg}}
+\subtitle{\textit{Aula 01: Motivação\\}}
+
+\begin{document}
+
+
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+% \section{Roteiro}
+% \AtBeginSection[]
+{\frame{
+\frametitle{Roteiro}
+\tableofcontents[hidesubsections]
+}
+}
+
+\section{Motivação}
+\begin{frame}{Relembrando um pouco programação estruturada}
+Suponha que seja solicitado o desenvolvimento de um programa em Python para gerência de uma biblioteca com as seguintes funcionalidades:
+\begin{enumerate}
+ \item Cadastrar funcionários (nome e salário) 
+ \item Apagar funcionários cadastrados
+ \item Listar funcionários
+ \item Exibir salário com gratificação (25\%)
+ \item Sair
+\end{enumerate}
+
+Como seria uma possível solução?
+
+\end{frame}
+
+\begin{frame}[allowframebreaks,fragile]{Solução}
+\begin{lstlisting}
+while True:
+	print("### Controle de Cadastro de Funcionarios ###")
+
+	print("1 - Cadastrar")
+	print("2 - Apagar")
+	print("3 - Mostrar")
+	print("4 - Exibir salario com gratificacao")
+	print("5 - Sair")
+
+	opc = int(input("Digite o numero da sua opcao: "))
+
+	if opc==1:
+		nomes.append(input("Digite o nome a ser cadastrado:"))
+		salarios.append(float(input("Digite o salario:")))
+	elif opc==2:
+		nome = input("Informe o nome a ser apagado:")
+		i=0
+		for n in nomes:
+			if n==nome:
+				del(nomes[i])
+				del(salarios[i])
+			i=i+1
+(...)
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}{Mas como evoluir o software?}
+ E se após o desenvolvimento, fosse solicitado que algumas funcionalidades extras fossem adicionadas:
+ 
+ \begin{itemize}
+  \item Como seria possível adicionar mais 3 atributos (endereço, CPF e data de nascimento)? \pause
+  \item E se fosse pedido para adicionar mais algumas entidades como Livro (titulo, edição, ISBN), Autor (nome, endereço, CPF), Locador (nome, endereço, CPF), Locações, ...?\pause
+  \item E se alguns dos atributos fosse na verdade uma lista (ex.: lista de telefones de uma pessoa)
+  \item E se fosse solicitado que o sistema adicionasse tipos específicos de funcionários, como Gerente (gratificacaoAdicional), Faxineiro (setorDeTrabalho), Bibliotecário (titulacaoAdicional) com algumas propriedades específicas?
+ \end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile,allowframebreaks]{Quais as consequências?}
+Em termos de código, a mais imediata seria a criação de vários vetores para armazenar as informações:
+\begin{lstlisting}
+nomesFunc = [] #dados do funcionário
+salariosFunc = []
+enderecosFunc = []
+cpfsFunc = []
+dataNascFunc = []
+titulos = [] #dados dos livros
+edicoes = []
+isbns = []
+nomesAutores = [] #dados dos autores
+enderecosAutores = []
+cpfsAutores = []
+[...]
+\end{lstlisting}
+Quais os problemas de tal abordagem?
+\begin{itemize}
+ \item Faz-se necessário a definição de vários vetores para armazenar as informações das diversas entidades
+ \item Por todos os vetores estarem no mesmo escopo, faz-se necessário inventar nomes diferentes para o mesmo tipo de propriedade
+ \item Não há uma ligação explícita entre os vetores para compor as entidades (Funcionario, Livro, Autor, Locador, Locações)
+ \item Como seria a implementação de relacionamento entre essas entidades?
+ \item Para as entidades derivadas não há uma maneira direta de representar as entidades sem duplicar os vetores de dados
+\end{itemize}
+
+O que podemos concluir?
+\begin{itemize}
+ \item Conforme o software aumenta de tamanho a maior complexidade se concentra mais na modelagem dos dados e em seus relacionamentos e menos no algoritmos
+ \item Programação estruturada não provê alguns elementos básicos para possibilitar a modelagem dos dados
+\end{itemize}
+
+
+
+\end{frame}
+
+
+\section{Definição de POO}
+\begin{frame}[allowframebreaks]{Definição}
+\begin{block}{Definição}
+POO é um paradigma de programação onde um programa consiste de uma rede de objetos se comunicando
+\end{block}
+\begin{itemize}
+ \item O programa passa a ser composto por um conjunto de \textbf{entidades} que se comunicam
+ \item Cada \textbf{entidade} é chamada de \textbf{objeto} no domínio de POO
+\end{itemize}
+
+\begin{figure}
+ \centering
+ \includegraphics[scale=0.5]{./imagens/objetos.png}
+ \caption{Linguagens OO oferecem suporte explícito para representar objetos do mundo real em software}
+ % objetos.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{figure}
+
+\begin{figure}
+ \centering
+ \includegraphics[scale=0.5]{./imagens/mapeamento-dominio.png}
+ % mapeamento-dominio.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+ \caption{Objetos reais mapeados para objetos no paradigma OO}
+\end{figure}
+
+
+\end{frame}
+
+\begin{frame}{Mas como podemos representar um objeto?}
+Linguagens OO geralmente oferecem dois recursos para representarmos objetos, que são \textbf{atributos} e \textbf{métodos}
+
+\begin{itemize}
+ \item \textbf{Atributos:} armazenam dados do objetos. Também conhecidos como estados do objetos
+ \item \textbf{Métodos:} correspondem as \textbf{funções} do objeto
+ \begin{itemize}
+  \item Podem manipular os valores dos atributos
+  \item Possbilitam interagir com outros objetos
+  \item Uma requisição de execução de um método é chamada \textbf{mensagem}
+ \end{itemize}
+
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Mas como podemos representar um objeto?}
+\begin{block}{Exemplo 1: como poderíamos representar modelar uma lâmpada em termos de \textbf{atributos} e \textbf{métodos}?}
+\begin{itemize}
+ \item \textbf{Atributos:}
+ \begin{itemize}
+  \item EstaLigado: [Verdadeiro/Falso]
+ \end{itemize}
+ \item \textbf{Métodos:}
+ \begin{itemize}
+  \item Ligar
+  \item Desligar
+ \end{itemize}
+\end{itemize}
+\end{block}
+\end{frame}
+
+% \pause
+\begin{frame}{Mas como podemos representar um objeto?}
+\begin{block}{Exemplo 2: como poderíamos representar modelar uma lâmpada com suporte a ajuste de potência, em termos de \textbf{atributos} e \textbf{métodos}?}
+\pause
+\begin{itemize}
+ \item \textbf{Atributos:}
+ \begin{itemize}
+  \item EstaLigado: [Verdadeiro/Falso]
+  \item PotênciaAtual: [\textit{Watts}]
+ \end{itemize}
+ \item \textbf{Métodos:}
+ \begin{itemize}
+  \item Ligar
+  \item Desligar
+  \item AjustarPotência(novaPotência)
+ \end{itemize}
+\end{itemize}
+\end{block}
+
+\end{frame}
+\begin{frame}{Mas como podemos representar um objeto?}
+\begin{block}{Qual a diferença entre uma função na \textbf{programação estruturada} e um método de um objeto na \textbf{OO}?}
+Funções na programação estruturada não estão associadas a nenhum objeto enquanto que métodos \textbf{pertencem} a um objeto
+\end{block}
+
+
+\end{frame}
+
+\begin{frame}{Quais informações modelar sobre um objeto?}
+Suponha que fosse solicitado a modelagem de uma pessoa. Quais atributos deveriam ser considerados?
+\pause
+
+Algumas propriedades ``óbvias'' poderiam ser:
+\begin{itemize}
+ \item 1 - nome
+ \item 2 - endereco
+ \item 3 - cpf
+ \item 4 - dataNascimento
+ 
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Quais informações modelar sobre um objeto?}
+Porém, poderíamos considerar algumas outras propriedades, como:
+
+\begin{itemize}
+ \item 5 - peso
+ \item 6 - altura
+ \item 7 - cor dos olhos
+ \item 8 - cor dos cabelos
+ \item 9 - dias que não toma banho
+ \item 10 - tamanho da unha do dedão do pé
+\end{itemize}
+\begin{block}{Quais propriedades deveríamos considerar?}\pause
+Depende do \textbf{domínio} do problema!
+\end{block}
+
+
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Abstraindo atributos}
+\begin{figure}
+ \centering
+ \includegraphics{./imagens/abstracao-01.pdf}
+ % abstracao.pdf: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{figure}
+
+\begin{figure}
+ \centering
+ \includegraphics{./imagens/abstracao-02.pdf}
+ % abstracao.pdf: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{figure}
+
+\begin{figure}
+ \centering
+ \includegraphics{./imagens/abstracao-03.pdf}
+ % abstracao.pdf: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{figure}
+
+\begin{figure}
+ \centering
+ \includegraphics{./imagens/abstracao-04.pdf}
+ % abstracao.pdf: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{figure}
+
+
+\end{frame}
+
+\begin{frame}{Seleção das propriedades importantes = Abstração}
+\begin{block}{Abstração}
+ \textit{``A \textbf{abstração} é o processo de filtragem de detalhes sem importância do objeto, para que apenas as \textbf{características apropriadas} que o descrevem permaneçam''}
+ \pause
+ \begin{itemize}
+  \item As \textbf{características apropriadas} sempre dependem do \textbf{domínio} que está sendo trabalhado
+ \end{itemize}
+
+\end{block}
+
+\end{frame}
+
+\section{POO x Programação Estruturada}
+\begin{frame}{Resumo: POO x Programação Estruturada}
+\begin{figure}
+ \centering
+ \includegraphics[scale=0.35]{./imagens/pooxestruturada.png}
+ % pooxestruturada.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{figure}
+
+\end{frame}
+
+\section{Orientação a Objetos}
+\begin{frame}[allowframebreaks]{Classes}
+\begin{itemize}
+ \item Antes de um objeto ser criado devemos projetá-lo
+\end{itemize}
+
+ \begin{figure}
+ \centering
+ \includegraphics[scale=0.4]{./imagens/classe.jpg}
+ % classe.jpg: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{figure}
+
+\begin{itemize}
+ \item Cada classe deve pode ter um conjunto de \textbf{atributos} e \textbf{métodos}
+ \begin{itemize}
+  \item Atributos representam as \textbf{propriedades} do tipo a ser criado
+  \item Métodos representam as \textbf{ações} que o tipo pode realizar
+ \end{itemize}
+ \item Um objeto é a ``concretização de uma classe''
+ \textbf{Um objeto é uma instância de uma classe}
+\end{itemize}
+
+\begin{block}{Fazendo uma analogia com uma tabela}
+\begin{itemize}
+ \item A \textbf{tabela} seria a \textbf{classe}
+ \item Cada linha da tabela (\textbf{tupla}) seria um \textbf{objeto}
+\end{itemize}
+
+\end{block}
+\begin{itemize}
+\item Todas as instâncias de uma classe têm os mesmos métodos e atributos mas podem ter valores diferentes
+\end{itemize}
+
+
+\end{frame}
+
+
+\begin{frame}{Como representar classes e objetos?}
+\begin{itemize}
+ \item Podemos representar classes e objetos com o diagrama de classes UML
+ \item Neste tipo de diagrama é possível modelar diversos detalhes da implementação como navegabilidade, tipo dos atributos, etc
+\end{itemize}
+
+
+ \begin{figure}
+ \centering
+ \includegraphics[scale=0.5]{./imagens/uml.png}
+ % uml.jpg: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{figure}
+
+\end{frame}
+
+
+\begin{frame}{Exemplo de UML}
+\begin{itemize}
+ \item O diagrama UML se assemelha ao modelo ER, porém nele é possível modelar os métodos de cada classe
+\end{itemize}
+
+\begin{figure}
+ \centering
+ \includegraphics[scale=0.3]{./imagens/exemplo-uml.png}
+ % exemplo-uml.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{figure}
+
+\end{frame}
+
+
+
+\end{document}

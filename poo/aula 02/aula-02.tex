@@ -1,0 +1,1065 @@
+%\documentclass[t,handout]{beamer}
+\documentclass{beamer}
+
+
+\usepackage[latin1]{inputenc}
+
+\usepackage[portuguese]{babel}
+\usepackage[tight]{subfigure}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{url}
+
+% \usepackage{inconsolata}
+\newcommand{\setcolor}[2]{\color{#1}{#2}\color{black}}
+
+%Pacote de listagem de cï¿½digo
+\usepackage{listings}
+%\lstset{numbers=left, stepnumber=1, firstnumber=1,
+%numberstyle=\tiny, extendedchars=true, breaklines=true, frame=tb,
+%basicstyle=\footnotesize, stringstyle=\ttfamily,
+%showstringspaces=false }
+
+\lstset{extendedchars=true, breaklines=true, frame=tb,
+basicstyle=\footnotesize, stringstyle=\ttfamily,
+showstringspaces=false,language=HTML }
+
+% \usecolortheme[RGB={130,35,150}]{structure}
+% \usecolortheme[RGB={33,33,94}]{structure}
+\usecolortheme[RGB={153,204,123}]{structure}
+\setbeamertemplate{footline}[frame number]
+\setbeamertemplate{navigation symbols}{}
+
+% \usetheme{Frankfurt} %LEGAL     !!!
+% \usetheme{Madrid}     %LEGAL/L%IMPO/COM CAIXA     (sem barra de desenvolvimento)
+
+% \usetheme{Antibes} %NAO
+% \usetheme{Berlin} %PODE SER...     (BARRA DE DESENVOLVIMANTO)
+% \usetheme{Berkeley}     %FEIO
+% \usetheme{Boadilla} %TUDO BRANCO...
+% \usetheme{Copenhagen}     %NAO
+% \usetheme{Darmstadt} %LEGAL!     !!!
+% \usetheme{Dresden}     %LEGAL/LIMPO/SEM CAIXA     (sem caixa fica ruim...)
+
+% \usetheme{Goettingen}     %FEIO DEMAIS!
+ \usetheme{Ilmenau} %LEGAL (forte candidato)
+% \usetheme{JuanLesPins} %BACANA
+% \usetheme{Luebeck}     %FEIO
+
+% \usetheme{Malmoe}     %FEIO
+% \usetheme{Warsaw} %NAO...
+% \usetheme{Seattle}
+% \usetheme{CambridgeUS}
+% \usetheme{Singapore}
+
+%Insere o numero de frames no slide
+\newcommand*\oldmacro{}
+\let\oldmacro\insertshortauthor% save previous definition
+\renewcommand*\insertshortauthor{%
+  \leftskip=.3cm% before the author could be a plus1fill ...
+  \insertframenumber\,/\,\inserttotalframenumber\hfill\oldmacro}
+
+
+\author[Ivo Calado]{Ivo Calado\\\url{ivo.calado@ifal.edu.br}}
+\date{\today}
+\institute[IFAL]{Instituto Federal de Educação, Ciência e Tecnologia de Alagoas}
+\title[POO]{Programação Orientada a Objetos}
+\logo{\includegraphics[width=0.2\linewidth]{imagens/ifal-logo.jpg}}
+\subtitle{\textit{Aula 02: Conceitos básicos da linguagem Java\\}}
+
+\begin{document}
+
+
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+% \section{Roteiro}
+% \AtBeginSection[]
+{\frame{
+\frametitle{Roteiro}
+\tableofcontents[hidesubsections]
+}
+}
+
+\section{Introdução}
+\subsection{Conceituação}
+\begin{frame}{O que é Java?}
+\begin{itemize}
+ \item É uma linguagem de programação
+ \item É uma plataforma
+\end{itemize}
+\begin{figure}
+ \centering
+ \includegraphics[scale=0.6]{./imagens/java-plataforma.png}
+ % java-plataforma.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{figure}
+\end{frame}
+
+\begin{frame}{Como Java funciona?}
+\begin{itemize}
+ \item O código fonte .java é compilado para \textit{bytecodes}
+ \item A JVM é responsável por interpretar os \textit{bytecodes} para a plataforma nativa
+\end{itemize}
+
+\begin{figure}
+ \centering
+ \includegraphics[scale=0.3]{./imagens/compilacao.png}
+ % compilacao.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{figure}
+
+\end{frame}
+
+
+\begin{frame}{Como Java funciona?}
+
+\begin{figure}
+ \centering
+ \includegraphics[scale=0.5]{./imagens/compilacao_java.png}
+ \caption{Depois que o \textit{bytecode} é gerado ele passa a ser utilizado em qualquer plataforma}
+ % compilacao_java.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{figure}
+
+ 
+\end{frame}
+
+\begin{frame}{Como Java funciona?}
+\begin{block}{O que são \textit{bytecodes}?}
+\textit{O código de um programa de computador escrito na linguagem Java é compilado para uma forma intermediária de código denominada bytecode, que é interpretada pelas Máquinas Virtuais Java (JVMs). É essa característica que faz com que os os programas Java sejam independentes de plataforma, executando em qualquer sistema que possua uma JVM.}
+\end{block}
+
+ 
+\end{frame}
+
+
+
+\begin{frame}{Histórico}
+\begin{itemize}
+ \item Desenvolvida na década de 90 por \textbf{James Gosling}
+ \item Desenvolvida na empresa \textbf{Sun Microsystems}, adquirida posteriormente pela \textbf{Oracle}
+\end{itemize}
+
+\begin{figure}
+ \centering
+ \includegraphics[scale=0.2]{./imagens/226px-Wave.png}
+ % 226px-Wave.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+ \caption{Duke, o mascote do Java}
+\end{figure}
+
+\end{frame}
+
+\begin{frame}{Porque o nome ``Java''?}
+\begin{itemize}
+ \item Originalmente a linguagem deveria se chamar \textbf{Oak}, porém os criadores perceberam que já havia uma linguagem com esse nome
+ \item Java foi utilizado pois os desenvolvedores tomavam muito café proveniente da ilha de Java na Indonésia
+\end{itemize}
+
+\begin{figure}
+ \centering
+ \includegraphics[scale=0.3]{./imagens/Java_Logo.jpg}
+ % Java_Logo.jpg: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{figure}
+
+
+ 
+\end{frame}
+
+
+\begin{frame}{Porque utilizar Java?}
+Java é:
+ \begin{itemize}
+  \item Uma linguagem relativamente simples
+  \item Portátil
+  \item Gratuita
+  \item Robusta (administraçãode memória e ponteiros)
+  \item Possui uma biblioteca vasta para construção de aplicações complexas
+ \end{itemize}
+
+\end{frame}
+
+\subsection{Preparando o ambiente de desenvolvimento}
+\begin{frame}[allowframebreaks]{Instalando as ferramentas necessárias}
+\begin{enumerate}
+ \item Instalar a JDK mais recente (\url{http://www.oracle.com/technetwork/pt/java/javase/downloads/index.html})
+ \item Obter um editor ou IDE (gedit, bloco de notas, Notepad++, \textbf{Eclipse} etc)
+\end{enumerate}
+
+\begin{block}{Uma IDE realmente é necessária?}
+Não, mas facilita bastante o desenvolvimento, pois:
+\begin{itemize}
+ \item Possibilita que o projeto se mantenha organizado
+ \item Facilita o processo de criação de novos arquivos e o processo de compilação
+ \item Geralmente oferecem suporte à execução e a depuração
+\end{itemize}
+
+\end{block}
+\begin{itemize}
+ \item Faremos uso da IDE Eclise
+ \begin{itemize}
+  \item \url{http://eclipse.org/}
+ \end{itemize}
+\begin{figure}
+ \centering
+ \includegraphics[scale=0.4]{./imagens/eclipse.jpg}
+ % eclipse.jpg: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{figure}
+
+\end{itemize}
+
+
+\begin{block}{Quais os benefícios da IDE Eclipse?}
+\begin{itemize}
+ \item Suporte a várias linguagens e extensões
+ \item Suporte a highlighting e code-completion
+ \item Suporte à depuração de código
+\end{itemize}
+
+ 
+\end{block}
+\begin{figure}
+ \centering
+ \includegraphics[scale=0.2]{./imagens/eclipse.png}
+ % eclipse.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{figure}
+
+\end{frame}
+
+\subsection{Hello World}
+\begin{frame}[allowframebreaks]{Hello World}
+Criar novo projeto Java
+\begin{enumerate}
+ \item Abrir o Eclipse
+ \item Criar novo projeto Java
+ \begin{enumerate}
+  \item Menu \textit{File}
+  \item Opção \textit{New}
+  \item Selecionar opção \textit{Java Project}
+ \end{enumerate}
+ \item Informar o nome do projeto e selecionar \textit{Finish}
+ 
+
+\end{enumerate}
+
+Criar classe \textit{Main}
+\begin{enumerate}
+ \item Menu \textit{File} -$>$ New
+ \item Selecionar opção \textit{Class} 
+ \item Informar o nome da nova classe (``App'') no campo \textit{Name} e selecionar \textit{Finish}
+\end{enumerate}
+
+\begin{block}{Que nome utilizar para a classe? (Importante)}
+\begin{itemize}
+ \item Toda classe Java deve iniciar com letra Maiúscula (Pessoa, Funcionario, Carro, etc)
+ \item Qualquer aplicação Java deve ter pelo menos uma classe para conter o método \textbf{main}
+\end{itemize}
+
+
+\end{block}
+
+\end{frame}
+
+\begin{frame}[fragile,allowframebreaks]{O método main}
+\begin{itemize}
+ \item Para que uma aplicação Java possa ter início \textbf{alguma classe} deve ter o método \textbf{main}
+ \item O método \textbf{main} representa o \textit{ponto de partida} a partir do qual a JVM irá iniciar a aplicação Java
+\end{itemize}
+
+ \begin{lstlisting}
+  public class App {
+	public static void main(String[] args) {
+		//A JVM inicia a execução da aplicação Java a partir deste ponto
+	}
+  }
+ \end{lstlisting}
+ 
+ \begin{itemize}
+  \item A assinatura do método \textbf{main} é fixa
+ \end{itemize}
+\begin{block}{O que é a assinatura de um método?}
+ Um método é definido pelo seu nome e pelo conjunto de entradas e pelo tipo de saída. A tal estrutura damos o nome de \textbf{assinatura de método}
+\end{block}
+
+\begin{block}{Seria possível criar uma função fora de uma classe?}
+Não! Diferentemente de Python e outras linguagens não é possível definir uma função fora de uma classe. Neste sentido, qualquer aplicação Java deve conter pelo menos uma classe que irá conter o método \textbf{main}
+\end{block}
+
+
+\end{frame}
+
+\begin{frame}[fragile]{Como imprimir uma mensagem na tela?}
+ \begin{lstlisting}
+public class Main {
+	public static void main(String[] args) {
+		System.out.println("Olá mundo!");
+	}
+}
+ \end{lstlisting}
+\begin{itemize}
+ \item O comando \textbf{System.out.println} imprime na saída padrão a mensagem passada por parâmetro inserindo o caracter de nova linha ao final da mensagem
+ \item Uma possibilidade seria utilizar o comando \textbf{System.out.print} em que não é inserido o caracter de nova linha ao fim da mensagem
+ \item \textbf{Comandos devem sempre terminar com ;}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Executando nosso primeiro programa}
+\begin{enumerate}
+ \item Clicar com o botão direito no arquivo Java que contém o método \textbf{main}
+ \item Ir na opção \textit{Run as...} e selecionar a opção \textit{Java application}
+\end{enumerate}
+\begin{block}{Como compilar e executar o programa a partir da linha de comando?}
+ \begin{enumerate}
+  \item Para compilar deve-se posicionar o console na pasta onde contem o arquivo java e executar o comando \textit{javac App.java}, que irá gerar o arquivo \textbf{App.class}
+  \item Para executar deve ser executado o comando \textit{java App} (sem a extensão \textbf{.class})
+ \end{enumerate}
+
+\end{block}
+\end{frame}
+
+
+\begin{frame}[fragile]{O que é importante sabermos até o momento?}
+\begin{itemize}
+ \item Toda aplicação deve conter pelo menos uma classe Java que deverá possuir um método \textbf{main}
+ \item Toda aplicação deve ter pelo menos um método \textbf{main} que será responsável por iniciar a aplicação
+ \item A assinatura do método \textbf{main} é fixa
+\end{itemize}
+\begin{block}{}
+\begin{itemize}
+\item Palavras-chave \textbf{public, static, void, String} são importantes mas serão melhor detalhadas à frente
+\end{itemize}
+\end{block}
+
+
+\begin{lstlisting}
+public static void main(String[] args) {
+	System.out.println("Olá mundo!");
+}
+\end{lstlisting}
+
+
+\end{frame}
+
+
+
+\section{Sintaxe da linguagem}
+\subsection{Elementos básicos da linguagem}
+\begin{frame}{Variáveis}
+Assim como em outras linguagens de programação, variáveis \textbf{representam espaços de memótia utilizados para armazenar dados}
+ 
+\begin{block}{O que há de diferente para Python?}
+\begin{itemize}
+ \item Em Python, ao declarar a variável, você não define seu tipo. Além disso, você pode atribuir valores de qualquer tipo que a variável se ``transforma'' no tipo de destino
+ \item Em Java cada variável tem um tipo específico definido no momento da declaração. \textbf{Na grande maioria das vezes não é possível fazer a conversão automática entre os tipos}
+\end{itemize}
+
+\end{block}
+
+\end{frame}
+
+\begin{frame}[fragile]{Como declarar uma variável?}
+Para definirmos uma variável temos duas abordagens possíveis:
+\begin{lstlisting}
+ tipo nome;
+\end{lstlisting}
+Ou
+
+\begin{lstlisting}
+ tipo nome = valor;
+\end{lstlisting}
+
+Por exemplo:
+ \begin{lstlisting}
+public class Main {
+	public static void main(String[] args) {
+		int i;
+		int j = 0;
+	}
+}
+ \end{lstlisting}
+
+\end{frame}
+
+\begin{frame}{Quais são os tipos primitivos possíveis?}
+       \begin{center}
+         \begin{tabular}{|c|c|p{5cm}|}
+         \hline
+	 \textbf{Tipo} & \textbf{Valores possíveis} & \textbf{Descrição} \\ \hline
+	 boolean  & true $|$ false& representa valores booleanos\\ \hline
+	 short  & -32768 $\leq$ x $\leq$ 32767& representa valores inteiros \\ \hline
+	 int  & -2$^{31}$ $\leq$ x $\leq$ 2$^{31}$ - 1 & representa valores inteiros\\ \hline
+	 long  & -2$^{63}$ $\leq$ x $\leq$ 2$^{63}$ - 1 & representa valores inteiros\\ \hline
+	 float  & 1.456, -0.00021, 5.79, ...& representa valores em \\ \hline
+	 double  & 1.456, -0.00021, 5.79, ... & representa valores em ponto flutuante\\ \hline
+	 char  & 'a', 'b', 'C', ...& representa um caracter\\ \hline
+         \end{tabular}
+       \end{center}
+       
+\end{frame}
+
+\begin{frame}[fragile]{Quais são os nomes possíveis de variáveis?}
+\begin{itemize}
+ \item Iniciadas com letra maiúscula ou minúscula, e \_
+\end{itemize}
+\begin{block}{Existe alguma recomendação sobre como declarar uma variável?}
+ Sim! 
+ \begin{itemize}
+  \item Recomenda-se que qualquer variável seja iniciada com letra minúscula
+  \item Nomes compostos devem seguir a regra \textit{Camel Case} (a cada nova palavra coloca-se em maiúscula)
+ \end{itemize}
+
+\end{block}
+
+Exemplo
+\begin{lstlisting}
+ double gratificacaoNatalina;
+\end{lstlisting}
+
+
+\end{frame}
+
+\begin{frame}{Quais nomes não podem ser utilizados como identificadores?}
+ \begin{itemize}
+  \item Não podem ser utilizados como identificadores de variáveis palavras-chave da linguagem (a IDE é sua amiga, ela te alerta!)
+ \end{itemize}
+ 
+ \begin{figure}
+ \centering
+ \includegraphics[scale=0.34]{./imagens/palavraschave.png}
+ % palavraschave.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{figure}
+
+
+\end{frame}
+
+\begin{frame}[fragile]{Exemplo}
+ \begin{lstlisting}
+public static void main(String[] args){
+    byte a = -128;
+    short c = -32768;
+    int e = -2147483648;
+    int f = 2;
+    //Perceba a letra L no final do número
+    long g = -9223372036854775808L;
+    //Perceba a letra f no final do número
+    float i = -100.4345f;
+    double k = -3123.434354;
+    boolean m = false;
+    boolean n = true;
+    char o = 'a';
+ }
+ \end{lstlisting}
+
+\end{frame}
+
+\begin{frame}{Em que casos ocorrem conversões automáticas?}
+\begin{itemize}
+ \item Quando o tipo de origem ``couber'' dentro do tipo de destino
+\end{itemize}
+
+ \begin{figure}
+ \centering
+ \includegraphics[scale=0.3]{./imagens/conversao.png}
+ % conversao.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{figure}
+
+\end{frame}
+
+\begin{frame}[fragile]{O objeto String}
+\begin{itemize}
+ \item Além dos tipos primitivos, Java fornece uma forma de armazenar cadeias de caracteres através do objeto String
+ \item Uma String é definida como sendo uma cadeia de caracteres entre aspas
+ \item É possível gerar uma string a partir da concatenaçaõ com quaisquer tipos
+\end{itemize}
+
+\begin{lstlisting}
+public class Main {
+	public static void main(String[] args) {
+		String s = "nova string!";
+		int i = 10;
+		String s2 = "O valor eh " + i + "!!!";
+	}
+}
+\end{lstlisting}
+\end{frame}
+
+\subsection{Comandos de Entrada e Saída}
+\begin{frame}[fragile]{Comandos de entrada}
+\begin{itemize}
+ \item Para lermos o valor de alguma variável fazemos uso da classe \textbf{Scanner}
+ \item O objeto Scanner vai ler da entrada padrão e ``entregar'' o tipo desejado deixando o restante da entrada disponível para novas leituras
+\end{itemize}
+
+
+ 
+ \begin{lstlisting}
+import java.util.Scanner;
+public class Main {
+   public static void main(String[] args) {
+      Scanner scanner = new Scanner(System.in);
+      int i = scanner.nextInt();
+      int j = scanner.nextFloat();      
+      scanner.close(); //sempre deve ser invocado ao final do programa para fechar o fluxo
+   }
+}
+
+ \end{lstlisting}
+
+\end{frame}
+
+\begin{frame}{Exemplo de leitura}
+        \begin{center}
+         \begin{tabular}{|c|c|c|}
+         \hline
+	 \textbf{Variável} & \textbf{Comando} & \textbf{Exemplo de entrada} \\ \hline
+	 int & scanner.nextInt() & -2 \\ \hline
+	 float & scanner.nextFloat() & 2.45 \\ \hline
+	 boolean & scanner.nextBoolean() & true \\ \hline
+	 long & scanner.nextLong() & 2.45 \\ \hline
+	 double & scanner.nextDouble() & 3.35 \\ \hline
+	 short & scanner.nextShort() & 120 \\ \hline
+	 String & scanner.next() & Lê uma palavra \\ \hline
+	 String & scanner.nextLine() & Lê uma linha\\ \hline
+	 
+         \end{tabular}
+       \end{center}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Exercício}
+ \begin{enumerate}
+  \item Criar um projeto Java chamado ``Proj-01''
+  \item Criar uma classe Java, chamada ``App'' com o método ``main''
+  \item Solicitar o nome (String), endereço (String) e idade (int) 
+  \item Imprimir a mensagem ``Olá X, você tem Y anos e mora em W!'', onde x, Y e W foram os valores lidos na etapa anterior
+ \end{enumerate}
+
+\end{frame}
+
+\subsection{Operadores}
+\begin{frame}[allowframebreaks]{Operadores}
+        \begin{center}
+         \begin{tabular}{|c|c|c|c|}
+         \hline
+	 \textbf{Operador} & \textbf{Função} & \textbf{Operador} & \textbf{Função}  \\ \hline
+	  + & Adição & - & Subtração \\ \hline
+	  * & Multiplicação & / & Divisão \\ \hline
+	  \% & Resto & ++ & Incremento \\ \hline
+	  -- & Decremento & $>$ & Maior que \\ \hline
+	  $>=$ & Maior ou igual & $<$ & Menor que \\ \hline
+	  $<=$ & Menor ou igual & == & Igual (comparação) \\ \hline
+	  != & Diferente & ! & Não lógico \\ \hline
+	  \&\& & E lógico & $||$ & OU lógico \\ \hline
+         \end{tabular}
+       \end{center}
+       
+        \begin{center}
+         \begin{tabular}{|c|c|c|c|}
+         \hline
+	 \textbf{Operador} & \textbf{Função} & \textbf{Operador} & \textbf{Função}  \\ \hline
+	  = & Atribuição & += & Atrib com adição \\ \hline
+	  -= & Atrib com subtração & *= & Atrib com multi \\ \hline
+	  /= & Atrib com divisão & \%= & Atrib com resto \\ \hline
+	  ? : & Operador ternário & & \\\hline
+	 \end{tabular}
+       \end{center}
+\end{frame}
+
+\begin{frame}[fragile]{Precedência}
+\begin{itemize}
+ \item Assim como na matemática operadores obedecem precedências
+\end{itemize}
+\begin{lstlisting}
+   int x = 2 + 2 * 3 - 9 / 3; // 2+6-3 = 5
+\end{lstlisting}
+
+\begin{itemize}
+ \item \textbf{Parentêses} podem ser usados para sobrepor precedência
+\end{itemize}
+
+\begin{lstlisting}
+ int x = (2 + 2) * (3 - 9) / 3; // 4*(-6)/3 = -8
+\end{lstlisting}
+
+
+
+
+ 
+\end{frame}
+
+
+\begin{frame}{Exercício}
+Crie uma aplicação Java que calcule a média aritmética de três valores solicitados pelo usuário e exiba na tela
+ 
+\end{frame}
+
+\subsection{Estruturas de controle}
+\begin{frame}{Estruturas de controle}
+ Assim como no Python, Java oferece diversas estruturas de controle de fluxo, tais como:
+ 
+ \begin{itemize}
+  \item if-else
+  \item for
+  \item while
+  \item do-while
+  \item switch
+ \end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]{Estrutura If-Else}
+ \begin{figure}
+ \centering
+ \includegraphics[scale=0.25]{./imagens/if-sintaxe.png}
+ % if-sintaxe.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{figure}
+
+\begin{itemize}
+ \item Exemplo
+\end{itemize}
+\begin{lstlisting}
+int a = 10;
+if(a < 10) {
+	System.out.println("a é menor que 10");
+} else {
+	System.out.println("a é maior ou igual a 10");
+}
+\end{lstlisting}
+
+
+
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Exercícios}
+ \begin{enumerate}
+  \item [1)] Faça um programa que receba quatro notas de um aluno, calcule e mostre a média aritmética das notas e a mensagem de aprovado ou reprovado, considerando para aprovação a média 7
+  \item [2)] Faça um programa que receba duas notas, calcule e mostre a média arimética e a mensagem que está na tabela a seguir:
+  
+         \begin{center}
+         \begin{tabular}{|c|c|}
+         \hline
+	 \textbf{Média Aritmética} & \textbf{Mensagem}\\ \hline
+	 $0\leq media < 4$ & Reprovado \\ \hline
+	 $4\leq media < 7$ & Exame final \\ \hline
+	 $7\leq media \leq 10 $ & Aprovado \\ \hline
+	 \end{tabular}
+       \end{center}
+  \item [3)] Faça um programa que receba dois número e mostre o menor
+  \item [4)] Faça um programa que receba três números e mostre o menor
+  \item [5)] Faça um programa que receba dois número e execute as operações listadas a seguir de acordo com a escolha do usuário:
+  \begin{center}
+   \begin{tabular}{|c|c|}
+   \hline
+   \textbf{Escolha do usuário} & Operação \\ \hline
+   1 & Média entre os números digitados \\ \hline
+   2 & Diferença do maior pelo menor \\ \hline
+   3 & Produto entre os números digitados \\ \hline
+   4 & Divisão do primeiro pelo segundo \\ \hline
+   
+   \end{tabular}
+   Se a opção digitada for inválida, mostrar uma mensagem de erro e terminar a execução do programa. Lembre-se de que na operação 4, o segundo número tem que ser diferente de zero.
+
+  \end{center}
+  \item [6)] Uma empresa decide dar um aumento de 30\% aos funcionários com salários inferiores a R\$ 500,00. Faça um programa
+que receba o salário do funcionário e mostre o valor do salário reajustado ou uma mensagem, caso o funcionário
+não tenha direito ao aumento.
+
+\item [7)] Faça um programa para calcular e mostrar o salário reajustado de um funcionário. Sabe-se que o percentual de aumento
+é o mesmo da tabela a seguir.
+
+\begin{center}
+ \begin{tabular}{|c|c|}
+  \hline
+  \textbf{Salário} & Aumento \\ \hline
+  Até R\$ 300,00 & 35\% \\ \hline
+  Acima de R\$ 300,00 & 15\% \\ \hline
+ \end{tabular}
+
+\end{center}
+
+\item [8)] Um banco concederá um crédito especial aos seus clientes de acordo com o saldo médio no último ano. Faça um programa
+que receba o saldo médio de um cliente e calcule o valor do crédito, de acordo com a tabela a seguir. Mostre o
+saldo médio e valor do crédito.
+
+\begin{center}
+ \begin{tabular}{|c|c|}
+  \hline
+  \textbf{Saldo Médio} & Percentual \\ \hline
+  saldo médio $>$ R\$ 400,00 & 30\% do saldo médio \\ \hline
+  300 $<$ saldo médio $\leq$ R\$ 400,00 & 25\% do saldo médio \\ \hline
+  200 $<$ saldo médio $\leq$ R\$ 300,00 & 20\% do saldo médio \\ \hline
+  saldo médio $\leq$ R\$ 200,00 & 15\% do saldo médio \\ \hline
+ \end{tabular}
+
+\end{center}
+\item [9)] Faça um programa que receba três números, e mostre em ordem crescente
+
+\item [10)] Faça um programa que receba a altura ($h$) e o sexo ('M' ou 'F') de uma pessoa e que calcule e mostre seu peso ideal, utilizando as seguintes fórmulas:
+\begin{itemize}
+ \item para homens: $(72,7 \times h) - 58$
+ \item para mulheres: $(62,1 \times h) - 44,7$
+\end{itemize}
+
+ \end{enumerate}
+
+\end{frame}
+
+
+\begin{frame}{for}
+\begin{figure}
+ \centering
+ \includegraphics[scale=0.35]{./imagens/for-sintaxe.png}
+ % for-sintaxe.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{figure}
+\begin{itemize}
+ \item No \textbf{for} são passados três valores separados pelo ;
+ \begin{itemize}
+  \item inicialização: quais variáveis serão inicializadas
+  \item condição de parada: indica que condição será avaliada para verificar o término
+  \item incremento: indica quais variáveis serão incrementadas
+ \end{itemize}
+
+\end{itemize}
+
+
+\end{frame}
+
+\begin{frame}[fragile]{Exemplo 1: for simples}
+
+
+
+\begin{lstlisting}
+public class Main {
+	public static void main(String[] args) {
+		for(int i = 0; i < 10; i++) {
+			System.out.println("I = " + i);
+		}		
+	}
+}
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]{Exemplo 2: múltiplos operadores}
+\begin{lstlisting}
+public class Main {
+	public static void main(String[] args) {
+		for(int i = 0, j = 20; i < 10 && j < 30; i++, j++) {
+			System.out.println("I = " + i);
+		}		
+	}
+}
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Exemplo 3: loop infinito}
+\begin{itemize}
+ \item Caso a condição de parada nunca seja atingida o for será executado indefinidamente
+\end{itemize}
+
+
+\begin{lstlisting}
+for(int i = 10; i > 0; i++) {
+	System.out.println("I = " + i);
+}		
+\end{lstlisting}
+
+\begin{lstlisting}
+int i = 0;
+for(;;) {
+	System.out.println("I = " + i);
+}		
+\end{lstlisting}
+
+\end{frame}
+
+
+
+\begin{frame}{While e Do-While}
+\begin{figure}
+ \centering
+ \includegraphics[scale=0.35]{./imagens/while-sintaxe.png}
+ % while-sintaxe.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{figure}
+
+\begin{itemize}
+ \item No While e no do-while é passado apenas um parâmetro que indica que será avaliada para determinar se o loop deve continuar
+ \item O While \textbf{testa} antes de \textbf{executar}
+ \item O do-while \textbf{executa} antes de \textbf{testar}
+\end{itemize}
+
+
+\end{frame}
+
+\begin{frame}[fragile]{Exemplo 1: while}
+ \begin{lstlisting}
+int x = 0;
+while (x < 10) {
+	System.out.println(x);
+	x++;
+}
+ \end{lstlisting}
+ \begin{itemize}
+  \item O comando while testa a condição antes de executar o bloco de comandos
+  \item Ele continua a execução do bloco até que a condição se torne \textbf{falsa}
+ \end{itemize}  
+
+\end{frame}
+
+\begin{frame}[fragile]{Exemplo 2: do-while}
+\begin{lstlisting}
+int x = 0;
+do {
+	System.out.println(x);
+	x++;
+} while (x < 10);
+\end{lstlisting}
+ \begin{itemize}
+  \item O comando do-while executa o bloco inicialmente para, só então, testar se deve continuar o loop
+  \item Ele continua a execução do bloco até que a condição se torne \textbf{falsa}
+ \end{itemize}  
+
+\end{frame}
+
+\begin{frame}{\textit{break} e \textit{continue}}
+\begin{itemize}
+ \item \textbf{break}: interrompe a execução do bloco de repetição
+ \begin{itemize}
+  \item Continua com a próxima instrução, logo após o bloco
+ \end{itemize}
+ \item \textbf{continue}: interrompe a execução da iteração
+ \begin{itemize}
+  \item Testa a condição e reinicia o bloco com a próxima iteração
+ \end{itemize}
+
+
+\end{itemize}
+\begin{figure}
+ \centering
+ \includegraphics[scale=0.2]{./imagens/break-continue.png}
+ % break-continue.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{figure}
+
+ 
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Exercícios}
+ \begin{enumerate}
+  
+ \item [1)] Escreva um programa que imprima os primeiros N números pares, onde o valor N é informado pelo usuário.
+
+
+\item [2)] Escreva um programa que verifique se um número K é primo, onde K é um inteiro informado pelo usuário (Dica: para saber se um número é primo, basta verificar se existe algum valor no intervalo [2 a (K-1)]) que seja divisoror de K. Se existir, ele não é primo. Para obter o resto da divisão de dois números basta utilizar o operador \%.)
+
+\item [3)] Criar programa que imprime fatorial de numero N, informado pelo usuário. O fatorial de um número é definido como a multiplicação de todos os termos anteriores a N e de N. Por exemplo:
+
+
+\begin{itemize}
+ \item O fatorial de 5 é definido como a seguinte multiplicação =$>$ 5 * 4 * 3 * 2 * 1
+ \item O fatorial de 10 é definido como a seguinte multiplicação =$>$ 10 * 9 * 8 * 7 * 6 * 5 * 4 * 3 * 2 * 1
+ \item O fatorial de 2 é definido como a seguinte multiplicação =$>$ 2 * 1
+ \item etc.
+
+\end{itemize}
+
+\item [4)] Implementar programa que imprime a média aritmética do conjunto 1..N (isto, é o conjunto formado por todos os elementos anteriores à N e N. Ex.: (1, 2, 3, 4, ..., N-2, N-1, N)), onde N é um valor informado pelo usuário. Por exemplo:
+
+\begin{itemize}
+ \item Se o valor de N for 5 o resultado será 3 pois (1 + 2 + 3 + 4 + 5)/5 é igual a 3	
+ \item Se o valor de N for 10 o resultado será 5.5 pois (1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9 + 10)/10 é igual a 5.5
+ \item etc.
+
+\end{itemize}
+
+\item [5)] Implementar um programa que imprime o produto cartesiano de dois conjuntos M = {1..m} e N = {1..n}, onde m e n são informados pelo usuário. 
+
+% \textbf{6.} Implementar programa que imprime média de um conjunto de números (1 a n), onde n é informado pelo usuário.
+
+\item [6)] Escreva um programa que imprima toda a sequência de 1 a N na ordem DECRESCENTE, onde N é informado pelo usuário (crie versões utilizando for, while e do-while).
+
+\item [7)] Escreva um programa que imprima toda a sequência de 1 a N na ordem CRESCENTE, onde N é informado pelo usuário (crie versões utilizando for, while e do-while).
+
+\item [8)] Escreva um programa que determine a soma dos quadrados dos n primeiros números naturais, onde n é informado pelo usuário.
+
+\item [9)] Escreva programas para calcular a soma dos n primeiros termos das sequências abaixo, onde n é informado pelo usuário:
+
+\begin{enumerate}
+ \item $(\frac{1}{2}, \frac{3}{5}, \frac{5}{8}, ...)$ 
+
+\item $(1, -\frac{1}{2}, \frac{1}{3}, -\frac{1}{4}, \frac{1}{5}, -\frac{1}{6}, ...)$
+
+\end{enumerate}
+
+\item [10)] Faça um programa que verifique e mostre os números entre 1000 e 2000 (inclusive) que, quando divididos por 11, produzam resto igual a 5.
+
+\item [11)] Faça um programa que calcule e mostre o produto dos números primos entre 92 e 105.
+
+\item [12)] Faça um programa que leia cinco grupos de quatro valores (A, B, C e D) e mostre-os na ordem lida. Em seguida, mostre-os em ordem crescente e decrescente.
+
+\item [13)] Faça um programa que receba a idade 80 pessoas e que calcule e mostre:
+
+\begin{enumerate}
+ \item a quantidade de pessoas em cada faixa etária;
+
+\item a percentagem de pessoas na primeira e na última faixa etária, com relação ao total de pessoas.
+
+\begin{center}
+\begin{tabular}{|l|l|}\hline
+\textbf{Faixa etária} & \textbf{Idade} \\\hline
+1ª  & Até 15 anos\\\hline
+2ª & de 16 a 30 anos\\\hline
+3ª & De 31 a 45 anos\\\hline
+4ª & De 46 a 60 anos\\\hline
+5ª & Acima de 61 anos\\\hline
+\end{tabular}
+\end{center}
+
+\end{enumerate}
+
+
+
+\item [14)] Faça um programa que mostre as tabuadas dos números de a 10.
+
+\item [15)] Faça um programa que receba um número e que calcule e mostre a tabuada desse número.
+
+\item [16)] Faça um programa que receba a idade, a altura e o peso de 25 pessoas. Calcule e mostre:
+
+\begin{enumerate}
+ \item a quantidade de pessoas com idade superior a 50 anos;
+ \item a média das alturas das pessoas com idade entre 10 e 20 anos;
+ \item a percentagem de pessoas com pesoa inferior a 40 quilos entre todas as pessoas analisadas.
+\end{enumerate}
+
+\item [17)] Faça um programa que receba dez números e que calcule e mostre a quantidade de números entre 30 e 90.
+
+\item [18)] Faça um programa que receba dez números, calcule e mostre a soma dos números pares e a soma dos números primos.
+
+\item [19)] Faça um programa que receba a medidade de dois ângulos de um triângulo, calcule e mostre a medida do terceiro ângulo. Sabe-se que a soma dos ângulos de um triângulo é 180.
+
+\item [20)] Faça um programa que receba uma hora (uma variável para hora e outra para minutos), calcule e mostre:
+
+\begin{enumerate}
+ \item a hora digitada convertida em minutos;
+ \item o total dos minutos, ou seja, os minutos digitados mais a conversão anterior;
+ \item o total dos minutos convertidos em segundos.
+\end{enumerate}
+
+\item [21)] Faça um programa que receba várias idades e que calcule e mostre a média das idades digitadas. Finalize digitando idade igual a zero.
+
+\item [22)] Uma empresa deseja aumentar seus preços em 20\%. Faça um programa que leia o código e o preço de custo de cada produto e que calcule o novo preço. Calcule também a média dos preços com e sem aumento. Mostre o código e o novo preço de cada produto e, no final, as médias. A entrada de dados deve terminar quando for lido um código de produto negativo.
+
+\item [23)] Faça um programa que receba a idade e o peso de 15 pessoas. Calcule e mostre as médias dos pesos das pessoas da mesma faixa etária. As faixas etárias são: de 1 a 10 anos, de 11 a 20 anos, de 21 a 30 anos e maiores de 31 anos.
+
+ \end{enumerate}
+
+\end{frame}
+
+
+\begin{frame}{Atividade para casa I}
+\begin{itemize}
+ \item Finalizar os exercícios pendentes
+\end{itemize}
+
+
+Pesquisar a utilização dos operadores
+\begin{itemize}
+ \item \&
+  \item \textasciitilde
+  \item $|$
+  \item \textasciicircum
+  \item $>>$
+  \item $<<$
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Atividade para casa II}
+ \begin{itemize}
+  
+  \item Estudar a utilização da estrutura de controle \textbf{switch}. Na próxima aula será sorteado um aluno para apresentar para os demais a estrutura de controle valendo 1 ponto (para esse aluno, N1 passará a valer 9,0). Caso o aluno não saiba a resposta (ou não esteja presente) um próximo aluno será sorteado até se ter a resposta correta
+  \begin{itemize}
+   \item Se o aluno faltar a aula \textbf{sem justificativa} e for sorteado perderá o ponto
+  \end{itemize}
+
+ \end{itemize}
+
+\end{frame}
+
+\section{Estruturas de dados simples}
+\subsection{Arrays}
+\begin{frame}[fragile]{Arrays}
+ \begin{itemize}
+  \item Em Java é possível criar arrays (vetores) para o armazenamento de mais vários do mesmo tipo
+  \item Devemos declarar o tipo da variável e colchetes para indicar um vetores
+  \item Devemos inicializar a variável com o tamanho
+  \item O tamanho do vetor é fixo
+  \item É possível recuperar o tamanho a partir da propriedade \textbf{length}
+ \end{itemize}
+ \begin{lstlisting}
+  int[] vetor = new int[5];
+  vetor[0] = 10;
+  vetor[1] = 20;
+  vetor[5] = 5; //Erro!
+  int k = vetor.length; // k == 5
+ \end{lstlisting}
+
+
+\end{frame}
+
+
+\begin{frame}{Matrizes}
+\begin{itemize}
+ \item Quando um array tem duas dimensões damos o nome de \textbf{matriz}
+\end{itemize}
+
+ \begin{figure}
+ \centering
+ \includegraphics[scale=0.5]{./imagens/matriz-explicacao.png}
+ % matriz-explicacao.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{figure}
+
+\end{frame}
+
+\begin{frame}[fragile]{Matrizes}
+ \begin{lstlisting}
+//DECLARANDO
+double matriz [][] = new double [3] [3];
+//ou
+double[][] matriz = new double [3] [3];
+//ATRIBUINDO DE VALORES:
+matriz[0][0] = 0;
+matriz[0][1] = 1;
+matriz[0][2] = 2;
+
+for (int i =0; i<matriz.length; i++){
+	for (int j=0; j<matriz[i].length; j++){
+		matriz [i][j] = 0;
+	}
+}
+  
+ \end{lstlisting}
+
+\end{frame}
+% 
+\begin{frame}[allowframebreaks]{Exercício}
+ \begin{enumerate}
+  \item Criar um programa que leia 10 valores inteiros e após isso imprimir o quadrado dos números
+  \item Criar um programa que leia 10 valores inteiros e após isso imprimir a soma dos quadrados dos números
+  \item Criar um programa que leia e calcule a soma de matrizes de \textbf{m} linhas por \textbf{n} colunas. 
+  \item Criar um programa que leia e calcule o produto de matrizes. Para tal, deve ser seguidas as seguintes etapas:
+  \begin{enumerate}
+   \item Ler o tamanho da matriz A
+   \item Ler a matriz A
+   \item Ler o tamanho da matriz B (linhas e colunas)
+   \item Ler a matriz B
+   \item Verificar se é possível realizar produto das matrizes pode ser realizada (o número de colunas da primeira é igual ao número de colunas da segunda)
+   \item Criar uma matriz C com tamanho adequado, realizar o produto das matrizes e armazená-lo na matriz C
+   \item Imprimir a matriz C   
+  \end{enumerate}
+% 
+ \end{enumerate}
+% 
+\end{frame}
+
+
+
+\end{document}
