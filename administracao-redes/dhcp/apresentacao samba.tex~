@@ -1,16 +1,14 @@
 %\documentclass[t,handout]{beamer}
 \documentclass{beamer}
 
-\usepackage[brazil]{babel}
+
 \usepackage[latin1]{inputenc}
 
-
+\usepackage[portuguese]{babel}
 \usepackage[tight]{subfigure}
 \usepackage{graphicx}
 \usepackage{color}
 \usepackage{url}
-% \usepackage{inconsolata}
-\newcommand{\setcolor}[2]{\color{#1}{#2}\color{black}}
 
 %Pacote de listagem de cï¿½digo
 \usepackage{listings}
@@ -51,24 +49,14 @@ showstringspaces=false,language=HTML }
 % \usetheme{CambridgeUS}
 % \usetheme{Singapore}
 
-%Insere o numero de frames no slide
-\newcommand*\oldmacro{}
-\let\oldmacro\insertshortauthor% save previous definition
-\renewcommand*\insertshortauthor{%
-  \leftskip=.3cm% before the author could be a plus1fill ...
-  \insertframenumber\,/\,\inserttotalframenumber\hfill\oldmacro}
-
-
-\author[Ivo Calado]{Ivo Calado\\\url{ivo.calado@ifal.edu.br}}
+\author[Ivo]{Ivo Calado}
 \date{\today}
 \institute[IFAL]{Instituto Federal de Educação, Ciência e Tecnologia de Alagoas}
-\title[ICSI]{Instalação e Configuração de Serviços de Internet}
+\title{Administração de redes}
 \logo{\includegraphics[width=0.2\linewidth]{imagens/ifal-logo.jpg}}
-\subtitle{\textit{Samba\\}}
+\subtitle{\textit{Samba\\}(Aula 3)}
 
 \begin{document}
-
-
 
 \begin{frame}
   \titlepage
@@ -299,9 +287,9 @@ Algumas seções do arquivo smb.conf já são predefinidas. São elas:
   \item Ações configuradas nesse servidor tem efeito em todo o servidor
   \item Se o parâmetro especificado for novamente definido em um compartilhamento, vale o valor do compartilhamento
  \end{itemize}
-\begin{block}{Exemplo}
+\begin{example}
  Se a opção \textit{guest user = nobody} for definido na seção \textit{[global]} e após isso, essa mesma opção for utilizada no compartilhamento \textbf{foo} com outro valor, então o usuário utilizado para acesso público será o \textbf{nobody} exceto para o compartilhamento \textbf{foo}
-\end{block}
+\end{example}
 
 
 \end{frame}
@@ -345,7 +333,7 @@ Diversas opções estão disponíveis para configuração do servidor samba na seção [
  \end{example}
 
 \begin{block}{}
- Adicionar o usuário a base de informações através do comando \textbf{smbpasswd -a $<$usuário$>$}
+ Adicionar o usuário a base de informações através do comando \textbf{smbpasswd -a <usuário>}
 \end{block}
 
 \end{frame}
@@ -387,239 +375,19 @@ Diversas opções estão disponíveis para configuração do servidor samba na seção [
 
 
 
-\section{Atividades}
-\subsection*{Preparando a Máquina Virtual}
+\section{Atividade}
+\subsection{}
 % 
 % \section{Atividade}
-\begin{frame}{Preparando a Máquina Virtual}
-\begin{enumerate}
- \item Importar \textit{appliance}
- \item Duplicar a máquina virtual renomeando para \textbf{ubuntu-server-samba}
- \item Configurar o adaptador para modo Bridge 
- \item Iniciar a máquina virtual
-\end{enumerate}
+% \begin{frame}{Atividade}
+\begin{itemize}
+ \item Configurar o servidor Samba de modo a disponibilizar os diretórios de usuários via rede
+ \item Fazer uso de máquinas virtuais (1 cliente e 1 servidor)
+\end{itemize}
+
 
 \end{frame}
-
-\begin{frame}[fragile]{Criando usuários}
- \begin{lstlisting}
-#Logar como root
-usuario@host1:~$ sudo su
-[sudo] senha para usuario: 
-root@host1:/home/usuario#  
  
-#criação do usuário 'usuario2'
-root@host1:/home# adduser usuario2
 
-#criação do usuário 'usuario3'
-root@host1:/home# adduser usuario3
-
-\end{lstlisting}
-
-\end{frame}
-
-\begin{frame}[fragile]{Instalação do Samba e adição de usuários à base do Samba}
- \begin{lstlisting}
-#Adição dos usuários 'usuario', 'usuario2' e 'usuario3' à base do samba
-root@host1:/home# smbpasswd -a usuario
-New SMB password:
-Retype new SMB password:
-Added user usuario.
-
-root@host1:/home# smbpasswd -a usuario2
-New SMB password:
-Retype new SMB password:
-Added user usuario2.
-
-root@host1:/home# smbpasswd -a usuario3
-New SMB password:
-Retype new SMB password:
-Added user usuario3.
-  
- \end{lstlisting}
-
-\end{frame}
-\subsection{Ex 1: compartilhando o diretório home}
-\begin{frame}[fragile]{Ex 1: compartilhando o diretório home}
-\begin{lstlisting}
-#Compartilhamento do diretório homes
-/etc/samba/smb.conf
-[homes]
-   comment = Home Directories 
-   browseable = no
-   writeable = yes
-   valid users = %S
-   guest ok = yes
-
-
-#Reiniciar o samba
-/etc/init.d/samba restart
- 
-\end{lstlisting}
-
-\end{frame}
-\subsection{Ex 2: compartilhando diretórios com permissões distintas}
-\begin{frame}{Ex 2: compartilhando diretórios com permissões distintas}
- \begin{itemize}
-  \item Vamos compartilhar 3 diretórios:
-  \begin{itemize}
-   \item instaladores
-   \item arquivosgerais
-   \item direcao
-  \end{itemize}
-  \item No primeiro, todos poderão ler e escrever e não é necessária autenticação
-  \item No segundo diretório, todos poderão ler mas apenas os usuários do grupo 'func' poderão escrever
-  \item No terceiro diretório, apenas os usuários do grupo 'direcao' poderão ler e escrever
-
- \end{itemize}
-
-\end{frame}
-\begin{frame}[fragile]{Passo 1: configuração da estrutura de diretórios}
-\begin{lstlisting}
-#Mover para diretório raiz
-root@host1:/# cd /
-
-#Criar diretório samba
-root@host1:/# mkdir samba
-
-#entrar no diretório criado
-root@host1:/# cd samba/
-
-#Criar 3 diretórios distintos
-root@host1:/samba# mkdir instaladores
-root@host1:/samba# mkdir arquivosgerais
-root@host1:/samba# mkdir direcao 
-\end{lstlisting}
-
-\end{frame}
-
-\begin{frame}[fragile]{Passo 2: Criação dos grupos func e direcao}
-\begin{lstlisting}
-#Criação dos grupos 'func' e 'direcao'
-
-root@host1:/samba# addgroup func
-Adicionando grupo `func' (GID 1003) ...
-Concluído.
-root@host1:/samba# addgroup direcao
-Adicionando grupo `direcao' (GID 1004) ...
-Concluído.
-root@host1:/samba# 
-
-\end{lstlisting}
-
-\end{frame}
-
-\begin{frame}[fragile, allowframebreaks]{Passo 3: Adição dos usuários aos respectivos grupos}
- \begin{itemize}
-  \item Adicionando usuários aos grupos
-  \begin{itemize}
-   \item `usuario' não pertence a nenhum grupo
-   \item `usuario2' pertence ao grupo func
-   \item `usuario3' pertence ao grupo direcao
-  \end{itemize}
-
- \end{itemize}
-
- \begin{lstlisting}
-root@host1:/samba# adduser usuario2 func
-Adicionando o usuário `usuario2' ao grupo `func' ...
-Adding user usuario2 to group func
-Concluído.
-root@host1:/samba# adduser usuario3 direcao
-Adicionando o usuário `usuario3' ao grupo `direcao' ...
-Adding user usuario3 to group direcao
-Concluído.
-  
- \end{lstlisting}
-
-\end{frame}
-
-\begin{frame}[fragile]{Passo 4: Modificação de permissões nos diretórios}
-\begin{lstlisting}
-#Adição da permissão de leitura, escrita e execução no diretório 'instaladores' para todos os usuários
-root@host1:/samba# chmod 777 instaladores
-
-#Adição da permissão de escrita para os usuários do grupo func e de leitura para os demais usuários
-root@host1:/samba# chown root.func arquivosgerais
-root@host1:/samba# chmod 775 arquivosgerais/
-
-#Adição da permissão de escrita para os usuários do grupo direcao e nada para os demais
-root@host1:/samba# chown root.direcao direcao/
-root@host1:/samba# chmod 770 direcao/
- 
-\end{lstlisting}
-
-\end{frame}
-
-\begin{frame}[fragile]{Passo 5: Configuração do diretório instaladores}
-\begin{lstlisting}
-[instaladores]
-   comment = Instaladores
-   browseable = yes
-   path = /samba/instaladores
-   guest ok = yes
-   writeable = yes
-   create mask = 766
-   
-#Reiniciando o servidor samba
-root@host1:/samba# /etc/init.d/samba restart
-   
-\end{lstlisting}
-
-\end{frame}
-
-\begin{frame}[fragile]{Passo 6: Configuração do diretório Arquivos gerais}
-\begin{lstlisting}
-[Arquivos Gerais]
-   comment = Diretório para arquivos gerais
-   browseable = yes
-   path = /samba/arquivosgerais
-   guest ok = yes
-   write list = @func
-
-#Reiniciando o servidor samba
-root@host1:/samba# /etc/init.d/samba restart
- 
-\end{lstlisting}
-
-\end{frame}
-
-\begin{frame}[fragile]{Passo 7: Configuração do diretório direcao}
-\begin{lstlisting}
-##Configuração do Samba para o diretório direcao
-[direcao]
-   comment = Diretório voltado para arquivos da direção
-   browseable = no
-   path = /samba/direcao
-   writeable = yes
-   valid users = @direcao
-
-\end{lstlisting}
-
-\end{frame}
-
-\begin{frame}[fragile]{Ocultando extensões de arquivos}
- \begin{itemize}
-  \item É possível impedir a criação de alguns diretórios específicos a partir da opção veto files
- \end{itemize}
- 
- \begin{lstlisting}
-#Ocultando extensões de arquivos
-veto files = *.tttxt
-
- \end{lstlisting}
-
-
-\end{frame}
-
-\subsection*{Atividade para casa}
-\begin{frame}{Atividades para casa}
-\begin{enumerate}
- \item Configurar o cliente samba do linux para acesso a compartilhamentos
- \item Configurar o Samba para servir como controlador de domínio na rede Windows
-\end{enumerate}
-
-  
-\end{frame}
 
 \end{document}

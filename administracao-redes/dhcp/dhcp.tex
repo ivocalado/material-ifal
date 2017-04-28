@@ -1,0 +1,359 @@
+%\documentclass[t,handout]{beamer}
+\documentclass{beamer}
+
+\usepackage[brazil]{babel}
+\usepackage[latin1]{inputenc}
+
+
+\usepackage[tight]{subfigure}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{url}
+% \usepackage{inconsolata}
+\newcommand{\setcolor}[2]{\color{#1}{#2}\color{black}}
+
+%Pacote de listagem de cï¿½digo
+\usepackage{listings}
+%\lstset{numbers=left, stepnumber=1, firstnumber=1,
+%numberstyle=\tiny, extendedchars=true, breaklines=true, frame=tb,
+%basicstyle=\footnotesize, stringstyle=\ttfamily,
+%showstringspaces=false }
+
+\lstset{extendedchars=true, breaklines=true, frame=tb,
+basicstyle=\footnotesize, stringstyle=\ttfamily,
+showstringspaces=false,language=HTML }
+
+% \usecolortheme[RGB={130,35,150}]{structure}
+% \usecolortheme[RGB={33,33,94}]{structure}
+\usecolortheme[RGB={153,204,123}]{structure}
+\setbeamertemplate{footline}[frame number]
+\setbeamertemplate{navigation symbols}{}
+
+% \usetheme{Frankfurt} %LEGAL     !!!
+% \usetheme{Madrid}     %LEGAL/L%IMPO/COM CAIXA     (sem barra de desenvolvimento)
+
+% \usetheme{Antibes} %NAO
+% \usetheme{Berlin} %PODE SER...     (BARRA DE DESENVOLVIMANTO)
+% \usetheme{Berkeley}     %FEIO
+% \usetheme{Boadilla} %TUDO BRANCO...
+% \usetheme{Copenhagen}     %NAO
+% \usetheme{Darmstadt} %LEGAL!     !!!
+% \usetheme{Dresden}     %LEGAL/LIMPO/SEM CAIXA     (sem caixa fica ruim...)
+
+% \usetheme{Goettingen}     %FEIO DEMAIS!
+ \usetheme{Ilmenau} %LEGAL (forte candidato)
+% \usetheme{JuanLesPins} %BACANA
+% \usetheme{Luebeck}     %FEIO
+
+% \usetheme{Malmoe}     %FEIO
+% \usetheme{Warsaw} %NAO...
+% \usetheme{Seattle}
+% \usetheme{CambridgeUS}
+% \usetheme{Singapore}
+
+%Insere o numero de frames no slide
+\newcommand*\oldmacro{}
+\let\oldmacro\insertshortauthor% save previous definition
+\renewcommand*\insertshortauthor{%
+  \leftskip=.3cm% before the author could be a plus1fill ...
+  \insertframenumber\,/\,\inserttotalframenumber\hfill\oldmacro}
+
+
+\author[Ivo Calado]{Ivo Calado\\\url{ivo.calado@ifal.edu.br}}
+\date{\today}
+\institute[IFAL]{Instituto Federal de Educação, Ciência e Tecnologia de Alagoas}
+\title[ICSI]{Instalação e Configuração de Serviços de Internet}
+\logo{\includegraphics[width=0.2\linewidth]{imagens/ifal-logo.jpg}}
+\subtitle{\textit{Dynamic Host Configuration Protocol} (DHCP)}
+
+\begin{document}
+
+
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+% \section{Roteiro}
+% \AtBeginSection[]
+{\frame{
+\frametitle{Roteiro}
+\tableofcontents[hidesubsections]
+}
+}
+
+\section{Introdução}
+\subsection{Características}
+\begin{frame}{Características}
+ \begin{itemize}
+  \item Implementa o serviço de endereçamento dinâmico de estações
+  \begin{itemize}
+   \item Permite a configuração automática de informações de endereçamento, roteamento e resolução de nomes
+  \end{itemize}
+  \item Viabiliza estações autoconfiguráveis
+  \begin{itemize}
+   \item Obtém informações de configuração TCP/IP de forma automática durante a inicialização
+  \end{itemize}
+
+
+ \end{itemize}
+
+\end{frame}
+
+\begin{frame}{Componentes}
+ \begin{itemize}
+  \item Servidor DHCP
+  \begin{itemize}
+   \item Processo de aplicação que provê informações de configuração TCP/IP para clientes
+   \item Administrador deve configurar pelo menos um servidor DHCP, informando as regras operacionais e os endereços IP disponíveis
+  \end{itemize}
+  \item Cliente DHCP
+  \begin{itemize}
+   \item Processo de aplicação que se comunica com o servidor para obter informações de configuração TCP/IP
+  \end{itemize}
+
+
+ \end{itemize}
+
+\end{frame}
+
+\begin{frame}{Tipos de alocação}
+ \begin{itemize}
+  \item Dinâmica
+  \begin{itemize}
+   \item Servidor aloca os endereços IP aos clientes de forma automática
+   \item Cliente pode ser configurado com diferentes endereços IP a cada inicialização
+  \end{itemize}
+  \item Estática
+  \begin{itemize}
+   \item Servidor aloca um determinado endereço IP \textbf{fixo} a cada cliente
+   \item Cliente sempre é configurado com o mesmo endereço IP a cada inicialização
+   \item Alocação é baseada no endereço físico da estação
+  \end{itemize}
+
+ \end{itemize}
+
+\end{frame}
+
+\begin{frame}{Duração da alocação}
+ \begin{itemize}
+  \item Cliente informa o intervalo de alocação desejado
+  \item Servidor pode ou não aceitar o intervalo solicitado pelo cliente
+  \item Servidor especifica a duração da alocação na resposta enviada ao cliente
+  \item Permanente
+  \begin{itemize}
+   \item Intervalo de alocação é infinito
+  \end{itemize}
+  \item Temporária
+  \begin{itemize}
+   \item Intervalo de alocação é finito
+  \end{itemize}
+
+ \end{itemize}
+
+\end{frame}
+
+\subsection{Funcionamento}
+\begin{frame}[allowframebreaks]{Mensagens trocadas}
+  O protocolo DHCP utiliza UDP, IP e broadcast limitado, sendo capaz de transportar vários tipos de informações, como máscara de rede, servidor de nomes e roteador \textit{default}. São definidas quatro messagens:
+  
+\begin{columns}[T] % align columns
+\begin{column}{.48\textwidth}
+  \begin{itemize}
+   \item DISCOVER (\textit{broadcast)}
+   \item OFFER (\textit{unicast})
+   \item REQUEST (\textit{broadcast)}
+   \item ACKNOWLEDGE (\textit{unicast})
+  \end{itemize}
+\end{column}%
+\hfill%
+\begin{column}{.48\textwidth}
+\begin{figure}
+ \centering
+ \includegraphics[scale=0.35]{./imagens/alocacao.jpeg}
+ % alocacao.jpeg: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{figure}
+\end{column}%
+\end{columns}
+ Pontos importantes:
+\begin{enumerate}
+ \item O endereço IP de origem das mensagens DISCOVERY e REQUEST é 0.0.0.0
+\end{enumerate}
+\end{frame}
+
+\subsection{Renovação}
+\begin{frame}{Renovação}
+\begin{itemize}
+ \item Cliente renova periodicamente a alocação
+ \item Cliente mantém um temporizador de renovação que indica quando deve renovar a alocação
+ \item Por \textbf{default}, o temporizador de renovaçã corresponde a 50\% do intervalo de alocação
+ \item Cliente envia a mensagem DHCPREQUEST ao servidro após expirar o temporizados de renovação
+ \item Servidor responde com a mensagem DHCPACK ou  DHCPNACK, confirmando ou não a renovação
+ \item Cliente pode renovar a alocação a cada inicialização
+\end{itemize}
+
+
+\end{frame}
+
+
+\begin{frame}{Associação a outro servidor}
+ \begin{itemize}
+  \item Cliente renova a alocação com outro servidor somente se o atual servidor não responder
+  \item Cliente mantém um temporizador de associação que indica quando deve contatar outro servidor
+  \item Por \textit{default}, o temporizador corresponde a 87,7\% do intervalo de alocação
+  \item Cliente envia em broadcast a mensagem DHCPREQUEST após expirar o temporizador de associação
+  \item O servidor responde com a mensagem DHCPACK ou DHCPNACK, confirmando ou não a associação
+ \end{itemize}
+
+\end{frame}
+
+\begin{frame}{Cancelamento da associação}
+ \begin{itemize}
+  \item Cliente cancela a associação quando não deseja mais usar o endereço IP
+  \item Cliente envia a mensagem DHCPRELEASE para cancelar a alocação
+  \item Cliente mantém um temporizador de alocação que indica a duração total da alocação
+  \item Cliente suspende o uso das informações de configuração se o temporizador de alocação expira antes da renovação
+  \item Servidor cancela automaticamente a alocação após expirar o temporizador de alocação
+ \end{itemize}
+
+\end{frame}
+
+\section{Atividade prática}
+\subsection{Atividade para casa}
+\begin{frame}[allowframebreaks]{Objetivos}
+ \begin{enumerate}
+  \item Configurar um servidor DHCP:
+  \begin{itemize}
+   \item Duas interfaces de rede
+   \item Atribui endereços apenas a uma das interfaces
+   \item Subrede 192.168.1.0/24
+   \item Deve-se configurar servidores com endereços IP fixos
+   \item Deve-se configurar clientes com endereços no intervalo 192.168.1.100/24 e 192.168.1.200/24
+   \item Deve-se configurar configurações como gateway, dns e endereço de broadcast
+  \end{itemize}
+  \item Configurar dois clientes para acesso
+ \end{enumerate}
+
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Passo 1: Configurar as máquinas cliente e servidor para IP estático e testar conectividade}
+ \begin{enumerate}
+  \item Importar duas \textit{appliances} do ubuntu server e nomeá-las cliente e servidor
+  \begin{itemize}
+   \item Não esquecer de reinicializar os endereços MAC
+   \item Definir as interfaces de rede como rede \textbf{interna}
+  \end{itemize}
+  \item Editar arquivo \textbf{/etc/network/interfaces} no servidor para definir um IP estático para o servidor:
+  \begin{block}{}
+auto enp0s3 \\
+iface enp0s3 inet static \\
+address 10.0.2.10 \\
+netmask 255.255.255.0 \\
+network 10.0.2.0 \\
+broadcast 10.0.2.255 \\
+gateway 10.0.2.2 \\
+dns-nameservers 8.8.8.8
+  \end{block}
+
+\item Editar arquivo \textbf{/etc/network/interfaces} no cliente para definir um IP estático para o cliente:
+\begin{block}{}
+auto enp0s3 \\
+iface enp0s3 inet static \\
+address 10.0.2.100 \\
+netmask 255.255.255.0\\
+network 10.0.2.0\\
+broadcast 10.0.2.255\\
+gateway 10.0.2.2\\
+dns-nameservers 8.8.8.8
+
+\end{block}
+\item Reiniciar as VMs com as interfaces de rede configuradas para rede interna
+\item Testar a conectividade entre as VMs utilizando o programa \textbf{ping}
+ \end{enumerate}
+
+\end{frame}
+
+\begin{frame}[allowframebreaks,fragile]{Passo 2: configurando o servidor DHCP}
+ \begin{enumerate}
+  \item Dando continuidade ao passo anterior, desligar a VM do servidor e adicionar um segundo adaptador de rede, de modo que um adaptador de rede esteja configurado como NAT e o outro em rede interna
+  \item Configurar o endereçamento da rede interna para IP estático, com endereço 192.168.0.1/32 e o adaptador externo para NAT
+  \item Instalar pacote isc-dhcp-server
+  \begin{block}{}
+root@host1:/home/usuario\# apt-get install isc-dhcp-server   
+  \end{block}
+\item Editar o arquivo \textbf{/etc/default/isc-dhcp-server} para definir a interface de rede em que o dhcp irá operar (nosso caso será a interna)
+\begin{block}{}
+INTERFACES=``eth0''  \#Definir interface correta
+\end{block}
+\item Configurar o servidor dhcp editando o arquivo \textbf{/etc/dhcp/dhcpd.conf} (fazer uma cópia do arquivo original)
+\begin{lstlisting}
+default-lease-time 600;
+max-lease-time 7200;
+authoritative;
+log-facility local7;
+subnet 192.168.1.0 netmask 255.255.255.0 {
+    range 192.168.1.100 192.168.1.200;
+    option domain-name-servers 8.8.4.4, 8.8.8.8;
+    option domain-name "lab3.riolargo.ifal.edu.br";
+    option routers 192.168.1.1;
+    option broadcast-address 192.168.1.255;
+    default-lease-time 600;
+    max-lease-time 7200;
+}
+\end{lstlisting}
+
+\item Reiniciar o servidor DHCP
+\begin{block}{}
+root@host1:/home/usuario\# service isc-dhcp-server restart 
+\end{block}
+
+\item Modificar o cliente de modo que ele utilize o dhcp como cliente
+
+\item Reiniciar o cliente e testar a conectividade
+
+ \end{enumerate}
+
+\end{frame}
+
+
+\begin{frame}[fragile, allowframebreaks]{Passo 3: Realizar reserva de endereços IP}
+  \begin{enumerate}
+   \item Importar um novo appliance, denominado ubuntu-server-samba-gateway, configurado para rede interna
+   \item Modificar o arquivo de configuração do servidor dhcp para o seguinte valor:
+   \begin{lstlisting}
+subnet 192.168.1.0 netmask 255.255.255.0 {  
+    range 192.168.1.100 192.168.1.200; 
+    option domain-name-servers 8.8.4.4, 8.8.8.8; 
+    option domain-name "lab3.riolargo.ifal.edu.br"; 
+    option routers 192.168.1.1; 
+    option broadcast-address 192.168.1.255;
+    default-lease-time 600;
+    max-lease-time 7200;
+    host servidor-samba {
+        hardware ethernet 08:00:27:5B:C1:A4; 
+        fixed-address 192.168.1.2;
+    }
+}
+    
+   \end{lstlisting}
+
+   \item Reiniciar todas as VMs, verificar os endereços IPs e testar a conectividade
+  \end{enumerate}
+
+\end{frame}
+
+
+\begin{frame}{Atividade para casa}
+ \begin{enumerate}
+  \item Pesquisar e configurar esquema de servidor FailOver (servidores DHCP primário e secundario)
+  \item Pesquisar e configurar esquema de faixa privilegiada
+  \begin{itemize}
+   \item Ao invés de um dado host receber um endereço fixo ele pode receber um endereço numa faixa de endereços da subrede
+  \end{itemize}
+
+ \end{enumerate}
+
+\end{frame}
+
+
+\end{document}

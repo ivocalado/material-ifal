@@ -1,0 +1,496 @@
+%\documentclass[t,handout]{beamer}
+\documentclass{beamer}
+
+\usepackage[brazil]{babel}
+\usepackage[latin1]{inputenc}
+
+
+\usepackage[tight]{subfigure}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{url}
+% \usepackage{inconsolata}
+\newcommand{\setcolor}[2]{\color{#1}{#2}\color{black}}
+
+%Pacote de listagem de cï¿½digo
+\usepackage{listings}
+%\lstset{numbers=left, stepnumber=1, firstnumber=1,
+%numberstyle=\tiny, extendedchars=true, breaklines=true, frame=tb,
+%basicstyle=\footnotesize, stringstyle=\ttfamily,
+%showstringspaces=false }
+
+\lstset{extendedchars=true, breaklines=true, frame=tb,
+basicstyle=\footnotesize, stringstyle=\ttfamily,
+showstringspaces=false,language=HTML }
+
+% \usecolortheme[RGB={130,35,150}]{structure}
+% \usecolortheme[RGB={33,33,94}]{structure}
+\usecolortheme[RGB={153,204,123}]{structure}
+\setbeamertemplate{footline}[frame number]
+\setbeamertemplate{navigation symbols}{}
+
+% \usetheme{Frankfurt} %LEGAL     !!!
+% \usetheme{Madrid}     %LEGAL/L%IMPO/COM CAIXA     (sem barra de desenvolvimento)
+
+% \usetheme{Antibes} %NAO
+% \usetheme{Berlin} %PODE SER...     (BARRA DE DESENVOLVIMANTO)
+% \usetheme{Berkeley}     %FEIO
+% \usetheme{Boadilla} %TUDO BRANCO...
+% \usetheme{Copenhagen}     %NAO
+% \usetheme{Darmstadt} %LEGAL!     !!!
+% \usetheme{Dresden}     %LEGAL/LIMPO/SEM CAIXA     (sem caixa fica ruim...)
+
+% \usetheme{Goettingen}     %FEIO DEMAIS!
+ \usetheme{Ilmenau} %LEGAL (forte candidato)
+% \usetheme{JuanLesPins} %BACANA
+% \usetheme{Luebeck}     %FEIO
+
+% \usetheme{Malmoe}     %FEIO
+% \usetheme{Warsaw} %NAO...
+% \usetheme{Seattle}
+% \usetheme{CambridgeUS}
+% \usetheme{Singapore}
+
+%Insere o numero de frames no slide
+\newcommand*\oldmacro{}
+\let\oldmacro\insertshortauthor% save previous definition
+\renewcommand*\insertshortauthor{%
+  \leftskip=.3cm% before the author could be a plus1fill ...
+  \insertframenumber\,/\,\inserttotalframenumber\hfill\oldmacro}
+
+\newcommand{\nologo}{\setbeamertemplate{logo}{}} 
+
+\author[Ivo Calado]{Ivo Calado\\\url{ivo.calado@ifal.edu.br}}
+\date{\today}
+\institute[IFAL]{Instituto Federal de Educação, Ciência e Tecnologia de Alagoas}
+\title[ICSI]{Instalação e Configuração de Serviços de Internet}
+\logo{\includegraphics[width=0.2\linewidth]{imagens/ifal-logo.jpg}}
+\subtitle{Iptables}
+
+\begin{document}
+
+
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+% \section{Roteiro}
+% \AtBeginSection[]
+{\frame{
+\frametitle{Roteiro}
+\tableofcontents[hidesubsections]
+}
+}
+
+\section{Introdução}
+\subsection{Características}
+\begin{frame}[allowframebreaks]{Características}
+  \begin{itemize}
+   \item A implementação de filtro de pacotes nos kernels 2.4, 2.6, 3.x e 4.x é realizado pelo iptables (projeto netfilter)
+   \item O iptables é o programa capaz de gerenciar a configuração do netfilter
+   \item Principais características:
+   \begin{itemize}
+    \item Filtragem sem considerar o estado do pacote
+    \item Filtragem considerando o estado do pacote
+    \item Suporte a NAT, tanto para endereços de rede ou portas
+    \item Flexível, com suporte a plugins
+   \end{itemize}
+
+  \end{itemize}
+
+\end{frame}
+
+{\nologo
+\begin{frame}[allowframebreaks]{Conceitos básicos}
+
+\begin{columns}[T] % align columns
+\begin{column}{.68\textwidth}
+\begin{itemize}
+ \item \textbf{regras}: são instruções dados para o firewall, indicando o que ele deve fazer
+ \item \textbf{cadeias}: locais onde as regras podem ser agrupadas. As regras são processadas em ordem pelo firewall
+ \item Toda cadeia tem uma política padrão, definida pelo usuário
+ \item A cadeia é percorrida até uma regra ser atingida. As seguintes são ignoradas
+ \item Regras com erro são ignoradas
+ \item Se nenhuma regra é atingida, usa-se a regra da política padrão
+\end{itemize}
+
+
+\end{column}%
+\hfill%
+\begin{column}{.28\textwidth}
+ \begin{figure}
+ \centering
+ \includegraphics[scale=0.4]{./imagens/regras-iptables.png}
+ % regras-iptables.jpg: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{figure}
+
+\end{column}%
+\end{columns}
+
+\begin{itemize}
+ \item \textbf{tabelas}: o iptables organiza o seu fluxo de pacotes em tabelas, cada uma com um conjunto de cadeias pré-definidas:
+ \begin{itemize}
+  \item Tabela \textbf{filter}: é a tabela padrão, com três cadeias
+  \begin{itemize}
+   \item INPUT
+   \item OUTPUT
+   \item FORWARD
+  \end{itemize}
+  \item Tabela \textbf{nat}: tabela usada para NAT (gera outras conexões)
+  \begin{itemize}
+   \item PREROUTING
+   \item OUTPUT
+   \item POSTROUTING
+  \end{itemize}
+  \item Tabela \textbf{mangle}: permite alterações nos pacotes (TOS, TTL, etc)
+  \begin{itemize}
+   \item PREROUTING
+   \item INPUT
+   \item FORWARD
+   \item OUTPUT
+   \item POSTROUTING
+  \end{itemize}
+  \item Tabela \textbf{raw}: marca pacotes para rastreio posterior
+
+ \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Organização das tabelas do Iptables}
+ \begin{itemize}
+  \item Tabela \textbf{filter} e suas cadeias
+
+ \end{itemize}
+  \begin{figure}
+ \centering
+ \includegraphics[scale=0.4]{./imagens/tabela-filter.png}
+ % tabela-filter.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{figure}
+
+\begin{itemize}
+ \item Tabela \textbf{nat} e suas cadeias
+\end{itemize}
+\begin{figure}
+ \centering
+ \includegraphics[scale=0.4]{./imagens/tabela-nat.png}
+ % tabela-nat.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{figure}
+
+\begin{itemize}
+ \item Tabela \textbf{mangle} e suas cadeias
+\end{itemize}
+\begin{figure}
+ \centering
+ \includegraphics[scale=0.4]{./imagens/tabela-mangle.png}
+ % tabela-mangle.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{figure}
+
+\begin{itemize}
+ \item Tabelas raw e suas cadeias
+\end{itemize}
+\begin{figure}
+ \centering
+ \includegraphics[scale=0.4]{./imagens/tabela-raw.png}
+ % tabela-raw.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{figure}
+
+\begin{itemize}
+ \item Tabelas filter, nat, mangle e raw e suas cadeias
+\end{itemize}
+\begin{figure}
+ \centering
+ \includegraphics[scale=0.4]{./imagens/tabelas-resumo.png}
+ % tabelas-resumo.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{figure}
+
+
+
+
+
+\end{frame}
+
+}
+
+\subsection{Comandos básicos}
+\begin{frame}{Salvando e restaurando regras no iptables}
+ \begin{itemize}
+  \item Pode ser feito com um arquivo de script ou usando os comandos \textit{iptables-save} e \textit{iptables-restore}
+  \item \textit{iptables-[save$|$restore]} executam a operação em um só passo, de maneira mais segura (sem brechas temporárias) e rápida.
+  \item Salvando:
+\begin{block}{}
+ sudo iptables-save $>$ arquivo\_de\_regras
+\end{block}
+  \item Restaurando:
+\begin{block}{}
+sudo iptables-restore $<$ arquivo\_de\_regras 
+\end{block}
+\item É possível salvar os contadores com -c
+ \end{itemize}
+
+\end{frame}
+
+{\nologo
+\begin{frame}[allowframebreaks]{Formato geral das regras do Iptables}
+ \begin{itemize}
+  \item \textit{iptables [-t table] comando [filtro] [-j ação]}
+ \end{itemize}
+ \begin{figure}
+ \centering
+ \includegraphics[scale=0.35]{./imagens/iptables-comando.png}
+ % iptables-comando.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{figure}
+
+
+
+\end{frame}
+
+}
+
+\begin{frame}[allowframebreaks]{Principais comandos de manipulação de cadeias}
+\begin{itemize}
+ \item Sempre maiúsculo seguido do nome da cadeia:
+ \begin{itemize}
+  \item \textbf{-P}: configura a política padrão da cadeia (\textbf{DROP} ou \textbf{ACCEPT})
+     \begin{block}{}
+iptables -P OUTPUT ACCEPT   
+  \end{block}
+
+\item \textbf{-N}: cria uma nova cadeia
+\begin{block}{}
+iptables -N internet 
+\end{block}
+
+\item \textbf{-F}: apaga as regras da cadeia
+\begin{block}{}
+iptables -F INPUT 
+\end{block}
+\item \textbf{-X}: apaga uma cadeia vazia
+
+\begin{block}{}
+ iptables -F internet; iptables -X internet
+\end{block}
+\item \textbf{-Z}: zera todos os contadores da cadeia
+\begin{block}{}
+iptables -Z INPUT
+\end{block}
+\item \textbf{-A}: adicionar uma regra no final da cadeia
+ \end{itemize}
+\begin{block}{}
+iptables -A INPUT - -dport 80 -j DROP
+\end{block}
+\item \textbf{-L}: listar regras da cadeia (adicione \textbf{-n} para não resolver nomes e \textbf{- -line-numbers} para ver o número das regras)
+\begin{block}{}
+iptables -L -n - - line-number 
+\end{block}
+\item \textbf{-D}: apagar uma regra da cadeia. Pode usar também a linha
+\begin{block}{}
+iptables -D INPUT - -dport 80 -j DROP \\
+iptables -D INPUT 5
+\end{block}
+\item \textbf{-R}: trocar uma regra por outra
+\begin{block}{}
+iptables -R INPUT 2 -s 10.0.1.2 -j DROP 
+\end{block}
+\item \textbf{-I}: insere uma regra em um ponto específico da cadeia
+\begin{block}{}
+ iptables -I INPUT 1 - -dport 80 -j DROP
+\end{block}
+
+\end{itemize}
+ 
+\end{frame}
+\begin{frame}[allowframebreaks]{Principais filtros no iptables}
+ \begin{itemize}
+  \item \textbf{-p} $<$protocolo$>$: especifica o protocolo. Por exemplo, udp, tcp ou icmp. Pode ser negado também. Para tudo menos tcp, faça: com ``! -p tcp''
+  \begin{block}{}
+iptables -A INPUT -p icmp -j DROP\\
+iptables -A INPUT ! -p tcp -j DROP   
+  \end{block}
+\item \textbf{-s} $<$endereço$>$: especifica o endereço de origem. Aceita IPs, redes, IP/máscara, IP/nn (notação CIDR) e também a negação com ``!''
+\begin{block}{}
+iptables -A INPUT -s 10.1.1.1 -j ACCEPT\\
+iptables -A INPUT ! -s 10.1.1.0/24 -j DROP
+\end{block}
+\item \textbf{-d} $<$endereço$>$: especifica o endereço de destino (mesmas regras do \textbf{-s})
+\begin{block}{}
+iptables -A OUTPUT -d uol.com.br -j ACCEPT 
+\end{block}
+\item \textbf{-i} $<$interface$>$: especifica a interface de entrada do pacote. Use ``!'' para negar e ``+'' como curinga. ``-i eth+'' significa todas as interfaces eth. Válida em INPUT, PREROUTING e FORWARD
+\begin{block}{}
+iptables -A INPUT -i eth0 -j ACCEPT\\
+iptables -A INPUT -i ppp+ -j DROP  
+\end{block}
+\item \textbf{-o} $<$interfaces$>$: especifica a interface de saída. Válida em OUTPUT, POSTROUTING e FORWARD. Usa as mesmas regras de -i
+\begin{block}{}
+ iptables -A OUTPUT -o ppp+ -j ACCEPT
+\end{block}
+\item \textbf{- -sport} $<$porta$>$: especifica a porta de origem. Pode ser dado em forma de faixa também, como em ``- -sport 80:123'' ou mesmo ``- -sport 1023:'' (todas acima de 1023). Precisa ter tcp ou udp especificado como protocolo
+\begin{block}{}
+iptables -A INPUT -p udp - -dport 53 -j ACCEPT\\
+iptables -A INPUT -p tcp - -sport 1:1023 -j REJECT\\
+iptables -A INPUT -p tcp - -sport 1024: -j ACCEPT 
+\end{block}
+\item - -dport $<$porta$>$: especifica a porta de destino. Mesmas regras do - -sport.
+\begin{block}{}
+iptables -A OUTPUT -p tcp - -dport 23 -j DROP
+\end{block}
+\item - -icmp-type $<$tipo$>$: filtra por tipo de pacotes ICMP. Por exemplo, 8 é o ping, mas ``echo-request'' poderia ser usado
+\begin{block}{}
+iptables -A INPUT -p icmp - -icmp-type echo-request -j ACCEPT 
+\end{block}
+ \end{itemize}
+
+ 
+\end{frame}
+\begin{frame}[allowframebreaks]{Principais ações no iptables}
+\begin{itemize}
+
+
+\begin{block}{}
+iptables -A INPUT -p tcp - -dport 22 -j ACCEPT   
+  \end{block}
+ \item DROP: descarta o pacote
+ \begin{block}{}
+iptables -A INPUT -p tcp - -dport 23 -j DROP  
+ \end{block}
+\item REJECT: rejeita o pacote, informando ao host de origem. Válida em INPUT, OUTPUT e FORWARD 
+ \begin{block}{}
+iptables -A INPUT -p tcp --dport 23 -j REJECT
+ \end{block}
+\item LOG: coloca no log informações sobre o pacote. Uma opção interessante é o --log-prefix ``mensagem'', que permite a adição de um prefixo. O log não interrompe o processamento, fique atento.
+\begin{block}{}
+iptables -A INPUT -p tcp - -dport 23 -j LOG - -log-prefix ``Tentativa de telnet''\\
+iptables -A INPUT -p tcp - -dport 23 -j DROP 
+\end{block}
+
+ 
+\end{itemize}
+
+ 
+\end{frame}
+
+{\nologo
+\begin{frame}[allowframebreaks]{SNAT x DNAT}
+  \begin{itemize}
+   \item SNAT tem como origem uma máquina da rede local destinada a um \textit{host} da rede externa
+   \begin{itemize}
+    \item Trata-se da forma mais comum de NAT
+    \item Modifica-se o IP de origem do pacote para o IP externo da máquina do servidor
+   \end{itemize}
+
+   \item DNAT tem como origem uma máquina da rede externa e destinada a um \textit{host} da rede local
+   \begin{itemize}
+    \item Serve como uma forma de possibilitar o acesso a servidores locais. Basicamente, configura-se o fluxo com dadas características para uma máquina específica (ex.: redireciona todos os fluxos tcp destinados a porta 80 para o servidor Web)
+   \end{itemize}
+
+  \end{itemize}
+
+   \begin{block}{DMZ: zona desmilitarizada (demilitarized zone)}
+   \begin{itemize}
+    \item Também conhecida como rede de perímetro
+    \item Trata-se de uma estratégia para isolar as máquinas internas dos eventuais servidores acessíveis externamente
+    \item O objetivo é isolar as máquinas internas de eventuais comprometimentos da DMZ
+   \end{itemize}
+
+\begin{figure}
+ \centering
+ \includegraphics[scale=0.22]{./imagens/dmz.jpg}
+ % dmz.jpg: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{figure}
+    
+   \end{block}
+
+\end{frame}
+}
+
+\begin{frame}[fragile,allowframebreaks]{SNAT}
+ \begin{itemize}
+  \item SNAT: realiza o NAT, alterando o endereço de origem do pacote. Válido em POSTROUTING, da tabela nat
+  \item Source NAT é especificado com `-j SNAT', e a opção `--to-source' demonstra um endereço IP, um range de endereços IP, e uma porta opcional ou um range de portas (apenas para os protocolos TCP e UDP).
+  \begin{lstlisting}
+## Mudando o endereço de origem para 1.2.3.4.
+# iptables -t nat -A POSTROUTING -o eth0 -j SNAT --to 1.2.3.4
+
+## Mudando o endereço de origem para 1.2.3.4, 1.2.3.5 ou 1.2.3.6
+# iptables -t nat -A POSTROUTING -o eth0 -j SNAT --to 1.2.3.4-1.2.3.6
+
+## Mudando o endereço de origem para 1.2.3.4, portas 1-1023
+# iptables -t nat -A POSTROUTING -p tcp -o eth0 -j SNAT --to 1.2.3.4:1-1023   
+  \end{lstlisting}
+   \item Não esqueça de habilitar o forwarding, colocando 1 em \textit{/proc/sys/net/ipv4/ip\_forward}, usando uma das formas abaixo:
+  \begin{block}{}
+\$ echo 1 $|$ sudo tee /proc/sys/net/ipv4/ip\_forward\\
+\# echo 1 $>$ /proc/sys/net/ipv4/ip\_forward   
+  \end{block}
+
+
+ \end{itemize}
+
+
+\end{frame}
+
+
+\begin{frame}[allowframebreaks]{Masquerade}
+ \begin{itemize}
+  \item Representa um caso especial de SNAT, denominado Masquerade, a ser utilizado como a interface de saída possuí endereço dinâmico
+  \item MASQUERADE: realiza o NAT, alterando o endereço de origem. Similar ao SNAT, mas sem opções de endereço de saída. Válido em POSTROUTING somente, tabela nat. Muito usado para implementar as regras de NAT do firewall
+  
+\begin{figure}
+ \centering
+ \includegraphics[scale=0.4]{./imagens/firewall.png}
+ % firewall.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{figure}
+
+ \end{itemize}
+\begin{block}{}
+   iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE\\
+   iptables -t nat -A POSTROUTING -o ppp+ -j MASQUERADE
+  \end{block}
+\end{frame}
+
+{\nologo
+\begin{frame}[allowframebreaks]{DNAT}
+ \begin{itemize}
+  \item DNAT: realiza o NAT, alterando o endereço de destino do pacote. Pode usar a opção --to-destination <IPa-IPb> para especificar uma faixa de IPs (load balancing). Válido somente em PREROUTE e OUTPUT, tabela nat
+  \item Caso de uso típico para criação de virtual servers, onde é preciso regras para quem vem de fora, para máquina na intranet e para o próprio firewall
+  \begin{figure}
+ \centering
+ \includegraphics[scale=0.4]{./imagens/dnat.png}
+ % dnat.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{figure}
+
+  \begin{block}{}
+iptables -t nat -A PREROUTING -p tcp -d 65.10.20.31 - -dport 80 -j DNAT - -to-destination 172.16.0.10\\
+iptables -t nat -A POSTROUTING -p tcp -d 172.16.0.10 - -dport 80 -j SNAT - -to-source 172.16.0.1\\
+iptables -t nat -A OUTPUT -p tcp -d 65.10.20.31 - -dport 80 -j DNAT - -to-destination 172.16.0.10
+   
+  \end{block}
+
+
+ \end{itemize}
+
+\end{frame}
+
+
+}
+
+\begin{frame}{Redirecionamento de cadeias}
+ \begin{itemize}
+  \item Caso você tenha criado uma cadeia, pode usar o -j para redirecionar a filtragem para ela
+  \item Ao terminar, caso nenhuma regra tenha sido acionada, o fluxo volta para quem redirecionou e o processamento continua. Caso contrário, é interrompido
+  \begin{block}{}
+iptables -N internet\\
+iptables -A INPUT -p tcp - -dport 80 -j internet   
+  \end{block}
+\begin{figure}
+ \centering
+ \includegraphics[scale=0.35]{./imagens/redirecionamento-cadeias.png}
+ % redirecionamento-cadeias.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+\end{figure}
+
+ \end{itemize}
+
+\end{frame}
+
+\end{document}

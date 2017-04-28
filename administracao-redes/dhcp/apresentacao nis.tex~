@@ -1,0 +1,297 @@
+%\documentclass[t,handout]{beamer}
+\documentclass{beamer}
+
+
+\usepackage[latin1]{inputenc}
+
+\usepackage[portuguese]{babel}
+\usepackage[tight]{subfigure}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{url}
+
+%Pacote de listagem de cï¿½digo
+\usepackage{listings}
+%\lstset{numbers=left, stepnumber=1, firstnumber=1,
+%numberstyle=\tiny, extendedchars=true, breaklines=true, frame=tb,
+%basicstyle=\footnotesize, stringstyle=\ttfamily,
+%showstringspaces=false }
+
+\lstset{extendedchars=true, breaklines=true, frame=tb,
+basicstyle=\footnotesize, stringstyle=\ttfamily,
+showstringspaces=false,language=HTML }
+
+% \usecolortheme[RGB={130,35,150}]{structure}
+% \usecolortheme[RGB={33,33,94}]{structure}
+\usecolortheme[RGB={153,204,123}]{structure}
+\setbeamertemplate{footline}[frame number]
+\setbeamertemplate{navigation symbols}{}
+
+% \usetheme{Frankfurt} %LEGAL     !!!
+% \usetheme{Madrid}     %LEGAL/L%IMPO/COM CAIXA     (sem barra de desenvolvimento)
+
+% \usetheme{Antibes} %NAO
+% \usetheme{Berlin} %PODE SER...     (BARRA DE DESENVOLVIMANTO)
+% \usetheme{Berkeley}     %FEIO
+% \usetheme{Boadilla} %TUDO BRANCO...
+% \usetheme{Copenhagen}     %NAO
+% \usetheme{Darmstadt} %LEGAL!     !!!
+% \usetheme{Dresden}     %LEGAL/LIMPO/SEM CAIXA     (sem caixa fica ruim...)
+
+% \usetheme{Goettingen}     %FEIO DEMAIS!
+ \usetheme{Ilmenau} %LEGAL (forte candidato)
+% \usetheme{JuanLesPins} %BACANA
+% \usetheme{Luebeck}     %FEIO
+
+% \usetheme{Malmoe}     %FEIO
+% \usetheme{Warsaw} %NAO...
+% \usetheme{Seattle}
+% \usetheme{CambridgeUS}
+% \usetheme{Singapore}
+
+\author[Ivo]{Ivo Calado}
+\date{\today}
+\institute[IFAL]{Instituto Federal de Educação, Ciência e Tecnologia de Alagoas}
+\title{Administração de redes}
+\logo{\includegraphics[width=0.2\linewidth]{imagens/ifal-logo.jpg}}
+\subtitle{\textit{NIS\\}(Aula 2)}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+% \section{Roteiro}
+% \AtBeginSection[]
+{\frame{
+\frametitle{Roteiro}
+\tableofcontents[hidesubsections]
+}
+}
+
+
+\section{Introdução}
+\subsection{Cenário}
+\begin{frame}{}
+
+ Suponha que desejamos configurar uma rede Linux com as seguintes características:
+\begin{itemize}
+  \item 30 usuários
+  \item 50 terminais de acesso
+  \end{itemize}
+Como deveríamos proceder?
+\pause
+...E se fosse necessário adicionar mais 10 usuários? 
+\pause 
+...Ou mais 10 máquinas?
+\pause 
+...Ou mesmo remover 1 usuário?
+
+\begin{block}{}
+ Quais os problemas existentes?
+\end{block}
+
+
+
+\end{frame}
+
+\subsection{Problemas da abordagem apresentada}
+\begin{frame}{}
+   \begin{itemize}
+    \item Várias bases de dados de informações de usuários
+    \item Usuários podem acabar tendo diferentes senhas
+    \item A adição de um novo usuário requer a configuração em todas as máquinas da rede
+    \item Uma quebra de segurança em uma conta de usuário requer a alteração das informações dos usuários em todas as máquinas
+  \end{itemize}
+
+Em vista do apresentado, é interessante centralizar o processo de autenticação de todas as máquinas em um único ponto da rede...\\
+\pause
+A solução: \textit{Network Information Service}
+
+
+\end{frame}
+
+
+\section{Network Information Service}
+\subsection{Definição}
+\begin{frame}{}
+    \begin{block}{Definição}
+    NIS, acrônimo de \textit{Network Information Service}, é um serviço disponível em redes Linux que possibilita a criação de contas de usuários que possam ser compartilhadas entre todos os terminais da rede.
+    \end{block}
+\end{frame}
+
+\subsection{Um pouco de história}
+\begin{frame}{}
+    \begin{itemize}
+      \item Originalmente chamado de YP (\textit{Yellow Pages} ou Páginas Amarelas)
+      \item Porém Yellow Pages é uma marca da British Telecom...\pause
+      \item ...o autor foi obrigado a alterar um nome da ferramenta para NIS
+      \item Ainda assim, as ferramentas de configuração levam as iniciais yp
+    \end{itemize}
+
+\end{frame}
+
+
+\subsection{Benefícios e problemas}
+\begin{frame}
+Vantagens
+\begin{itemize}
+ \item Permite que os registros de conta de usuários possam ser centralizados em um único ponto na redes
+ \item Torna mais escalável o gerenciamento de uma rede
+\end{itemize}
+\pause
+Desvantagens
+\begin{itemize}
+ \item As informações de login e senha são trafegadas sem qualquer criptografia
+ \item Sendo assim, recomenda-se a utilização em redes confiáveis
+ \item Soluções baseadas em LDAP podem ser utilizadas como alternativa
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Novo cenário...}
+\begin{itemize}
+ \item Um servidor central (em geral com grande capacidade) é utilizado para realizar o logon de todos os usuários
+ \item Quando o usuário tentar se logar na máquina local, será enviado uma requisição ao servidor central com as credenciais do usuário de modo a verificar se ele pode ser autenticado
+\end{itemize}
+\pause
+\begin{block}{Relembrando nosso cenário anterior...}
+ Uma rede Linux com 30 usuários e 50 terminais de acesso
+\end{block}
+
+\pause
+\begin{enumerate}
+ \item Configura-se o serviço NIS no servidor
+ \item Cadastra-se a conta dos 30 usuário no servidor
+ \item Habilita-se o acesso ao serviço NIS nos 50 clientes
+\end{enumerate}
+ 
+\end{frame}
+
+\begin{frame}{Mantendo a rede...}
+E se for necessário alterar a estrutura da rede...
+\begin{itemize}
+ \item Se for necessário adicionar novos clientes apenas o servidor deve ser configurado
+ \item Se for necessário adicionar mais terminais apenas o serviço NIS nas máquinas clientes precisa ser configurado
+\end{itemize}
+
+ 
+\end{frame}
+
+
+
+\section{Processo de instalação}
+\subsection{}
+\begin{frame}{Ferramentas necessárias}
+Os seguintes pacotes devem estar instalados para o servidor:
+\begin{itemize}
+ \item ypserv - servidor NIS 
+ \item ypbind-mt - serviço de suporte multithread
+ \item yp-tools - utilitários NIS
+\end{itemize}
+Obs.: no cliente apenas os dois últimos pacotes são necessários\\
+
+\pause
+Porém no Ubuntu o pacote \textbf{nis} inclui todas as ferramentas necessárias
+  \begin{block}{}
+   \textit{apt-get install nis}
+  \end{block}
+
+\end{frame}
+
+\section{Configuração}
+\subsection{Configuração do servidor}
+\begin{frame}{Passos...}
+ \begin{enumerate}
+  \item Definir o nome de domínio do servidor (/etc/defaultdomain)
+  \item Editar o arquivo /etc/default/nis marcando a opção NISSERVER para \textbf{master}
+  \item Reiniciar o servidor NIS (/etc/init.d/nis restart)
+  \item Popular a base de dados (/usr/lib/yp/ypinit -m)
+
+ \end{enumerate}
+
+\end{frame}
+
+\begin{frame}{Quando adicionarmos novos usuários}
+  \begin{itemize}
+   \item O comando ``/usr/lib/yp/ypinit -m'' pergunta por servidores escravos
+   \item É criado um mapa contendo em ``/var/yp/<nome\_domínio>''
+   \item Para alteração na lista de usuários o seguinte procedimento deve ser adotado
+   \begin{enumerate}
+    \item cd /var/yp
+    \item make
+   \end{enumerate}
+
+  \end{itemize}
+\end{frame}
+
+\subsection{Configuração do cliente}
+\begin{frame}{Passos...}
+ \begin{enumerate}
+  \item Instalar o pacote NIS
+  \item Definir nome do servidor NIS em /etc/yp.conf (recomenda-se a configuração da resolução de nomes em /etc/hosts)
+  \item Editar o arquivo /etc/nsswitch.conf
+  \begin{itemize}
+   \item passwd:	files nis
+   \item group:		files nis
+   \item shadow:	files nis
+  \end{itemize}
+  \item Definir o nome do domínio NIS em /etc/defaultdomain
+  \item Reiniciar o \textit{daemon} NIS
+
+ \end{enumerate}
+
+\end{frame}
+
+\subsection{Executando...}
+\begin{frame}
+\begin{enumerate}
+ \item No servidor criar um usuário nisuser
+ \begin{itemize}
+  \item adduser -g users nisuser
+  \item cd /var/yp/<domain\_name>
+  \item make
+ \end{itemize}
+\item No cliente
+\begin{itemize}
+ \item Executar o comando ``getent passwd'' para verificar qual base de dados está sendo acessada
+ \item Executar o comando para login ``su nisuser'' (informar a senha cadatrada no servidor)
+ \item Executar o comando ``cd ''
+\end{itemize}
+
+\end{enumerate}
+\pause
+\begin{block}{}
+ Qual o problema ocorrido?
+\end{block}
+\end{frame}
+
+\subsection{Problemas encontrados}
+\begin{frame}
+\begin{itemize}
+ \item Apesar da autenticação estar centralizada os diretórios \textit{home} acessados ainda estão localmente localizados
+ \item Sendo assim, utilizando apenas o NIS, ainda é necessário uma reconfiguração de cada cliente na adição de um novo usuário
+\pause
+ \item Se o objetivo é tornar indiferente a partir de qual máquina será feito o acesso há uma questão de sincronização dos arquivos envolvidos. 
+
+\end{itemize}
+\begin{block}{}
+ Qual seria uma possível solução?
+\pause
+\begin{itemize}
+ \item Utilizar o NIS integrado com o NFS
+\end{itemize}
+
+\end{block}
+
+\end{frame}
+
+
+\section{Atividade}
+\begin{frame}{Atividade}
+Configurar a ferramenta NIS em uma máquina fazendo a montagem do diretório \textit{home} remotamente através do NFS
+\end{frame}
+ 
+
+
+\end{document}
